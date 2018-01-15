@@ -2,6 +2,8 @@
 
 > offer100 project front-end via vue
 
+Associated front-end project : https://github.com/wanghuan321/offer100.git
+
 ## Build Setup
 
 ``` bash
