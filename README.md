@@ -1,7 +1,6 @@
 # offer100-frontend
 
-> offer100 project front-end via vue
-> Based on iView-admin
+> offer100 project front-end Based on vue & iView-admin
 
 Associated front-end project : https://github.com/wanghuan321/offer100.git
 
