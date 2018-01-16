@@ -1,6 +1,7 @@
 # offer100-frontend
 
 > offer100 project front-end via vue
+> Based on iView-admin
 
 ## Build Setup
 
