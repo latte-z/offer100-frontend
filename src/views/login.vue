@@ -47,7 +47,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
+import qs from 'qs'
+// axios 添加到 Vue的prototype里
+Vue.prototype.$axios = axios
 export default {
     data () {
         return {
@@ -73,9 +77,9 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    // 0:admin 1:enterprise 2:user
+                    // 0:guest 1:admin 2:enterprise 3:user
                     // axios send login post request
-                    axios.post(this.loginUrl, this.form)
+                    this.$axios.post(this.loginUrl, qs.stringify(this.form))
                         .then(response => {
                             this.msg = response.data.msg
                             this.status = response.data.status
@@ -86,11 +90,11 @@ export default {
                                 this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg')
                                 // set user role
                                 if (response.data.accsss === 'admin') {
-                                    localStorage.setItem('access', 0)
-                                } else if (response.data.accsss === 'enterprise') {
                                     localStorage.setItem('access', 1)
-                                } else {
+                                } else if (response.data.accsss === 'enterprise') {
                                     localStorage.setItem('access', 2)
+                                } else {
+                                    localStorage.setItem('access', 3)
                                 }
                                 this.$router.push({
                                     name: 'home_index'

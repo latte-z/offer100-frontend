@@ -1,11 +1,10 @@
 import Vue from 'vue';
 import iView from 'iview';
-import {router} from './router/index';
-import {appRouter} from './router/router';
+import { router } from './router/index';
+import { appRouter } from './router/router';
 import store from './store';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
-// import util from './libs/util';`
 
 Vue.use(iView);
 
@@ -27,7 +26,7 @@ new Vue({
     },
     created () {
         let tagsList = [];
-        appRouter.map((item) => {
+        appRouter.map(item => {
             if (item.children.length <= 1) {
                 tagsList.push(item.children[0]);
             } else {
