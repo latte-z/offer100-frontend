@@ -17,7 +17,7 @@
             </div>
             <div class="right">
                 <a :href="job.url">查看详情</a>
-                <Icon type="android-chat" style="color:#2d8cf0"></Icon>
+                <Icon type="android-chat" style="color:#54BF8E"></Icon>
             </div>
         </div>
     </Card>

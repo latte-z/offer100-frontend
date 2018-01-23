@@ -5,8 +5,8 @@
 <template>
     <div class="home-main">
       <!-- 搜索bar -->
-      <Row :gutter="10" style="margin-bottom:5px">
-        <Card dis-hover style="position:relative">
+      <Row style="margin-top:20px">
+        <div class="content-header">
           <div class="search-wrapper">
             <div class="search_box">
               <Form ref="searchForm" class="search_form" :model="searchForm">
@@ -25,11 +25,11 @@
               <dd><a href="#" class="highlight" target="_self">销售经理</a></dd>
             </dl>
           </div>
-        </Card>
+        </div>
       </Row>
       <!-- 职位分类+AD Banner -->
-      <Row :gutter="10" style="margin-bottom:5px">
-        <Card dis-hover>
+      <Row>
+        <div class="banner">
           <Row :gutter="10">
             <Col :md="24" :lg="8">
               <Row :gutter="5">
@@ -61,11 +61,11 @@
               </Carousel>
             </Col>
           </Row>
-        </Card>
+        </div>
       </Row>
       <!-- 热门职位Card -->
-      <Row :gutter="10" style="margin-bottom:5px">
-        <Card dis-hover>
+      <Row>
+        <div class="banner">
           <Tabs value="hotjobs">
             <TabPane label="热门职位" icon="fireball" name="hotjobs">
               <Row :gutter="5">
@@ -94,13 +94,13 @@
             </TabPane>
           </Tabs>
           <div style="display:flex;margin-top:10px">
-            <Button type="primary" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
+            <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
           </div>
-        </Card>
+        </div>
       </Row>
       <!-- 热门公司Card -->
-      <Row :gutter="10">
-        <Card dis-hover>
+      <Row>
+        <div class="banner">
           <Tabs value="hotcompany">
             <TabPane label="热门公司" icon="briefcase" name="hotcompany">
               <Row :gutter="5">
@@ -136,9 +136,9 @@
             </TabPane>
           </Tabs>
           <div style="display:flex;margin-top:10px">
-            <Button type="primary" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
+            <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
           </div>
-        </Card>
+        </div>
       </Row>
     </div>
 </template>
@@ -255,12 +255,14 @@ export default {
           name: 'offer100',
           industry: '移动互联网',
           stage: '上市公司',
-          des: '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
           slogan: 'slogan',
           evaluate: '46',
           numjobs: '5',
           processrate: '87%',
-          url: 'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
         }
       ]
     }
