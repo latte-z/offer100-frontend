@@ -74,23 +74,30 @@
           <Tabs value="hotcompany">
             <TabPane label="热门公司" icon="briefcase" name="hotcompany">
               <Row :gutter="5">
-                <Col :md="24" :lg="8">
+                <Col :md="24" :lg="6">
                   <Row :gutter="5">
                     <div v-for="(enterprise,index) in enterprises" v-if="index<3" style="padding:5px">
                       <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                     </div>
                   </Row>
                 </Col>
-                <Col :md="24" :lg="8">
+                <Col :md="24" :lg="6">
                   <Row :gutter="5">
                     <div v-for="(enterprise,index) in enterprises" v-if="index>=3 && index <6" style="padding:5px">
                       <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                     </div>
                   </Row>
                 </Col>
-                <Col :md="24" :lg="8">
+                <Col :md="24" :lg="6">
                   <Row :gutter="5">
                     <div v-for="(enterprise,index) in enterprises" v-if="index>=6 && index <9" style="padding:5px">
+                      <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
+                    </div>
+                  </Row>
+                </Col>
+                <Col :md="24" :lg="6">
+                  <Row :gutter="5">
+                    <div v-for="(enterprise,index) in enterprises" v-if="index>=9 && index <12" style="padding:5px">
                       <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                     </div>
                   </Row>
@@ -203,13 +210,15 @@ export default {
       ],
       enterprises: [
         {
-          name: '1',
-          des: '游戏，文化娱乐',
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des: '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
           slogan: 'slogan',
           evaluate: '46',
           numjobs: '5',
           processrate: '87%',
-          url: '#'
+          url: 'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
         }
       ]
     }
