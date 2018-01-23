@@ -189,14 +189,16 @@ export const appRouter = [
                 icon: 'lightbulb',
                 title: '个人案例',
                 name: 'personal_experience',
-                component: () => import('@/views/proservice/personal_experience.vue')
+                component: () =>
+                    import('@/views/proservice/personal_experience.vue')
             },
             {
                 path: 'qna',
                 icon: 'ios-help',
                 title: '问题咨询',
                 name: 'question_answer',
-                component: () => import('@/views/proservice/question_answer.vue')
+                component: () =>
+                    import('@/views/proservice/question_answer.vue')
             }
         ]
     },
@@ -226,7 +228,7 @@ export const appRouter = [
                 path: 'analysis',
                 icon: 'ios-analytics',
                 title: '数据分析',
-                name: 'personal_experience',
+                name: 'data_analysis',
                 component: () => import('@/views/system/data_analysis.vue')
             }
         ]

@@ -41,7 +41,7 @@
                                     <Icon type="arrow-down-b"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem name="ownSpace">个人中心</DropdownItem>
+                                    <DropdownItem name="ownSpace" v-if="seen">个人中心</DropdownItem>
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -83,7 +83,8 @@ export default {
     return {
       shrink: false,
       userName: '',
-      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+      openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
+      seen: false
     }
   },
   computed: {
@@ -116,6 +117,10 @@ export default {
       if (pathArr.length >= 2) {
         this.$store.commit('addOpenSubmenu', pathArr[1].name)
       }
+      // 如果登录是用户，那么显示个人中心按钮
+      if (localStorage.getItem('access') === '3') {
+        this.seen = true
+      }
       this.userName = localStorage.getItem('username')
       let messageCount = 3
       this.messageCount = messageCount.toString()
@@ -127,10 +132,10 @@ export default {
     },
     handleClickUserDropdown(name) {
       if (name === 'ownSpace') {
-        // util.openNewPage(this, 'ownspace_index')
-        // this.$router.push({
-        //   name: 'ownspace_index'
-        // })
+        util.openNewPage(this, 'user_account')
+        this.$router.push({
+          name: 'user_account'
+        })
         // TODO
       } else if (name === 'loginout') {
         // 退出登录
