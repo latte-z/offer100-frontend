@@ -4,8 +4,31 @@
 </style>
 <template>
     <div class="home-main">
+      <!-- 搜索bar -->
+      <Row :gutter="10" style="margin-bottom:5px">
+        <Card dis-hover style="position:relative">
+          <div class="search-wrapper">
+            <div class="search_box">
+              <Form ref="searchForm" class="search_form" :model="searchForm">
+                <FormItem prop="searchInput">
+                  <input v-model="searchForm.input" class="search_input" tabindex="1" maxlength="64" autocomplete="off" placeholder="搜索职位、公司或地点" type="text">
+                  <input type="submit" class="search_button" value="搜索">
+                </FormItem>
+              </Form>
+            </div>
+            <dl class="hotSearch">
+              <dt>热门搜索：</dt>
+              <dd><a href="#" class="highlight" target="_self">UI设计师</a></dd>
+              <dd><a href="#" class="highlight" target="_self">Java</a></dd>
+              <dd><a href="#" class="highlight" target="_self">网络推广</a></dd>
+              <dd><a href="#" class="highlight" target="_self">PHP</a></dd>
+              <dd><a href="#" class="highlight" target="_self">销售经理</a></dd>
+            </dl>
+          </div>
+        </Card>
+      </Row>
       <!-- 职位分类+AD Banner -->
-      <Row :gutter="10" style="margin-bottom:10px">
+      <Row :gutter="10" style="margin-bottom:5px">
         <Card dis-hover>
           <Row :gutter="10">
             <Col :md="24" :lg="8">
@@ -17,7 +40,14 @@
             </Col>
             <!-- AD Banner -->
             <Col :md="24" :lg="16">
-              <Carousel autoplay v-model="carouselstart" :autoplay-speed="4000" style="margin-top:10px" loop>
+              <Carousel 
+                v-model="value"
+                :autoplay="setting.autoplay"
+                :autoplay-speed="setting.autoplaySpeed"
+                :dots="setting.dots"
+                :radius-dot="setting.radiusDot"
+                :trigger="setting.trigger"
+                :arrow="setting.arrow">
                 <CarouselItem>
                   <div>
                     <img class="banner-img" src="@/views/home/images/banner1.jpg">
@@ -34,7 +64,7 @@
         </Card>
       </Row>
       <!-- 热门职位Card -->
-      <Row :gutter="10">
+      <Row :gutter="10" style="margin-bottom:5px">
         <Card dis-hover>
           <Tabs value="hotjobs">
             <TabPane label="热门职位" icon="fireball" name="hotjobs">
@@ -117,7 +147,19 @@ export default {
   },
   data() {
     return {
-      carouselstart: 0,
+      value: 0,
+      search: '',
+      setting: {
+        autoplay: true,
+        autoplaySpeed: 4000,
+        dots: 'inside',
+        radiusDot: false,
+        trigger: 'click',
+        arrow: 'hover'
+      },
+      searchForm: {
+        input: ''
+      },
       jobs: [
         {
           name: '1',
@@ -222,6 +264,13 @@ export default {
   methods: {
     init() {
       this.userName = localStorage.getItem('username')
+    },
+    handleSubmit() {
+      this.$refs.validate(valid => {
+        if (valid) {
+          console.log('Success')
+        }
+      })
     }
   },
   mounted() {
