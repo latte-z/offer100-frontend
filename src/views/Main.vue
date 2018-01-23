@@ -2,22 +2,8 @@
 @import './main.less';
 </style>
 <template>
-    <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-            <shrinkable-menu 
-                :shrink="shrink"
-                @on-change="handleSubmenuChange"
-                :theme="menuTheme" 
-                :before-push="beforePush"
-                :open-names="openedSubmenuArr"
-                :menu-list="menuList">
-                <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../images/logo.png" key="max-logo" />
-                    <img v-show="shrink" src="../images/logo-min.png" key="min-logo" />
-                </div>
-            </shrinkable-menu>
-        </div>
-        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
+    <div class="main">
+        <div class="main-header-con">
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
@@ -50,11 +36,8 @@
                     </div>
                 </div>
             </div>
-            <div class="tags-con">
-                <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
-            </div>
         </div>
-        <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
+        <div class="single-page-con">
             <div class="single-page">
                 <keep-alive :include="cachePage">
                     <router-view></router-view>
