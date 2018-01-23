@@ -1,20 +1,119 @@
-.line-gray {
-  border-bottom: 1px #dcdcdc;
-  border-style: none none dashed none;
+body{
+  font-size: 14px;
+  font-family: "Hiragino Sans GB","Microsoft Yahei",SimSun,Arial,"Helvetica Neue",Helvetica;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased
+}
+p{
+  margin: 0;
+}
+a{
+  color: #555;
+  background-color: transparent;
+  text-decoration: none;
+}
+img{
+  border: 0;
+  vertical-align: top;
+  display: inline-block;
+}
+.company-item{
+  float: left;
+  width: 288px;
+  height: 270px;
+  margin-top: 16px;
+  margin-right: 16px;
+  border: 1px solid #eeeeee;
+}
+.wordcut{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 
-.line-gray-vertical {
-  display: inline;
-  border-right: 1px #dcdcdc;
-  border-style: none dashed none none;
+.top{
+  margin: 0 13px;
+  padding: 20px 0 14px;
+  text-align: center;
+  border-bottom: 1px dashed #E0E0E0;
+  p{
+    line-height: 22px;
+  }
+  .company-name{
+  height: 22px;
+  margin-top: 13px;
+  font-size: 16px;
+  color: #333;
 }
+.indus-stage{
+  height: 22px;
+  margin-top: 3px;
+  color: #999;
 
-.bottom {
-  display: inline;
-  &-top {
-    color: #2d8cf0;
+  span+span:before{
+  content: "/";
   }
-  &-bottom {
-    color: #495060;
+}
+.advantage{
+  margin-top: 5px;
+  color: #555;
+}
+  
+}
+.bottom{
+  .bottom-1{
+  width: 90px;
+}
+.bottom-item{
+  position: relative;
+  display: block;
+  margin-top: 17px;
+  text-align:center;
+  p{
+    line-height: 1;
+    &.grey{
+      margin-top: 4px;
+      font-size: 12px;
+      color: #999;
+    }
   }
+  &.bottom-1:after{
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: "";
+    height: 30px;
+    width: 1px;
+    background: #EDEDED;
+  }
+  &.bottom-2:after{
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: "";
+    height: 30px;
+    width: 1px;
+    background: #EDEDED;
+  }
+}
+}
+.f1{
+  float: left;
+}
+.green{
+  color: #00b38a;
+}
+.clearfix{
+  &:after{
+    clear: both;
+    content: "";
+    display: table;
+  }
+  &:before{
+    content: "";
+    display: table;
+  }
+
 }
