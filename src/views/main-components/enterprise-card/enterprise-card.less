@@ -24,7 +24,7 @@ img{
   height: 270px;
   margin-top: 16px;
   margin-right: 16px;
-  border: 1px solid #eeeeee;
+  // border: 1px solid #eeeeee;
 }
 .wordcut{
   text-overflow: ellipsis;
@@ -63,17 +63,20 @@ img{
   
 }
 .bottom{
-  .bottom-1, .bottom-2{
-  width: 90px;
-}
-.bottom-3{
-  width: 101.5px;
-}
+  display: flex;
+  flex-direction: row;
+//   .bottom-1, .bottom-2{
+//   width: 90px;
+// }
+// .bottom-3{
+//   width: 101.5px;
+// }
 .bottom-item{
   position: relative;
   display: block;
   margin-top: 17px;
-  text-align:center;
+  text-align: center;
+  flex: auto;
   p{
     line-height: 1;
     &.grey{
