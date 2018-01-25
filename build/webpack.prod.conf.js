@@ -62,9 +62,6 @@ module.exports = merge(webpackBaseConfig, {
             {
                 from: 'src/styles/fonts',
                 to: 'fonts'
-            },
-            {
-                from: 'src/views/main-components/theme-switch/theme'
             }
         ], {
             ignore: [
