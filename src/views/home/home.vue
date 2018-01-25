@@ -31,13 +31,13 @@
       <Row>
         <div class="banner">
           <Row :gutter="10">
-            <Col :md="24" :lg="8">
+            <!-- <Col :md="24" :lg="8">
               <Row :gutter="5">
                     <div v-for="(job,index) in jobs" v-if="index<2" style="padding:5px">
                       <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                     </div>
                   </Row>
-            </Col>
+            </Col> -->
             <!-- AD Banner -->
             <Col :md="24" :lg="16">
               <Carousel 
