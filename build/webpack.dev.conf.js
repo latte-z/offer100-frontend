@@ -32,15 +32,6 @@ module.exports = merge(webpackBaseConfig, {
             title: 'iView admin v' + package.version,
             filename: '../index.html',
             inject: false
-        }),
-        new CopyWebpackPlugin([
-            {
-                from: 'src/views/main-components/theme-switch/theme'
-            }
-        ], {
-            ignore: [
-                'text-editor.vue'
-            ]
         })
     ]
 });

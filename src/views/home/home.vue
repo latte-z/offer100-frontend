@@ -11,7 +11,7 @@
             <div class="search_box">
               <Form ref="searchForm" class="search_form" :model="searchForm">
                 <FormItem prop="searchInput">
-                  <input v-model="searchForm.input" class="search_input" tabindex="1" maxlength="64" autocomplete="off" placeholder="搜索职位、公司或地点" type="text">
+                  <input v-model="searchForm.input" class="search_input" tabindex="1" maxlength="64" autocomplete="off" placeholder="搜索职位或公司" type="text">
                   <input type="submit" class="search_button" value="搜索">
                 </FormItem>
               </Form>
@@ -140,17 +140,22 @@
           </div>
         </div>
       </Row>
+      <Row>
+        <footerDiv></footerDiv>
+      </Row>
     </div>
 </template>
 
 <script>
 import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue'
 import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
+import footerDiv from './components/footer/footer.vue'
 export default {
   name: 'home',
   components: {
     jobsCard,
-    enterpriseCard
+    enterpriseCard,
+    footerDiv
   },
   data() {
     return {
@@ -251,6 +256,149 @@ export default {
         }
       ],
       enterprises: [
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
+        {
+          name: 'offer100',
+          industry: '移动互联网',
+          stage: '上市公司',
+          des:
+            '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
+          slogan: 'slogan',
+          evaluate: '46',
+          numjobs: '5',
+          processrate: '87%',
+          url:
+            'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
+        },
         {
           name: 'offer100',
           industry: '移动互联网',
