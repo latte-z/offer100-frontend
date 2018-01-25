@@ -1,0 +1,138 @@
+body{
+    font-size: 14px;
+    font-family: "Hiragino Sans GB", "Microsoft Yahei", SimSun, Arial, "Helvetica Neue", Helvetica;
+    color: #333;
+    word-wrap: break-word;
+}   
+a{
+    color: #555;
+    background-color: transparent;
+    text-decoration: none;
+}
+em i{
+    font-style: normal;
+}
+dl，dt，dd{
+    margin: 0px;
+}
+.sidebar{
+    float: left;
+    position: relative;
+    width: 321px;
+    margin-left: 20px;
+    // padding-left: 50px; 
+}
+.sidebar .mainNavs .menu_box{
+    position: relative;
+   
+}
+.sidebar .mainNavs .menu_box:hover .menu_sub{
+    box-shadow: 0 0 4px 2px rgba(0,0,0,0.09);
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background: #fff;
+    z-index: 102;
+    display: block;
+}
+
+.sidebar .mainNavs .menu_box:hover{
+    box-shadow: 0 0 4px 2px rgba(0,0,0,0.09);
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background: #fff;
+}
+
+.sidebar .mainNavs .menu_box:hover:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px;
+    width: 7px;
+    background: #fff;
+    z-index: 102;
+}
+.sidebar .mainNavs .menu_box .menu_main{
+    position: relative;
+    padding: 18px 0px 17px;
+}
+.sidebar .mainNavs .menu_box .menu_main .category-list{
+    position: relative;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    border-right: 0px none;
+}
+.sidebar .mainNavs .menu_box .menu_main .category-list h2{
+    display: inline-block;
+    padding-left: 15px;
+    margin: 0px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.sidebar .mainNavs .menu_box .menu_main .category-list a{
+    margin: 0 5px 5px 0;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+.sidebar .mainNavs .menu_box .menu_main .category-list i.arrow{
+    position: absolute;
+    right: 0px;
+    top: 6px;
+    width: 6px;
+    height: 11px;
+    margin-right: 8px;
+    background: url("./images/arrow.png") no-repeat 0px 0px;
+}
+.sidebar .mainNavs .menu_box .menu_sub{
+    position: absolute;
+    left: 321px;
+    top: 0px;
+    width: 600px;
+    padding: 20px 10px 0 12px;
+    // z-index:10;
+    background: none repeat scroll 0% 0% #FFF;
+    box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.09);
+    border-radius: 0px 2px 2px;
+}
+.dn{    /*隐藏子菜单*/
+    display: none;
+}
+.sidebar .mainNavs .menu_box .menu_sub dl{
+    margin: 0px 0px 17px;
+}
+.sidebar .mainNavs .menu_box .menu_sub dt{
+    position: relative;
+    width: 90px;
+    margin: 0px 0px 6px;
+    padding-left: 10px;
+    font-size: 14px;
+    line-height: 20px;
+}
+.sidebar .mainNavs .menu_box .menu_sub dt span{
+    position: relative;
+    display: inline-block;
+    padding: 0px;
+    color: #333;
+}
+.sidebar .mainNavs .menu_box .menu_sub dd{
+    color: #555;
+    font-size: 0px;
+    overflow: hidden;
+}
+.sidebar .mainNavs .menu_box .menu_sub dd a.curr{
+    color: #00b38a;
+}
+.sidebar .mainNavs .menu_box .menu_sub dd a{
+    display: inline-block;
+    position: relative;
+    margin-left: -1px;
+    padding: 0px 11px;
+    font-size: 14px;
+    line-height: 28px;
+    color: #777;
+    white-space: nowrap;
+}
+
+
+

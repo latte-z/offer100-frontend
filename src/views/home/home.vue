@@ -30,17 +30,12 @@
       <!-- 职位分类+AD Banner -->
       <Row>
         <div class="banner">
-          <Row :gutter="10">
-            <!-- <Col :md="24" :lg="8">
-              <Row :gutter="5">
-                    <div v-for="(job,index) in jobs" v-if="index<2" style="padding:5px">
-                      <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
-                    </div>
-                  </Row>
-            </Col> -->
+          <div >
+          <Row :gutter="10" >
+            <jobNav></jobNav>
             <!-- AD Banner -->
             <Col :md="24" :lg="16">
-              <Carousel 
+              <Carousel style="margin: 20px 0 0 60px"
                 v-model="value"
                 :autoplay="setting.autoplay"
                 :autoplay-speed="setting.autoplaySpeed"
@@ -61,6 +56,7 @@
               </Carousel>
             </Col>
           </Row>
+          </div>
         </div>
       </Row>
       <!-- 热门职位Card -->
@@ -150,12 +146,14 @@
 import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue'
 import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
 import footerDiv from './components/footer/footer.vue'
+import jobNav from './components/job-nav/job-nav.vue'
 export default {
   name: 'home',
   components: {
     jobsCard,
     enterpriseCard,
-    footerDiv
+    footerDiv,
+    jobNav
   },
   data() {
     return {
@@ -167,7 +165,8 @@ export default {
         dots: 'inside',
         radiusDot: false,
         trigger: 'click',
-        arrow: 'hover'
+        arrow: 'hover',
+        // height: '385px'
       },
       searchForm: {
         input: ''
