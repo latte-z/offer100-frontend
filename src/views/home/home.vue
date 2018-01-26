@@ -12,7 +12,7 @@
               <Form ref="searchForm" class="search_form" :model="searchForm">
                 <FormItem prop="searchInput">
                   <input v-model="searchForm.input" class="search_input" tabindex="1" maxlength="64" autocomplete="off" placeholder="搜索职位或公司" type="text">
-                  <input type="submit" class="search_button" value="搜索">
+                  <input @click="handleSubmit" type="button" class="search_button" value="搜索">
                 </FormItem>
               </Form>
             </div>
@@ -30,12 +30,11 @@
       <!-- 职位分类+AD Banner -->
       <Row>
         <div class="banner">
-          <div >
-          <Row :gutter="10" >
+          <Row :gutter="10" style="width:1200px;margin:0 auto">
             <jobNav></jobNav>
             <!-- AD Banner -->
             <Col :md="24" :lg="16">
-              <Carousel style="margin: 20px 0 0 60px"
+              <Carousel class="carousel"
                 v-model="value"
                 :autoplay="setting.autoplay"
                 :autoplay-speed="setting.autoplaySpeed"
@@ -56,12 +55,11 @@
               </Carousel>
             </Col>
           </Row>
-          </div>
         </div>
       </Row>
       <!-- 热门职位Card -->
-      <Row>
-        <div class="banner">
+      <div class="banner">
+        <Row style="width:1200px;margin:0 auto">
           <Tabs value="hotjobs">
             <TabPane label="热门职位" icon="fireball" name="hotjobs">
               <Row :gutter="5">
@@ -92,11 +90,11 @@
           <div style="display:flex;margin-top:10px">
             <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
           </div>
-        </div>
-      </Row>
+        </Row>
+      </div>
       <!-- 热门公司Card -->
-      <Row>
-        <div class="banner">
+      <div class="banner">
+        <Row style="width:1200px;margin:0 auto">
           <Tabs value="hotcompany">
             <TabPane label="热门公司" icon="briefcase" name="hotcompany">
               <Row :gutter="5">
@@ -134,8 +132,8 @@
           <div style="display:flex;margin-top:10px">
             <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
           </div>
-        </div>
-      </Row>
+        </Row>
+      </div>
       <Row>
         <footerDiv></footerDiv>
       </Row>
@@ -145,8 +143,10 @@
 <script>
 import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue'
 import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
-import footerDiv from './components/footer/footer.vue'
+import footerDiv from '@/views/main-components/footer/footer.vue'
 import jobNav from './components/job-nav/job-nav.vue'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'home',
   components: {
@@ -411,7 +411,8 @@ export default {
           url:
             'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png'
         }
-      ]
+      ],
+      searchUrl: '',
     }
   },
   computed: {
@@ -424,11 +425,14 @@ export default {
       this.userName = localStorage.getItem('username')
     },
     handleSubmit() {
-      this.$refs.validate(valid => {
-        if (valid) {
-          console.log('Success')
-        }
-      })
+      this.$axios.post(this.searchUrl, qs.stringify(this.searchForm))
+        .then(response => {
+          let params = response.data.result
+          this.$router.push({
+            name: 'search',
+            params: params
+          })
+        })
     }
   },
   mounted() {

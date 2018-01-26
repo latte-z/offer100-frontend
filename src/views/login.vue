@@ -50,8 +50,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
-// axios 添加到 Vue的prototype里
-Vue.prototype.$axios = axios
 export default {
     data () {
         return {

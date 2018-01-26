@@ -55,6 +55,12 @@ export const otherRouter = {
             title: '消息中心',
             name: 'message_index',
             component: () => import('@/views/message/message.vue')
+        },
+        {
+            path: 'search',
+            name: 'search',
+            title: '搜索',
+            component: () => import('@/views/search/search.vue')
         }
     ]
 };
@@ -143,22 +149,6 @@ export const appRouter = [
                 title: '个人收藏',
                 name: 'user_favorite',
                 component: () => import('@/views/user/favorite.vue')
-            }
-        ]
-    },
-    {
-        path: '/search',
-        icon: 'search',
-        title: '职位搜索',
-        access: 3,
-        name: 'search',
-        component: Main,
-        children: [
-            {
-                path: 'index',
-                title: '职位搜索',
-                name: 'search_index',
-                component: () => import('@/views/search/search.vue')
             }
         ]
     },

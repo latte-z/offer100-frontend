@@ -5,6 +5,7 @@
     <div class="main">
         <div class="main-header-con">
             <div class="main-header">
+              <div style="width:1200px;margin:0 auto">
                 <!-- left navbar -->
                 <div class="logo">
                   <a href="#" title="offer100" src="@/images/logo.png">
@@ -51,6 +52,7 @@
                     </li>
                   </ul>    
                 </div>
+              </div>  
             </div>
         </div>
         <div class="single-page-con">

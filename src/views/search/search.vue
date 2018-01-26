@@ -3,14 +3,17 @@
 </style>
 
 <template>
-    <div>
+    <div class="search-main">
         
     </div>
 </template>
 
 <script>
 export default {
-    name: 'search_index',
+    name: 'search',
+    props: [
+
+    ],
     data () {
         return {
 
