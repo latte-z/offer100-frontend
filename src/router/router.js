@@ -44,21 +44,24 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
+        //  home index
         {
             path: 'home',
             title: '首页',
             name: 'home_index',
             component: () => import('@/views/home/home.vue')
         },
+        // private message page
         {
             path: 'message',
             title: '消息中心',
             name: 'message_index',
             component: () => import('@/views/message/message.vue')
         },
+        // main page search component
         {
             path: 'search',
-            name: 'search',
+            name: 'search_index',
             title: '搜索',
             component: () => import('@/views/search/search.vue')
         }

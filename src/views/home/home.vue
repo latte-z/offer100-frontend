@@ -30,7 +30,7 @@
       <!-- 职位分类+AD Banner -->
       <Row>
         <div class="banner">
-          <Row :gutter="10" style="width:1200px;margin:0 auto">
+          <Row :gutter="10" style="width:1200px;margin:0 auto;">
             <jobNav></jobNav>
             <!-- AD Banner -->
             <Col :md="24" :lg="16">
@@ -429,7 +429,7 @@ export default {
         .then(response => {
           let params = response.data.result
           this.$router.push({
-            name: 'search',
+            name: 'search_index',
             params: params
           })
         })
