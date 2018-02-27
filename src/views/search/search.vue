@@ -49,6 +49,7 @@
             <div class="row-wrapper">
                 <Row :gutter="10" style="width:1200px;margin:0 auto;overflow:hidden;padding-bottom:100px">
                     <div class="content-left">
+                        <search-head></search-head>
                         <result-card></result-card>
                         <result-card></result-card>
                         <result-card></result-card>
@@ -69,12 +70,14 @@
 import searchHistory from './components/history/search-history.vue'
 import searchAd from './components/ad/search-ad.vue'
 import resultCard from './components/resultCard/result-card.vue'
+import searchHead from './components/head/search-head.vue'
 export default {
     name: 'search_index',
     components: {
         searchHistory,
         searchAd,
-        resultCard
+        resultCard,
+        searchHead
     },
     props: [
 
