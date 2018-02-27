@@ -20,7 +20,7 @@
             </li>
             <div class="details" id="filterCollapse" style="opacity: 1; height: 184px; display: block;">
                 <div class="has-more">
-                    <div class="more more-positions workPosition">
+                    <div class="more more-positions workPosition" ref="folded">
                         <li class="hot">
                             <span class="title">工作地点：</span>
                             <a rel="nofollow" href="javascript:;" class="active">全国</a>
@@ -83,7 +83,7 @@
                                 <a class="current_city current">全国</a>
                             </div>
 
-                            <div class="other-hot-city">
+                            <div class="other-hot-city" ref="otherHotCity">
                                 <div class="city-wrapper dn" style="margin-left: 132px; width: 740px; overflow: hidden; display: block;">
                                     <a class="hot-city-name">北京</a>
                                     <a class="hot-city-name">上海</a>
@@ -99,7 +99,7 @@
                                     <a class="hot-city-name">苏州</a>
                                     <a class="hot-city-name">天津</a>
                                 </div>
-                                <a rel="nofollow" class="btn-more" href="javascript:;">更多
+                                <a rel="nofollow" class="btn-more" @mouseover="city_unfolded">更多
                                     <i></i>
                                 </a>
                             </div>
@@ -286,7 +286,7 @@
             </div>
         </ul>
         <div class="btn-collapse-wrapper">
-            <a rel="nofollow" class="btn-collapse" title="点击收起筛选项" href="javascript:"></a>
+            <a rel="nofollow" class="btn-collapse" title="点击收起筛选项" @click="collapse_wrapper" ref="collapse"></a>
         </div>
         <ul class="order">
             <li class="wrapper">
@@ -384,8 +384,26 @@ export default {
     computed: {
 
     },
+    
     methods: {
-        
+        collapse_wrapper(){
+            if(document.getElementById("filterCollapse").style.display == "block"){
+                document.getElementById("filterCollapse").style.display = "none" ;
+                this.$refs.collapse.className = "btn-collapse collapsed";
+            }else{
+                document.getElementById("filterCollapse").style.display = "block" ;
+                this.$refs.collapse.className = "btn-collapse";
+            }
+        },
+        city_unfolded(){
+            this.$refs.folded.className = "more more-positions workPosition unfolded";
+            this.$refs.otherHotCity.className = "other-hot-city active";
+
+        },
+        city_folded(){
+            this.$refs.folded.className = "more more-positions workPosition";
+            this.$refs.otherHotCity.className = "other-hot-city";
+        }
     }
 };
 </script>
