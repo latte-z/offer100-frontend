@@ -18,7 +18,7 @@
                 <span class="title">行业领域：</span>
                 <a rel="nofollow" href="javascript:;" class="active">不限</a>
             </li>
-            <div class="details" id="filterCollapse" style="opacity: 1; height: 184px;" v-bind:style="{display : (isBtnActive ? blockClass : noneClass)}">
+            <div class="details" id="filterCollapse" style="opacity: 1; height: 184px;" v-bind:style="{display : (isBtnActive ? noneClass: blockClass)}">
                 <div class="has-more">
                     <div class="more more-positions workPosition" :class="{unfolded:isPosActive}" ref="folded">
                         <li class="hot">
@@ -216,7 +216,7 @@
                             <i></i>
                         </span>
                     </li>
-                    <div class="more-hy more-fields" :class="{unfolded: isFieldActive}" ref="more_fields">
+                    <div class="more-hy more-fields" :class="{unfolded: isFieldActive}">
                         <li class="hot multi-chosen">
                             <span class="title">行业领域：</span>
                             <a rel="nofollow" href="javascript:;" class="active">不限
@@ -286,7 +286,8 @@
             </div>
         </ul>
         <div class="btn-collapse-wrapper">
-            <a rel="nofollow" class="btn-collapse" :style="{transform: (!isBtnActive ? 'rotateX(180deg)' : '')}" title="点击收起筛选项" @click="btnCollapseClick" ref="collapse"></a>
+            <a rel="nofollow" class="btn-collapse" :class="{collapsed: isBtnActive}" title="点击收起筛选项" @click="btnCollapseClick" ref="collapse"></a>
+            <!-- :style="{transform: (!isBtnActive ? 'rotateX(180deg)' : '')}" -->
         </div>
         <ul class="order">
             <li class="wrapper">
