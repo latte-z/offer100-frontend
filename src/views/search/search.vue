@@ -79,30 +79,35 @@ export default {
         resultCard,
         searchHead
     },
-    props: [
-
-    ],
     data () {
         return {
             searchForm: {
                 input: ''
             },
+            params: ''
         };
     },
     computed: {
 
     },
     methods: {
+        init () {
+            this.params = this.$route.params;
+            console.log(this.params.data)
+        },
         handleSubmit () {
-            this.$axios.post(this.searchUrl, qs.stringify(this.searchForm))
-                .then(response => {
-                    let params = response.data.result
-                    this.$router.push({
-                        name: 'search_index',
-                        params: params
-                    })
-                })
+            // this.$axios.post(this.searchUrl, qs.stringify(this.searchForm))
+            //     .then(response => {
+            //         let params = response.data.result
+            //         this.$router.push({
+            //             name: 'search_index',
+            //             params: this.params
+            //         })
+            //     })
         }
+    },
+    mounted() {
+        this.init()
     }
 };
 </script>

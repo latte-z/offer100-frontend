@@ -5,15 +5,15 @@
 <template>
     <Card class="card">
         <div slot="title" class="title">
-            <p style="font-size:18px">{{ job.name }}&nbsp;<span class="starttime" style="font-size:15px">[{{ job.starttime }}]</span></p>
+            <p style="font-size:18px">{{ job.title }}&nbsp;<span class="starttime" style="font-size:15px">[{{ job.effectiveTime }}]</span></p>
         </div>
         <p slot="extra" class="extra" style="font-size: 18px">
-            {{ job.salary }}
+            {{ job.wage }}
         </p>
         <div>
             <div class="left" style="color:#495060">
-                <p>{{ job.worktime }}&nbsp;/&nbsp;{{ job.education }}</p>
-                <p>{{ job.des }}</p>
+                <p>{{ job.serviceYear }}&nbsp;/&nbsp;{{ job.education }}</p>
+                <p>{{ job.description }}</p>
             </div>
             <div class="right">
                 <a :href="job.url">查看详情</a>
@@ -30,11 +30,12 @@ export default {
   data() {
     return {
       job: {
-        name: '',
-        salary: '',
-        starttime: '',
-        des: '',
-        worktime: '',
+        id: '',
+        title: '',
+        wage: '',
+        effectiveTime: '',
+        description: '',
+        serviceYear: '',
         education: '',
         url: ''
       }
@@ -43,6 +44,14 @@ export default {
   methods: {
     init() {
       this.job = this.message
+      this.handleTime()
+    },
+    handleTime() {
+      var today = new Date()
+      var startTime = new Date(this.job.effectiveTime)
+      var gapTime = today.getTime() - startTime.getTime()
+      var gapDays = Math.floor(gapTime/(24*3600*1000))
+      this.job.effectiveTime = gapDays + '天前'
     }
   },
   mounted() {

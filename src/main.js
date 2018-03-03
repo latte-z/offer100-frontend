@@ -5,6 +5,8 @@ import { appRouter } from './router/router';
 import store from './store';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
+import axios from 'axios';
+Vue.prototype.$axios = axios;
 
 Vue.use(iView);
 
