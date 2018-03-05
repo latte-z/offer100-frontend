@@ -1,5 +1,5 @@
 <style lang="less">
-    @import './styles/account.less';
+    @import './enterprise.less';
 </style>
 
 <template>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-    name: 'enterprise_account',
+    name: 'enterprise_index',
     data () {
         return {
 
