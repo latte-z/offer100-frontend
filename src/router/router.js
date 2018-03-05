@@ -74,47 +74,47 @@ export const appRouter = [
         path: '/enterprise',
         icon: 'briefcase',
         title: '企业管理',
-        access: 2,
+        // access: 2,
         name: 'enterprise',
         component: Main,
-        // children: [
-        //     {
-        //         path: 'register',
-        //         icon: 'plus',
-        //         title: '企业注册',
-        //         access: 0,
-        //         name: 'enterprise_register',
-        //         component: () => import('@/views/enterprise/register.vue')
-        //     },
-        //     {
-        //         path: 'account',
-        //         icon: 'locked',
-        //         title: '账户管理',
-        //         name: 'enterprise_account',
-        //         component: () => import('@/views/enterprise/account.vue')
-        //     },
-        //     {
-        //         path: 'qualification',
-        //         icon: 'ribbon-b',
-        //         title: '资质认证',
-        //         name: 'enterprise_qualification',
-        //         component: () => import('@/views/enterprise/qualification.vue')
-        //     },
-        //     {
-        //         path: 'enterprise_resume',
-        //         icon: 'ios-paper',
-        //         title: '简历管理',
-        //         name: 'enterprise_resume',
-        //         component: () => import('@/views/enterprise/resume.vue')
-        //     },
-        //     {
-        //         path: 'job',
-        //         icon: 'social-codepen',
-        //         title: '岗位管理',
-        //         name: 'enterprise_job',
-        //         component: () => import('@/views/enterprise/job.vue')
-        //     }
-        // ]
+        children: [
+            {
+                path: 'index',
+                icon: 'locked',
+                title: '账户管理',
+                name: 'enterprise_index',
+                component: () => import('@/views/enterprise/enterprise.vue')
+            },
+            {
+                path: 'register',
+                icon: 'plus',
+                title: '企业注册',
+                // access: 0,
+                name: 'enterprise_register',
+                component: () => import('@/views/enterprise/components/register.vue')
+            },
+            {
+                path: 'qualification',
+                icon: 'ribbon-b',
+                title: '资质认证',
+                name: 'enterprise_qualification',
+                component: () => import('@/views/enterprise/components/qualification.vue')
+            },
+            {
+                path: 'enterprise_resume',
+                icon: 'ios-paper',
+                title: '简历管理',
+                name: 'enterprise_resume',
+                component: () => import('@/views/enterprise/components/resume.vue')
+            },
+            {
+                path: 'job',
+                icon: 'social-codepen',
+                title: '岗位管理',
+                name: 'enterprise_job',
+                component: () => import('@/views/enterprise/components/job.vue')
+            }
+        ]
     },
     {
         path: '/user',
