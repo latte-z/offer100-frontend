@@ -47,7 +47,7 @@
                 <ul>
                     <li class="active md_flag">
                         <a class="clearfixs">
-                            <Icon type="cube"></Icon>
+                            <Icon type="ios-speedometer"></Icon>
                             <span class="mr_m_name">仪表板</span>
                         </a>
                     </li>

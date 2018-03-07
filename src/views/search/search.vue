@@ -5,7 +5,7 @@
 <template>
     <div class="search-main">
         <!-- 搜索bar -->
-        <Row style="margin-top:20px">
+        <Row>
             <div class="content-header">
                 <div class="search-wrapper">
                     <div id="searchBar" class="search-bar">
@@ -15,12 +15,12 @@
                             <a id="tab_comp" rel="nofollow" href="javascript:;" class="">公司 (
                                 <span>74</span> ) </a>
                         </div>
-                        <div class="input-wrapper" data-lg-tj-track-code="search_search" data-lg-tj-track-type="1">
+                        <div class="input-wrapper">
                             <div class="keyword-wrapper">
                                 <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-                                <input type="text" id="keyword" autocomplete="off" maxlength="64" placeholder="搜索职位、公司或地点" value="" class="ui-autocomplete-input">
+                                <input v-model="searchInput" type="text" id="keyword" autocomplete="off" maxlength="64" placeholder="搜索职位、公司或地点" value="" class="ui-autocomplete-input">
                             </div>
-                            <input type="button" id="submit" value="搜索">
+                            <input @click="handleSubmit" type="button" id="submit" value="搜索">
                         </div>
                         <dl class="relevantSearch">
                             <dt>相关搜索：</dt>
@@ -45,16 +45,19 @@
             </div>
         </Row>
 
-        <Row>
+        <Row style="margin-top:-40px;">
             <div class="row-wrapper">
                 <Row :gutter="10" style="width:1200px;margin:0 auto;overflow:hidden;padding-bottom:100px">
                     <div class="content-left">
-                        <search-head></search-head>
-                        <result-card></result-card>
-                        <result-card></result-card>
-                        <result-card></result-card>
-                        <result-card></result-card>
-                        <result-card></result-card>
+                        <search-head v-on:listenToChildEvent="getFilterInfo"></search-head>
+                        <div v-for="(row,index) in rows">
+                            <result-card :message="row"></result-card>
+                        </div>
+                        <Page :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
+                        <Spin size="large" fix v-if="spinShow" style="margin-top:208px;width:960px">
+                            <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+                            <div>加载中，请稍候</div>
+                        </Spin>
                     </div>
                     <div class="content-right">
                         <searchHistory></searchHistory>
@@ -81,10 +84,22 @@ export default {
     },
     data () {
         return {
-            searchForm: {
-                input: ''
-            },
-            params: ''
+            spinShow: false,
+            searchUrl: 'http://localhost:8081/jobSearch',
+            searchInput: '',
+            params: '',
+            rows: [],
+            city: '',
+            experience: '',
+            education: '',
+            industry: '',
+            sorting: '',
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            }
         };
     },
     computed: {
@@ -92,21 +107,37 @@ export default {
     },
     methods: {
         init () {
-            this.params = this.$route.params;
-            console.log(this.params.data)
+            this.params = this.$route.params.searchInput;
+            this.searchInput = this.params;
+            this.handleSubmit();
         },
         handleSubmit () {
-            // this.$axios.post(this.searchUrl, qs.stringify(this.searchForm))
-            //     .then(response => {
-            //         let params = response.data.result
-            //         this.$router.push({
-            //             name: 'search_index',
-            //             params: this.params
-            //         })
-            //     })
+            this.$Loading.start();
+            this.spinShow = true;
+            if (this.searchInput) {
+                let keys = { "key": [this.searchInput] };
+                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize, keys)
+                    .then(response => {
+                        this.page.total = response.data.total;
+                        this.rows = response.data.rows;
+                        this.$Loading.finish();
+                        this.spinShow = false;
+                    })
+            } else {
+                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize)
+                    .then(response => {
+                        this.page.total = response.data.total;
+                        this.rows = response.data.rows;
+                        this.$Loading.finish();
+                        this.spinShow = false;
+                    })
+            }
+        },
+        getFilterInfo (data) {
+            console.log(data[0].key)
         }
     },
-    mounted() {
+    mounted () {
         this.init()
     }
 };

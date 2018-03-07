@@ -17,30 +17,30 @@ export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    if (!localStorage.getItem('username') && !localStorage.getItem('token') && to.name !== 'login') { // 判断是否已经登录且前往的页面不是登录页
-        next({
-            name: 'login'
-        });
-    } else if (localStorage.getItem('username') && localStorage.getItem('token') && to.name === 'login') { // 判断是否已经登录且前往的是登录页
-        Util.title();
-        next({
-            name: 'home_index'
-        });
-    } else {
-        const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name);
-        if (curRouterObj && curRouterObj.access !== undefined) { // 需要判断权限的路由
-            if (curRouterObj.access === parseInt(localStorage.getItem('access'))) {
-                Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
-            } else {
-                next({
-                    replace: true,
-                    name: 'error-403'
-                });
-            }
-        } else { // 没有配置权限的路由, 直接通过
-            Util.toDefaultPage([...routers], to.name, router, next);
+    // if (!localStorage.getItem('username') && !localStorage.getItem('token') && to.name !== 'login') { // 判断是否已经登录且前往的页面不是登录页
+    //     next({
+    //         name: 'login'
+    //     });
+    // } else if (localStorage.getItem('username') && localStorage.getItem('token') && to.name === 'login') { // 判断是否已经登录且前往的是登录页
+    //     Util.title();
+    //     next({
+    //         name: 'home_index'
+    //     });
+    // } else {
+    const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name);
+    if (curRouterObj && curRouterObj.access !== undefined) { // 需要判断权限的路由
+        if (curRouterObj.access === parseInt(localStorage.getItem('access'))) {
+            Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
+        } else {
+            next({
+                replace: true,
+                name: 'error-403'
+            });
         }
+    } else { // 没有配置权限的路由, 直接通过
+        Util.toDefaultPage([...routers], to.name, router, next);
     }
+    // }
 });
 
 router.afterEach((to) => {

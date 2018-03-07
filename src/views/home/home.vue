@@ -3,7 +3,7 @@
 @import '../../styles/common.less';
 </style>
 <template>
-  <div class="home-main">
+  <div class="home-main" @keydown.enter="handleSubmit">
     <!-- 搜索bar -->
     <Row style="margin-top:20px">
       <div class="content-header">
@@ -68,21 +68,21 @@
             <Row :gutter="5">
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index<3" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === (0 || 3 || 6)" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index>=3 && index <6" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === (1 || 4 || 7)" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index>=6 && index <9" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === (2 || 5 || 8)" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
@@ -90,7 +90,7 @@
             </Row>
           </TabPane>
         </Tabs>
-        <div style="display:flex;margin-top:10px">
+        <div style="display:flex;margin-top:20px">
           <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
         </div>
       </Row>
@@ -99,32 +99,32 @@
     <div class="banner">
       <Row style="width:1200px;margin:0 auto">
         <Tabs value="hotcompany">
-          <TabPane label="热门公司" icon="briefcase" name="hotcompany">
+          <TabPane label="热门公司" icon="briefcase" name="hotcompany" style="margin-bottom:5px;">
             <Row :gutter="5">
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index<3" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === (0 || 4 || 8)" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index>=3 && index <6" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === (1 || 5 || 9)" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index>=6 && index <9" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === (2 || 6 || 10)" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index>=9 && index <12" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === (3 || 7 || 11)" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
@@ -132,7 +132,7 @@
             </Row>
           </TabPane>
         </Tabs>
-        <div style="display:flex;margin-top:10px">
+        <div style="display:flex;margin-top:20px">
           <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
         </div>
       </Row>
@@ -161,6 +161,10 @@ export default {
     return {
       value: 0,
       search: '',
+      jobs: [],
+      enterprises: [],
+      jobsUrl: 'http://localhost:8081/mainpage/hotJob',
+      enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
       setting: {
         autoplay: true,
         autoplaySpeed: 4000,
@@ -172,36 +176,7 @@ export default {
       },
       searchForm: {
         input: ''
-      },
-      jobs: [
-        // {
-        //   name: '1',
-        //   salary: '5K-10K',
-        //   starttime: '3天前发布',
-        //   des: '游戏，文化娱乐',
-        //   worktime: '经验1-3年',
-        //   education: '本科以上',
-        //   url: '#'
-        // }
-      ],
-      enterprises: [
-        // {
-        //   name: 'offer100',
-        //   industry: '移动互联网',
-        //   stage: '上市公司',
-        //   des:
-        //     '游戏，文化娱公司专注于互联网、移动互联网与信息化互动社区，致力并服务于推动手机用户的沟通和娱乐。乐',
-        //   logo: 'https://www.lgstatic.com/thumbnail_160x160/image1/M00/00/08/Cgo8PFTUWBCAcSJHAAB-yfiYxHM640.png',
-        //   evaluate: '46',
-        //   numjobs: '5',
-        //   processrate: '87%',
-        //   url:
-        //     '#'
-        // }
-      ],
-      searchUrl: 'http://www.mocky.io/v2/5a94c58635000058009b0f33',
-      jobsUrl: 'http://localhost:8081/mainpage/hotJob',
-      enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise'
+      }
     }
   },
   computed: {
@@ -216,14 +191,10 @@ export default {
       this.getEnterprises()
     },
     handleSubmit () {
-      this.$axios.post(this.searchUrl, qs.stringify(this.searchForm))
-        .then(response => {
-          let params = response
-          this.$router.push({
-            name: 'search_index',
-            params: params
-          })
-        })
+      this.$router.push({
+        name: 'search_index',
+        params: {searchInput: this.searchForm.input}
+      })
     },
     getJobs () {
       this.$axios.get(this.jobsUrl)
