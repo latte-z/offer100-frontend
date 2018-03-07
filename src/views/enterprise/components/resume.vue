@@ -1,26 +1,210 @@
 <style lang="less">
-    @import './styles/resume.less';
+@import './styles/resume.less';
 </style>
 
 <template>
     <div>
-        
+        <div class="resume-container" style="display: block;">
+            <Tabs value="name1">
+                <TabPane :label="label1" name="name1">
+                    <!-- 筛选条件 -->
+                    <div class="resume_choose">
+                        <div class="optionbox fl">
+                            <span class="qw-place fl">期望工作地：</span>
+                            <div class="placeCombox fl" style="height: 32px;border: none;">
+                                <Cascader :data="data4" :load-data="loadData"></Cascader>
+                            </div>
+
+                        </div>
+                        <div class="optionbox fl">
+                            <span class="keyword fl">关键字：</span>
+                            <div class="placeCombox fl">
+                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                            </div>
+                        </div>
+                        <div class="fl">
+                            <Button type="primary" icon="ios-search">Search</Button>
+                        </div>
+                    </div>
+                    <!-- 简历表格 -->
+                    <resume_table></resume_table>
+                </TabPane>
+                <TabPane :label="label2" name="name2">
+                    <!-- 筛选条件 -->
+                    <div class="resume_choose">
+                        <div class="optionbox fl">
+                            <span class="qw-place fl">期望工作地：</span>
+                            <div class="placeCombox fl" style="height: 32px;border: none;">
+                                <Cascader :data="data4" :load-data="loadData"></Cascader>
+                            </div>
+
+                        </div>
+                        <div class="optionbox fl">
+                            <span class="keyword fl">关键字：</span>
+                            <div class="placeCombox fl">
+                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                            </div>
+                        </div>
+                        <div class="fl">
+                            <Button type="primary" icon="ios-search">Search</Button>
+                        </div>
+                    </div>
+                    <resume_table></resume_table>
+                </TabPane>
+                <TabPane :label="label3" name="name3">
+                    <!-- 筛选条件 -->
+                    <div class="resume_choose">
+                        <div class="optionbox fl">
+                            <span class="qw-place fl">期望工作地：</span>
+                            <div class="placeCombox fl" style="height: 32px;border: none;">
+                                <Cascader :data="data4" :load-data="loadData"></Cascader>
+                            </div>
+
+                        </div>
+                        <div class="optionbox fl">
+                            <span class="keyword fl">关键字：</span>
+                            <div class="placeCombox fl">
+                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                            </div>
+                        </div>
+                        <div class="fl">
+                            <Button type="primary" icon="ios-search">Search</Button>
+                        </div>
+                    </div>
+                    <resume_table></resume_table>
+                </TabPane>
+                <TabPane :label="label4" name="name4">
+                    <!-- 筛选条件 -->
+                    <div class="resume_choose">
+                        <div class="optionbox fl">
+                            <span class="qw-place fl">期望工作地：</span>
+                            <div class="placeCombox fl" style="height: 32px;border: none;">
+                                <Cascader :data="data4" :load-data="loadData"></Cascader>
+                            </div>
+
+                        </div>
+                        <div class="optionbox fl">
+                            <span class="keyword fl">关键字：</span>
+                            <div class="placeCombox fl">
+                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                            </div>
+                        </div>
+                        <div class="fl">
+                            <Button type="primary" icon="ios-search">Search</Button>
+                        </div>
+                    </div>
+                    <resume_table></resume_table>
+                </TabPane>
+            </Tabs>
+
+        </div>
     </div>
 </template>
 
 <script>
+import resume_table from './sub_components/resume_table.vue'
 export default {
     name: 'enterprise_resume',
+    components: {
+        resume_table
+    },
     data () {
         return {
-
+            label1: (h) => {
+                return h('div', [
+                    h('span', '待筛选 '),
+                    h('Badge', {
+                        props: {
+                            count: 2,
+                            className: 'badge-alone'
+                        }
+                    })
+                ])
+            },
+            label2: (h) => {
+                return h('div', [
+                    h('span', '待沟通 '),
+                    h('Badge', {
+                        props: {
+                            count: 2,
+                            className: 'badge-alone'
+                        }
+                    })
+                ])
+            },
+            label3: (h) => {
+                return h('div', [
+                    h('span', '已邀请 '),
+                    h('Badge', {
+                        props: {
+                            count: 4,
+                            className: 'badge-alone'
+                        }
+                    })
+                ])
+            },
+            label4: (h) => {
+                return h('div', [
+                    h('span', '不合适 '),
+                    h('Badge', {
+                        props: {
+                            count: 4,
+                            className: 'badge-alone'
+                        }
+                    })
+                ])
+            },
+            data4: [
+                {
+                    value: 'beijing',
+                    label: '北京',
+                    children: [],
+                    loading: false
+                },
+                {
+                    value: 'hangzhou',
+                    label: '杭州',
+                    children: [],
+                    loading: false
+                }
+            ]
         };
     },
     methods: {
-        
+        loadData (item, callback) {
+            item.loading = true;
+            setTimeout(() => {
+                if (item.value === 'beijing') {
+                    item.children = [
+                        {
+                            value: 'baidu',
+                            label: '百度'
+                        },
+                        {
+                            value: 'sina',
+                            label: '新浪'
+                        }
+                    ];
+                } else if (item.value === 'hangzhou') {
+                    item.children = [
+                        {
+                            value: 'ali',
+                            label: '阿里巴巴'
+                        },
+                        {
+                            value: '163',
+                            label: '网易'
+                        }
+                    ];
+                }
+                item.loading = false;
+                callback();
+            }, 1000);
+        }
+
     },
     computed: {
-        
+
     }
 };
 </script>
