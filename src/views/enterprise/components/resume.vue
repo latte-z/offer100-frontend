@@ -5,8 +5,8 @@
 <template>
     <div>
         <div class="resume-container" style="display: block;">
-            <Tabs value="name1">
-                <TabPane :label="label1" name="name1">
+            <Tabs value="name1" >
+                <TabPane :label="label1" name="name1" >
                     <!-- 筛选条件 -->
                     <div class="resume_choose">
                         <div class="optionbox fl">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <!-- 简历表格 -->
-                    <resume_table></resume_table>
+                    <resume_table1></resume_table1>
                 </TabPane>
                 <TabPane :label="label2" name="name2">
                     <!-- 筛选条件 -->
@@ -49,7 +49,7 @@
                             <Button type="primary" icon="ios-search">Search</Button>
                         </div>
                     </div>
-                    <resume_table></resume_table>
+                    <resume_table2></resume_table2>
                 </TabPane>
                 <TabPane :label="label3" name="name3">
                     <!-- 筛选条件 -->
@@ -71,7 +71,7 @@
                             <Button type="primary" icon="ios-search">Search</Button>
                         </div>
                     </div>
-                    <resume_table></resume_table>
+                    <resume_table3></resume_table3>
                 </TabPane>
                 <TabPane :label="label4" name="name4">
                     <!-- 筛选条件 -->
@@ -93,7 +93,7 @@
                             <Button type="primary" icon="ios-search">Search</Button>
                         </div>
                     </div>
-                    <resume_table></resume_table>
+                    <resume_table4></resume_table4>
                 </TabPane>
             </Tabs>
 
@@ -102,11 +102,18 @@
 </template>
 
 <script>
-import resume_table from './sub_components/resume_table.vue'
+import resume_table1 from './sub_components/resume_table1.vue'
+import resume_table2 from './sub_components/resume_table2.vue'
+import resume_table3 from './sub_components/resume_table3.vue'
+import resume_table4 from './sub_components/resume_table4.vue'
+
 export default {
     name: 'enterprise_resume',
     components: {
-        resume_table
+        resume_table1,
+        resume_table2,
+        resume_table3,
+        resume_table4
     },
     data () {
         return {

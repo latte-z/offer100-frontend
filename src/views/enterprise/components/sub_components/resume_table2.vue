@@ -1,10 +1,10 @@
 <style lang="less">
-@import './styles/resume_table.less';
+@import './styles/resume_table2.less';
 </style>
 
 <template>
     <div>
-        <Table border stripe :columns="columns" :data="data"></Table>
+        <Table border stripe :columns="columns" :data="data" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page :total="100" :current="1" @on-change="changePage"></Page>
@@ -16,8 +16,13 @@
 <script>
 export default {
     name: 'enterprise_resume_resumeTable',
+    
     data () {
         return {
+            name1: 'name1',
+            name2: 'name2',
+            name3: 'name3',
+            name4: 'name4',
             columns: [
                 {
                     title: '序号',
@@ -71,28 +76,14 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    // click: () => {
-                                    //     this.show(params.index)
-                                    // }
-                                }
-                            }, '待沟通'),
-                            h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
+                                    marginRight: '15px'
                                 },
                                 on: {
                                     // click: () => {
                                     //     this.remove(params.index)
                                     // }
                                 }
-                            }, '已邀请'),
+                            }, '发送邀请'),
                             h('Button', {
                                 props: {
                                     type: 'error',
