@@ -7,7 +7,7 @@
         <!-- 搜索bar -->
         <Row>
             <div class="content-header">
-                <div class="search-wrapper">
+                <div class="search-wrapper2">
                     <div id="searchBar" class="search-bar">
                         <div class="tab-wrapper">
                             <a id="tab_pos" class="active" rel="nofollow" href="javascript:;">职位 (
