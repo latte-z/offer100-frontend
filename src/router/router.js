@@ -44,6 +44,18 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
+        {
+            path: 'jobs',
+            title: 'jobs',
+            name: 'jobs',
+            component: () => import('@/views/detail/jobs.vue')
+        },
+        {
+            path: 'companys',
+            title: 'companys',
+            name: 'companys',
+            component: () => import('@/views/detail/companys.vue')
+        },
         //  home index
         {
             path: 'home',

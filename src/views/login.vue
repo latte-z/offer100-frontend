@@ -41,7 +41,7 @@
                         </FormItem>
                     </Form>
                     <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p>
-                    <p class="login-tip" v-show="!(this.status === 0)">{{ msg }}</p>
+                    <p class="login-tip" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
                 </div>
             </Card>
         </div>
@@ -57,7 +57,7 @@
                     </RadioGroup>
                 </p>
                 <div class="form-con">
-                    <Form :label-width="80" ref="registForm" :model="user" :rules="rulesReg">
+                    <Form :label-width="80" label-position="left" ref="registForm" :model="user" :rules="rulesReg">
                         <FormItem label="邮箱" prop="email">
                             <Input v-model="user.email" type="email" placeholder="example@abc.com"></Input>
                         </FormItem>
@@ -65,7 +65,7 @@
                             <Input v-model="user.password" type="password" placeholder=""></Input>
                         </FormItem>
                         <FormItem label="密码确认" prop="repassword">
-                            <Input v-model="user.repassword" placeholder=""></Input>
+                            <Input v-model="user.repassword" type="password" placeholder=""></Input>
                         </FormItem>
                         <FormItem label="用户名" prop="username">
                             <Input v-model="user.username" placeholder=""></Input>
@@ -80,8 +80,9 @@
                             <Input v-model="user.phone" placeholder=""></Input>
                         </FormItem>
                         <FormItem>
-                            <Button @click="handleRegist" type="success" style="margin-left:35px">注册</Button>
-                            <Button @click="registSwitch" type="primary" style="margin-left:20px">返回</Button>
+                            <Button @click="handleRegist" type="success">注册</Button>
+                            <Button @click="handleReset" type="warning" style="position:relative;margin-left:20px;">重置</Button>
+                            <Button @click="registSwitch" type="primary" style="position:relative;margin-left:20px">返回</Button>
                         </FormItem>
                     </Form>
                 </div>
@@ -96,6 +97,26 @@ import axios from 'axios'
 import qs from 'qs'
 export default {
     data () {
+        const validatePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('密码不能为空'));
+            } else {
+                if (this.user.repassword !== '') {
+                    // 对第二个密码框单独验证
+                    this.$refs.registForm.validateField('repassword');
+                }
+                callback();
+            }
+        };
+        const validatePassCheck = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== this.user.password) {
+                callback(new Error('两次输入的密码不相同'));
+            } else {
+                callback();
+            }
+        };
         return {
             // loginUrl: 'http://192.168.43.189:8080/templete-webmvc/login',
             loginUrl: 'http://www.mocky.io/v2/5a5ca3ff2e0000e4119f83a9',
@@ -131,13 +152,25 @@ export default {
             },
             rulesReg: {
                 email: [
-                    { required: true, message: '邮箱不能为空', trigger: 'blur' }
+                    { required: true, message: '邮箱不能为空', trigger: 'blur' },
+                    { type: 'email', message: '邮件格式不正确', trigger: 'blur' }
                 ],
                 password: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' }
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { validator: validatePass, trigger: 'blur' }
                 ],
                 repassword: [
-                    { required: true, message: '' }
+                    { required: true, message: '重复输入密码不能为空', trigger: 'blur' },
+                    { validator: validatePassCheck, trigger: 'blur' }
+                ],
+                username: [
+                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                ],
+                gender: [
+                    { required: true }
+                ],
+                phone: [
+                    { required: true, message: '手机不能为空', trigger: 'blur' }
                 ]
             }
         };
@@ -196,6 +229,9 @@ export default {
         // 切换注册mod显示状态
         registSwitch () {
             return this.registToggle = !this.registToggle;
+        },
+        handleReset () {
+            this.$refs.registForm.resetFields();
         }
     }
 };
