@@ -44,18 +44,6 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
-        {
-            path: 'jobs',
-            title: 'jobs',
-            name: 'jobs',
-            component: () => import('@/views/detail/jobs.vue')
-        },
-        {
-            path: 'companys',
-            title: 'companys',
-            name: 'companys',
-            component: () => import('@/views/detail/companys.vue')
-        },
         //  home index
         {
             path: 'home',
@@ -76,6 +64,13 @@ export const otherRouter = {
             name: 'search_index',
             title: '搜索',
             component: () => import('@/views/search/search.vue')
+        },
+        // enterprise list page
+        {
+            path: 'companylist',
+            name: 'enterprise_list',
+            title: '名企招聘',
+            component: () => import('@/views/search/enterprise-search.vue')
         }
     ]
 };
@@ -244,7 +239,17 @@ export const appRouter = [
                 component: () => import('@/views/system/data_analysis.vue')
             }
         ]
-    }
+    },
+    {
+        path: '/detail',
+        name: 'detail-router',
+        title: '详情路由',
+        component: Main,
+        children: [
+            { path: 'jobs/:job_id', title: '职位', name: 'jobs', component: () => import('@/views/detail/jobs.vue') },
+            { path: 'companys/:company_id', title: '公司', name: 'companys', component: () => import('@/views/detail/companys.vue') }
+        ]
+    },
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

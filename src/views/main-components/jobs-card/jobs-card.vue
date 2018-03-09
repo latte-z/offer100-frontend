@@ -13,10 +13,10 @@
         <div>
             <div class="left" style="color:#495060">
                 <p>{{ job.serviceYear }}&nbsp;/&nbsp;{{ job.education }}</p>
-                <p>{{ job.description }}</p>
+                <p>{{ job.welfare }}</p>
             </div>
             <div class="right">
-                <a :href="job.url">查看详情</a>
+                <a @click="goDetail">查看详情</a>
                 <Icon type="android-chat" style="color:#54BF8E"></Icon>
             </div>
         </div>
@@ -37,6 +37,7 @@ export default {
         description: '',
         serviceYear: '',
         education: '',
+        welfare: '',
         url: ''
       }
     }
@@ -52,6 +53,13 @@ export default {
       var gapTime = today.getTime() - startTime.getTime()
       var gapDays = Math.floor(gapTime/(24*3600*1000))
       this.job.effectiveTime = gapDays + '天前'
+    },
+    goDetail () {
+      let argu = {job_id: this.job.id };
+      this.$router.push({
+        name: 'jobs',
+        params: argu
+      });
     }
   },
   mounted() {

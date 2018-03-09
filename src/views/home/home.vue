@@ -91,7 +91,7 @@
           </TabPane>
         </Tabs>
         <div style="display:flex;margin-top:20px">
-          <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
+          <Button type="success" style="margin:auto;width:200px;font-size:15px" @click="goSearch">查看更多</Button>
         </div>
       </Row>
     </div>
@@ -207,6 +207,12 @@ export default {
         .then(response => {
           this.enterprises = response.data
         })
+    },
+    goSearch () {
+      this.$router.push({
+        name: 'search_index',
+        params: null
+      })
     }
   },
   mounted () {

@@ -8,7 +8,7 @@
             <div class="list_item_top">
                 <div class="position">
                     <div class="p_top">
-                        <a class="position_link" href="#" target="_blank">
+                        <a class="position_link" @click="goDetail" target="_blank">
                             <h3 style="max-width: 180px;">{{job.title}}</h3>
                             <span class="add">[{{job.zone}}]</span>
                         </a>
@@ -17,17 +17,18 @@
                     </div>
                     <div class="p_bot">
                         <div class="li_b_l">
-                            <span class="money">{{job.wage}}</span>
-                            <!--<i></i>-->{{job.serviceYear}} / {{job.education}}
+                            <span class="money">{{wage}}</span>
+                            <!--<i></i>-->{{serviceYear}} / {{job.education}}
                         </div>
                     </div>
                 </div>
                 <div class="company">
                     <div class="company_name">
-                        <a href="#" target="_blank">{{job.enterprise}}</a>
-                        <i class="company_mark">
-                            <span style="display: none;">该企业已上传营业执照并通过资质验证审核</span>
-                        </i>
+                        <a @click="goDetail2" target="_blank">{{job.enterprise}}</a>
+                        <Tooltip content="该企业已通过认证">
+                            <i class="company_mark">
+                            </i>
+                        </Tooltip>
                     </div>
                     <div class="industry">
                         {{job.enterpriseCategory}} / 在招{{job.peopleNumber}}人
@@ -59,6 +60,7 @@ export default {
                 title: '',
                 nature: '',
                 zone: '',
+                enterpriseId: '',
                 category: [],
                 wage: '',
                 education: '',
@@ -70,7 +72,9 @@ export default {
                 welfare: '',
                 peopleNumber: '',
                 key: ''
-            }
+            },
+            wage: '',
+            serviceYear: ''
         };
     },
     computed: {
@@ -78,7 +82,33 @@ export default {
     },
     methods: {
         init () {
-            this.job = this.message
+            this.job = this.message;
+            this.handleData();
+        },
+        handleData () {
+            this.wage = this.job.wage / 1000 + 'k';
+            if (this.job.serviceYear === 0) {
+                this.serviceYear = '无经验限制';
+            } else {
+                this.serviceYear = '要求' + this.job.serviceYear + '年经验';
+            }
+        },
+        goDetail () {
+            let argu = { job_id: this.job.id };
+            localStorage.setItem('recentJobid', this.job.id);
+            localStorage.setItem('recentJobtitle', this.job.title);
+            localStorage.setItem('recentJobwage', this.job.wage);
+            this.$router.push({
+                name: 'jobs',
+                params: argu
+            });
+        },
+        goDetail2 () {
+            let argu = { company_id: this.job.enterpriseId };
+            this.$router.push({
+                name: 'companys',
+                params: argu
+            });
         }
     },
     mounted () {

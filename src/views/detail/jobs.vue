@@ -90,12 +90,16 @@ export default {
 
     },
     methods: {
+        init () {
+            let index = this.$route.params.job_id;
+        }
 
     },
     mounted () {
-
+        this.init();
     },
-    created () {
+    activated () {
+        this.init();
     }
 }
 </script>

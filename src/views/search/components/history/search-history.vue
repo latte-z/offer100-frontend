@@ -8,9 +8,9 @@
         <ul class="history_position_list" id="history_position_list">
             <li class="p_list_item" data-positionid="3382067" data-salary="15k-30k" data-company="点我达" data-positionname="Java开发">
                 <div class="position_link">
-                    <a href="https://www.lagou.com/jobs/3382067.html" target="_blank" class="name" title="Java开发">Java开发</a>
-                    <div class="salary">15k-30k</div>
-                    <div class="c_name" title="点我达">点我达</div>
+                    <div class="name" title="Java开发">{{job.title}}</div>
+                    <div class="salary">{{wage}}</div>
+                    <a @click="goDetail" class="c_name" title="点我达">点我达</a>
                 </div>
             </li>
         </ul>
@@ -20,19 +20,36 @@
 <script>
 export default {
     name: 'search_history',
-    props: [
-
-    ],
     data () {
         return {
-
+            job: {
+                id: '',
+                title: '',
+                wage: '',
+            },
+            wage: ''
         };
     },
     computed: {
 
     },
     methods: {
-
+        init () {
+            this.job.id = localStorage.getItem('recentJobid');
+            this.job.title = localStorage.getItem('recentJobtitle');
+            this.job.wage = localStorage.getItem('recentJobwage');
+            this.wage = this.job.wage / 1000 + 'k';
+        },
+        goDetail () {
+            let argu = { job_id: this.job.id };
+            this.$router.push({
+                name: 'jobs',
+                params: argu
+            });
+        }
+    },
+    mounted () {
+        this.init();
     }
 };
 </script>

@@ -12,10 +12,10 @@
                     </a>
                 </p>
                 <p class="company-name wordcut">
-                    <a href="" target="_blank">{{enterprise.name}}</a>
+                    <a @click="goDetail" target="_blank">{{enterprise.name}}</a>
                 </p>
                 <p class="indus-stage wordcut">
-                    <span>{{enterprise.industry}}</span>
+                    <span>{{enterprise.industryName}}</span>
                     <span>{{enterprise.stage}}</span>
                 </p>
                 <p class="advantage wordcut">
@@ -50,7 +50,7 @@ export default {
             enterprise: {
                 id: '',
                 name: '',
-                industry: '',
+                industryName: '',
                 stage: '',
                 description: '',
                 imageLog: '',
@@ -64,6 +64,13 @@ export default {
     methods: {
         init () {
             this.enterprise = this.message
+        },
+        goDetail () {
+            let argu = { company_id: this.enterprise.id };
+            this.$router.push({
+                name: 'companys',
+                params: argu
+            });
         }
     },
     mounted () {
