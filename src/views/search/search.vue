@@ -53,7 +53,7 @@
                         <div v-for="(row,index) in rows">
                             <result-card :message="row"></result-card>
                         </div>
-                        <Page :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
+                        <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
                         <Spin size="large" fix v-if="spinShow" style="margin-top:208px;width:960px">
                             <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
                             <div>加载中，请稍候</div>
@@ -94,6 +94,7 @@ export default {
             education: '',
             industry: '',
             sorting: '',
+            keys: {},
             page: {
                 current: 1,
                 total: 0,
@@ -111,30 +112,85 @@ export default {
             this.searchInput = this.params;
             this.handleSubmit();
         },
+        buildKey () {
+            this.keys = {};
+            // 等值搜索
+            // 地区重新加入 key 内搜索
+            // if (this.city != '全国')
+            //     this.keys.zone = this.city;
+            if (this.experience != '不限')
+                this.keys.serviceYear = this.experience;
+            if (this.education != '不限')
+                this.keys.education = this.education;
+            if (this.industry != '不限')
+                this.keys.enterpriseCategory = this.industry;
+            // key 内检索
+            if (this.searchInput) {
+                if (!this.keys.key)
+                    this.keys.key = [];
+                this.keys.key.push(this.searchInput);
+            }
+            if (this.city != '全国') {
+                if (!this.keys.key)
+                    this.keys.key = [];
+                this.keys.key.push(this.city);
+            }
+        },
+        buildUrl () {
+            this.searchUrl = 'http://localhost:8081/jobSearch';
+            this.searchUrl += '?page=' + this.page.current + '&rows=' + this.page.pageSize;
+            if (this.sorting != '默认')
+                this.searchUrl += '&sortKey=publishTime' + '&asc=false';
+        },
         handleSubmit () {
+            // 清空rows
+            this.rows = [];
+            // 加载进度条和loading动画
             this.$Loading.start();
             this.spinShow = true;
-            if (this.searchInput) {
-                let keys = { "key": [this.searchInput] };
-                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize, keys)
+            this.buildKey();
+            this.buildUrl();
+            // 对body内容做判断
+            if (JSON.stringify(this.keys) != '{}') {
+                this.$axios.put(this.searchUrl, this.keys)
                     .then(response => {
                         this.page.total = response.data.total;
                         this.rows = response.data.rows;
+                        // 加载进度条和loading动画
                         this.$Loading.finish();
                         this.spinShow = false;
                     })
             } else {
-                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize)
+                this.$axios.put(this.searchUrl)
                     .then(response => {
                         this.page.total = response.data.total;
                         this.rows = response.data.rows;
+                        // 加载进度条和loading动画
                         this.$Loading.finish();
                         this.spinShow = false;
                     })
             }
         },
         getFilterInfo (data) {
-            console.log(data[0].key)
+            this.city = data[0].value;
+            // console.log(this.city);
+            this.experience = data[1].value;
+            // console.log(this.experience);
+            this.education = data[2].value;
+            // console.log(this.education);
+            this.industry = data[3].value;
+            // console.log(this.industry);
+            this.sorting = data[4].value;
+            // console.log(this.sorting);
+            this.handleSubmit();
+        },
+        pageChange (page) {
+            this.page.current = page;
+            this.handleSubmit();
+        },
+        pageSizeChange (pageSize) {
+            this.page.pageSize = pageSize;
+            this.handleSubmit();
         }
     },
     mounted () {

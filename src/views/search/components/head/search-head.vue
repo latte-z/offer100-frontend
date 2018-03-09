@@ -89,7 +89,7 @@
             <li class="wrapper">
                 <div class="item order">
                     <span class="title">排序方式：</span>
-                    <RadioGroup v-model="sorting" type="button" size="small" style="margin-left:5px;">
+                    <RadioGroup v-model="sorting" type="button" size="small" style="margin-left:5px;" @on-change="sendMsgToParent">
                         <Radio label="默认"></Radio>
                         <Radio label="最新"></Radio>
                     </RadioGroup>
@@ -140,6 +140,9 @@ export default {
             ];
             this.$emit("listenToChildEvent", this.message);
         }
+    },
+    mounted () {
+        this.sendMsgToParent();
     }
 };
 </script>
