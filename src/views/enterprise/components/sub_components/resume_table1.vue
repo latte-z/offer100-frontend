@@ -4,10 +4,11 @@
 
 <template>
     <div>
-        <Table border stripe :columns="columns" :data="data" ></Table>
+        <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="100" :current="1" @on-change="changePage"></Page>
+                <!-- <Page :total="100" :current="1" @on-change="changePage"></Page> -->
+                <Page :current="this.page.current" :total="this.page.total" :page-size="this.page.pageSize" :page-size-opts="this.page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
             </div>
         </div>
     </div>
@@ -16,13 +17,12 @@
 <script>
 export default {
     name: 'enterprise_resume_resumeTable',
-    
+    props: [
+        'page',
+        'resumeRows'
+    ],
     data () {
         return {
-            name1: 'name1',
-            name2: 'name2',
-            name3: 'name3',
-            name4: 'name4',
             columns: [
                 {
                     title: '序号',
@@ -82,7 +82,7 @@ export default {
 
                                     click: () => {
                                         // this.show(params.index)
-                                        console.log(this.fatherName);
+                                        this.filterPass()
                                     }
                                 }
                             }, '筛选通过'),
@@ -103,28 +103,42 @@ export default {
             ],
             // data6: this.mockTableData1()
             data: [
-                {
-                    num: '01',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '02',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '03',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '硕士'
-                }
+                // {
+                //     num: '01',
+                //     repostTime: '2018-01-01',
+                //     jobName: "java开发",
+                //     education: '本科'
+                // },
+                // {
+                //     num: '02',
+                //     repostTime: '2018-01-01',
+                //     jobName: "java开发",
+                //     education: '本科'
+                // },
+                // {
+                //     num: '03',
+                //     repostTime: '2018-01-01',
+                //     jobName: "java开发",
+                //     education: '硕士'
+                // }
             ]
         };
     },
     methods: {
+        init () {
+            for (let i = 0; i < page.pageSize; i++) {
+                data.push({
+                    // num: this.data[i].num,
+                    // repostTime: this.data[i].repostTime,
+                    // jobName: this.data[i].jobName,
+                    // education: this.data[i].education
+                })
+            }
+            this.data = this.resumeRows;
+        },
+        filterPass () {
+
+        },
         show (index) {
             this.$Modal.info({
                 title: 'Job Info',
@@ -134,24 +148,27 @@ export default {
         remove (index) {
             this.data.splice(index, 1);
         },
-        mockTableData1 () {
-            let data = [];
-            for (let i = 0; i < 10; i++) {
-                data.push({
-                    num: this.data[i].num,
-                    repostTime: this.data[i].repostTime,
-                    jobName: this.data[i].jobName,
-                    education: this.data[i].education
+        // mockTableData1 () {
+        //     let data = [];
+        //     for (let i = 0; i < 10; i++) {
+        //         data.push({
+        //             num: this.data[i].num,
+        //             repostTime: this.data[i].repostTime,
+        //             jobName: this.data[i].jobName,
+        //             education: this.data[i].education
 
-                })
-            }
-            return data;
-        },
-        changePage () {
-            // The simulated data is changed directly here, and the actual usage scenario should fetch the data from the server
-            this.tableData1 = this.mockTableData1();
-        }
+        //         })
+        //     }
+        //     return data;
+        // },
+        // changePage () {
+        //     // The simulated data is changed directly here, and the actual usage scenario should fetch the data from the server
+        //     this.tableData1 = this.mockTableData1();
+        // }
 
+    },
+    mounted () {
+        this.init();
     },
     computed: {
 

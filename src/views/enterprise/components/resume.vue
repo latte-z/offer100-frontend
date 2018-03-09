@@ -5,44 +5,30 @@
 <template>
     <div>
         <div class="resume-container" style="display: block;">
-            <Tabs value="name1" >
-                <TabPane :label="label1" name="name1" >
+            <Tabs value="name1">
+                <TabPane :label="label1" name="name1">
                     <!-- 筛选条件 -->
                     <div class="resume_choose">
                         <div class="optionbox fl">
-                            <span class="qw-place fl">期望工作地：</span>
-                            <div class="placeCombox fl" style="height: 32px;border: none;">
-                                <Cascader :data="data4" :load-data="loadData"></Cascader>
-                            </div>
-
-                        </div>
-                        <div class="optionbox fl">
-                            <span class="keyword fl">关键字：</span>
+                            <span class="keyword fl">岗位名：</span>
                             <div class="placeCombox fl">
-                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
                             </div>
                         </div>
                         <div class="fl">
-                            <Button type="primary" icon="ios-search">Search</Button>
+                            <Button type="primary" icon="ios-search" @click="handleSearch">Search</Button>
                         </div>
                     </div>
                     <!-- 简历表格 -->
-                    <resume_table1></resume_table1>
+                    <resume_table1 :page="page" :resumeRows="rows"></resume_table1>
                 </TabPane>
                 <TabPane :label="label2" name="name2">
                     <!-- 筛选条件 -->
                     <div class="resume_choose">
                         <div class="optionbox fl">
-                            <span class="qw-place fl">期望工作地：</span>
-                            <div class="placeCombox fl" style="height: 32px;border: none;">
-                                <Cascader :data="data4" :load-data="loadData"></Cascader>
-                            </div>
-
-                        </div>
-                        <div class="optionbox fl">
-                            <span class="keyword fl">关键字：</span>
+                            <span class="keyword fl">岗位名：</span>
                             <div class="placeCombox fl">
-                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
                             </div>
                         </div>
                         <div class="fl">
@@ -55,16 +41,9 @@
                     <!-- 筛选条件 -->
                     <div class="resume_choose">
                         <div class="optionbox fl">
-                            <span class="qw-place fl">期望工作地：</span>
-                            <div class="placeCombox fl" style="height: 32px;border: none;">
-                                <Cascader :data="data4" :load-data="loadData"></Cascader>
-                            </div>
-
-                        </div>
-                        <div class="optionbox fl">
-                            <span class="keyword fl">关键字：</span>
+                            <span class="keyword fl">岗位名：</span>
                             <div class="placeCombox fl">
-                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
                             </div>
                         </div>
                         <div class="fl">
@@ -77,16 +56,9 @@
                     <!-- 筛选条件 -->
                     <div class="resume_choose">
                         <div class="optionbox fl">
-                            <span class="qw-place fl">期望工作地：</span>
-                            <div class="placeCombox fl" style="height: 32px;border: none;">
-                                <Cascader :data="data4" :load-data="loadData"></Cascader>
-                            </div>
-
-                        </div>
-                        <div class="optionbox fl">
-                            <span class="keyword fl">关键字：</span>
+                            <span class="keyword fl">岗位名：</span>
                             <div class="placeCombox fl">
-                                <input type="text" value="" id="keyWork" placeholder="请输入搜索关键字" class="comboBoxInput">
+                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
                             </div>
                         </div>
                         <div class="fl">
@@ -117,6 +89,16 @@ export default {
     },
     data () {
         return {
+            keywordInput: '',
+            params: '',
+            searchUrl: 'http://localhost:8081/unfilterSearch',
+            rows: [],
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
             label1: (h) => {
                 return h('div', [
                     h('span', '待筛选 '),
@@ -207,6 +189,31 @@ export default {
                 item.loading = false;
                 callback();
             }, 1000);
+        },
+        init () {
+            this.params = this.$route.params.keywordInput;
+            this.keywordInput = this.params;
+            this.handleSearch();
+        },
+        handleSearch () {
+            if (this.keywordInput) {
+                let keys = { "key": [this.keywordInput] };
+                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize, keys)
+                    .then(response => {
+                        this.page.total = response.data.total;
+                        this.rows = response.data.rows;
+                        this.$Loading.finish();
+                        // this.spinShow = false;
+                    })
+            } else {
+                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize)
+                    .then(response => {
+                        this.page.total = response.data.total;
+                        this.rows = response.data.rows;
+                        this.$Loading.finish();
+                        // this.spinShow = false;
+                    })
+            }
         }
 
     },

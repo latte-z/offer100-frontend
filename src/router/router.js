@@ -86,6 +86,13 @@ export const appRouter = [
                 component: () => import('@/views/enterprise/enterprise.vue')
             },
             {
+                path: 'account',
+                icon: 'locked',
+                title: '账户管理',
+                name: 'enterprise_account',
+                component: () => import('@/views/enterprise/components/account.vue')
+            },
+            {
                 path: 'register',
                 icon: 'plus',
                 title: '企业注册',
