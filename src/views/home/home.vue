@@ -68,21 +68,21 @@
             <Row :gutter="5">
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (0 || 3 || 6)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 0 || index === 3 || index === 6" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (1 || 4 || 7)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 1 || index === 4 || index === 7" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (2 || 5 || 8)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 2 || index === 5 || index === 8" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
@@ -103,28 +103,28 @@
             <Row :gutter="5">
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (0 || 4 || 8)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 0 || index === 4" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (1 || 5 || 9)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 1 || index === 5" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (2 || 6 || 10)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 2 || index === 6" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (3 || 7 || 11)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 3 || index === 7" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
@@ -144,79 +144,79 @@
 </template>
 
 <script>
-import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue'
-import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
-import footerDiv from '@/views/main-components/footer/footer.vue'
-import jobNav from './components/job-nav/job-nav.vue'
-import qs from 'qs'
+import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue';
+import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue';
+import footerDiv from '@/views/main-components/footer/footer.vue';
+import jobNav from './components/job-nav/job-nav.vue';
+import qs from 'qs';
 export default {
-  name: 'home',
-  components: {
-    jobsCard,
-    enterpriseCard,
-    footerDiv,
-    jobNav
-  },
-  data () {
-    return {
-      value: 0,
-      search: '',
-      jobs: [],
-      enterprises: [],
-      jobsUrl: 'http://localhost:8081/mainpage/hotJob',
-      enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
-      setting: {
-        autoplay: true,
-        autoplaySpeed: 4000,
-        dots: 'inside',
-        radiusDot: false,
-        trigger: 'click',
-        arrow: 'hover',
-        // height: '385px'
-      },
-      searchForm: {
-        input: ''
-      }
+    name: 'home',
+    components: {
+        jobsCard,
+        enterpriseCard,
+        footerDiv,
+        jobNav
+    },
+    data () {
+        return {
+            value: 0,
+            search: '',
+            jobs: [],
+            enterprises: [],
+            jobsUrl: 'http://localhost:8081/mainpage/hotJob',
+            enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
+            setting: {
+                autoplay: true,
+                autoplaySpeed: 4000,
+                dots: 'inside',
+                radiusDot: false,
+                trigger: 'click',
+                arrow: 'hover'
+                // height: '385px'
+            },
+            searchForm: {
+                input: ''
+            }
+        };
+    },
+    computed: {
+        avatorPath () {
+            return localStorage.avatorImgPath;
+        }
+    },
+    methods: {
+        init () {
+            this.userName = localStorage.getItem('username');
+            this.getJobs();
+            this.getEnterprises();
+        },
+        handleSubmit () {
+            this.$router.push({
+                name: 'search_index',
+                params: {searchInput: this.searchForm.input}
+            });
+        },
+        getJobs () {
+            this.$axios.get(this.jobsUrl)
+                .then(response => {
+                    this.jobs = response.data;
+                });
+        },
+        getEnterprises () {
+            this.$axios.get(this.enterprisesUrl)
+                .then(response => {
+                    this.enterprises = response.data;
+                });
+        },
+        goSearch () {
+            this.$router.push({
+                name: 'search_index',
+                params: null
+            });
+        }
+    },
+    mounted () {
+        this.init();
     }
-  },
-  computed: {
-    avatorPath () {
-      return localStorage.avatorImgPath
-    }
-  },
-  methods: {
-    init () {
-      this.userName = localStorage.getItem('username')
-      this.getJobs()
-      this.getEnterprises()
-    },
-    handleSubmit () {
-      this.$router.push({
-        name: 'search_index',
-        params: {searchInput: this.searchForm.input}
-      })
-    },
-    getJobs () {
-      this.$axios.get(this.jobsUrl)
-        .then(response => {
-          this.jobs = response.data
-        })
-    },
-    getEnterprises () {
-      this.$axios.get(this.enterprisesUrl)
-        .then(response => {
-          this.enterprises = response.data
-        })
-    },
-    goSearch () {
-      this.$router.push({
-        name: 'search_index',
-        params: null
-      })
-    }
-  },
-  mounted () {
-    this.init()
-  }
-}
+};
 </script>
