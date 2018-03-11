@@ -76,6 +76,12 @@ export const otherRouter = {
             name: 'search_index',
             title: '搜索',
             component: () => import('@/views/search/search.vue')
+        },
+        {
+            path: 'companylist',
+            name: 'enterprise_list',
+            title: '名企招聘',
+            component: () => import('@/views/search/enterprise-search.vue')
         }
     ]
 };
