@@ -91,7 +91,7 @@ export default {
         return {
             keywordInput: '',
             params: '',
-            searchUrl: 'http://localhost:8081/unfilterSearch',
+            searchUrl: 'http://47.93.20.40:8081/resume_post_record/manageResume',
             
             rows: [],
             page: {
@@ -143,59 +143,17 @@ export default {
                         }
                     })
                 ])
-            },
-            data4: [
-                {
-                    value: 'beijing',
-                    label: '北京',
-                    children: [],
-                    loading: false
-                },
-                {
-                    value: 'hangzhou',
-                    label: '杭州',
-                    children: [],
-                    loading: false
-                }
-            ]
+            }
+            
         };
     },
     methods: {
-        loadData (item, callback) {
-            item.loading = true;
-            setTimeout(() => {
-                if (item.value === 'beijing') {
-                    item.children = [
-                        {
-                            value: 'baidu',
-                            label: '百度'
-                        },
-                        {
-                            value: 'sina',
-                            label: '新浪'
-                        }
-                    ];
-                } else if (item.value === 'hangzhou') {
-                    item.children = [
-                        {
-                            value: 'ali',
-                            label: '阿里巴巴'
-                        },
-                        {
-                            value: '163',
-                            label: '网易'
-                        }
-                    ];
-                }
-                item.loading = false;
-                callback();
-            }, 1000);
-        },
         init () {
             this.params = this.$route.params.keywordInput;
             this.keywordInput = this.params;
             this.handleSearch();
         },
+
         handleSearch () {
             if (this.keywordInput) {
                 let keys = { "key": [this.keywordInput] };
@@ -218,6 +176,9 @@ export default {
     },
     computed: {
 
+    },
+    mounted: {
+        
     }
 };
 </script>

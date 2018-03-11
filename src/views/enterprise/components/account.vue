@@ -5,8 +5,8 @@
 <template>
     <div>
         <div class="main-container">
-            <Tabs type="card">
-                <TabPane label="账户信息">
+            <Tabs type="card" :on-click="clickTab()">
+                <TabPane label="账户信息" name="accountInfo">
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                         <FormItem label="登录名：" prop="login">
                             <Input v-model="formValidate.login" readonly unselectable="on"></Input>
@@ -25,7 +25,7 @@
                         </FormItem>
                     </Form>
                 </TabPane>
-                <TabPane label="账户安全">
+                <TabPane label="账户安全" name="accountSec">
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                         <FormItem label="原密码：" prop="oldPassword">
                             <Input type="password" v-model="formValidate.oldPassword" readonly unselectable="on"></Input>
@@ -41,13 +41,13 @@
                         </FormItem>
                     </Form>
                 </TabPane>
-                <TabPane label="单位信息">
+                <TabPane label="单位信息" name="companyInfo">
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                         <FormItem label="公司名称：" prop="companyName">
                             <Input v-model="formValidate.companyName"></Input>
                         </FormItem>
                         <FormItem label="所属行业：" prop="industry">
-                            <Cascader :data="data4" :load-data="loadData" v-model="formValidate.industry"></Cascader>
+                            <Cascader :data="data4" v-model="formValidate.industry"></Cascader>
                         </FormItem>
                         <FormItem label="融资状态：" prop="companyStage">
                             <Select v-model="formValidate.companyStage">
@@ -80,13 +80,13 @@ export default {
     data () {
         return {
             formValidate: {
-                login: 'yy',
-                name: 'yunyun',
-                mail: '12345@126.com',
-                phone: '13112345678',
-                oldPassword: '12345',
-                newPassword: '1234',
-                confirmPassword: '1234'
+                login: '',
+                name: '',
+                mail: '',
+                phone: '',
+                oldPassword: '',
+                newPassword: '',
+                confirmPassword: ''
 
             },
             ruleValidate: {
@@ -123,35 +123,35 @@ export default {
                 }
             ],
             companystage: [
-                    {
-                        value: '0',
-                        label: '未融资'
-                    },
-                    {
-                        value: '1',
-                        label: '天使轮融资'
-                    },
-                    {
-                        value: '2',
-                        label: 'A轮融资'
-                    },
-                    {
-                        value: '3',
-                        label: 'B轮融资'
-                    },
-                    {
-                        value: '4',
-                        label: 'C轮融资'
-                    },
-                    {
-                        value: '5',
-                        label: 'D轮融资'
-                    },
-                    {
-                        value: '6',
-                        label: '上市'
-                    }
-                ]
+                {
+                    value: '0',
+                    label: '未融资'
+                },
+                {
+                    value: '1',
+                    label: '天使轮融资'
+                },
+                {
+                    value: '2',
+                    label: 'A轮融资'
+                },
+                {
+                    value: '3',
+                    label: 'B轮融资'
+                },
+                {
+                    value: '4',
+                    label: 'C轮融资'
+                },
+                {
+                    value: '5',
+                    label: 'D轮融资'
+                },
+                {
+                    value: '6',
+                    label: '上市'
+                }
+            ]
         };
     },
     methods: {
@@ -163,9 +163,18 @@ export default {
                     this.$Message.error('Fail!');
                 }
             })
+        },
+        clickTab () {
+            // alert(1234);
+            
+
         }
     },
+
     computed: {
+
+    },
+    mounted: {
 
     }
 };
