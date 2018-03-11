@@ -92,6 +92,7 @@ export default {
             keywordInput: '',
             params: '',
             searchUrl: 'http://localhost:8081/unfilterSearch',
+            
             rows: [],
             page: {
                 current: 1,
@@ -201,17 +202,15 @@ export default {
                 this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize, keys)
                     .then(response => {
                         this.page.total = response.data.total;
-                        this.rows = response.data.rows;
+                        this.rows = response.data;
                         this.$Loading.finish();
-                        // this.spinShow = false;
                     })
             } else {
                 this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize)
                     .then(response => {
                         this.page.total = response.data.total;
-                        this.rows = response.data.rows;
+                        this.rows = response.data;
                         this.$Loading.finish();
-                        // this.spinShow = false;
                     })
             }
         }

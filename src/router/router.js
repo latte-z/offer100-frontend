@@ -44,6 +44,18 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
+        {
+            path: 'jobs',
+            title: 'jobs',
+            name: 'jobs',
+            component: () => import('@/views/detail/jobs.vue')
+        },
+        {
+            path: 'companys',
+            title: 'companys',
+            name: 'companys',
+            component: () => import('@/views/detail/companys.vue')
+        },
         //  home index
         {
             path: 'home',
@@ -64,19 +76,33 @@ export const otherRouter = {
             name: 'search_index',
             title: '搜索',
             component: () => import('@/views/search/search.vue')
-        },
-        // enterprise list page
-        {
-            path: 'companylist',
-            name: 'enterprise_list',
-            title: '名企招聘',
-            component: () => import('@/views/search/enterprise-search.vue')
         }
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
+    // news page
+    {
+        path: '/news',
+        title: '新闻',
+        name: 'news',
+        component: Main,
+        children: [
+            {
+                path: 'index',  
+                title: '新闻',
+                name: 'information_index',
+                component: () => import('@/views/news/news.vue')
+            },
+            {
+                path: 'detail/:newsId',
+                title: ':title', 
+                name: 'news_detail', 
+                component: () => import('@/views/news/newsDetail.vue')
+            }
+        ]
+    },
     {
         path: '/enterprise',
         icon: 'briefcase',
@@ -249,7 +275,7 @@ export const appRouter = [
             { path: 'jobs/:job_id', title: '职位', name: 'jobs', component: () => import('@/views/detail/jobs.vue') },
             { path: 'companys/:company_id', title: '公司', name: 'companys', component: () => import('@/views/detail/companys.vue') }
         ]
-    },
+    }
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
