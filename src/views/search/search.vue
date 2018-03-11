@@ -204,6 +204,7 @@ export default {
             // console.log(this.industry);
             this.sorting = data[4].value;
             // console.log(this.sorting);
+            this.handleSubmit();
         },
         pageChange (page) {
             this.page.current = page;

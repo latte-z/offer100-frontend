@@ -156,7 +156,7 @@ export default {
         }
     },
     mounted () {
-        this.sendMsgToParent();
+        // this.sendMsgToParent();
     }
 };
 </script>

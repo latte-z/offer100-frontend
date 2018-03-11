@@ -120,7 +120,7 @@ export const appRouter = [
             {
                 path: 'index',
                 icon: 'locked',
-                title: '账户管理',
+                title: '仪表板',
                 name: 'enterprise_index',
                 component: () => import('@/views/enterprise/enterprise.vue')
             },
@@ -129,7 +129,7 @@ export const appRouter = [
                 icon: 'locked',
                 title: '账户管理',
                 name: 'enterprise_account',
-                component: () => import('@/views/enterprise/components/account.vue')
+                component: () => import('@/views/enterprise/account.vue')
             },
             {
                 path: 'register',
@@ -144,21 +144,21 @@ export const appRouter = [
                 icon: 'ribbon-b',
                 title: '资质认证',
                 name: 'enterprise_qualification',
-                component: () => import('@/views/enterprise/components/qualification.vue')
+                component: () => import('@/views/enterprise/qualification.vue')
             },
             {
                 path: 'enterprise_resume',
                 icon: 'ios-paper',
                 title: '简历管理',
                 name: 'enterprise_resume',
-                component: () => import('@/views/enterprise/components/resume.vue')
+                component: () => import('@/views/enterprise/resume.vue')
             },
             {
                 path: 'job',
                 icon: 'social-codepen',
                 title: '岗位管理',
                 name: 'enterprise_job',
-                component: () => import('@/views/enterprise/components/job.vue')
+                component: () => import('@/views/enterprise/job.vue')
             }
         ]
     },
@@ -270,16 +270,6 @@ export const appRouter = [
                 name: 'data_analysis',
                 component: () => import('@/views/system/data_analysis.vue')
             }
-        ]
-    },
-    {
-        path: '/detail',
-        name: 'detail-router',
-        title: '详情路由',
-        component: Main,
-        children: [
-            { path: 'jobs/:job_id', title: '职位', name: 'jobs', component: () => import('@/views/detail/jobs.vue') },
-            { path: 'companys/:company_id', title: '公司', name: 'companys', component: () => import('@/views/detail/companys.vue') }
         ]
     }
 ];

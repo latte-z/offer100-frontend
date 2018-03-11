@@ -115,13 +115,11 @@
 
 <script>
 import mainNavbar from './components/main-navbar.vue'
-import job from './components/job.vue'
 import footerDiv from '@/views/main-components/footer/footer.vue'
 export default {
     name: 'enterprise_job',
     components: {
         mainNavbar,
-        job,
         footerDiv
     },
     data () {

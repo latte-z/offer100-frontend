@@ -45,14 +45,9 @@
           <!-- AD Banner -->
           <Col :md="24" :lg="16">
           <Carousel class="carousel" v-model="value" :autoplay="setting.autoplay" :autoplay-speed="setting.autoplaySpeed" :dots="setting.dots" :radius-dot="setting.radiusDot" :trigger="setting.trigger" :arrow="setting.arrow">
-            <CarouselItem>
+            <CarouselItem v-for="obj in adKeyArray" :key="adKeyArray.index">
               <div>
-                <img class="banner-img" src="@/views/home/images/banner1.jpg">
-              </div>
-            </CarouselItem>
-            <CarouselItem>
-              <div>
-                <img class="banner-img" src="@/views/home/images/banner2.jpg">
+                <img class="banner-img" :src="obj">
               </div>
             </CarouselItem>
           </Carousel>
@@ -163,8 +158,11 @@ export default {
             search: '',
             jobs: [],
             enterprises: [],
+            adimgUrl: 'http://localhost:8081/mainpage/getAdImage?location=mainpage',
             jobsUrl: 'http://localhost:8081/mainpage/hotJob',
             enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
+            ad: {},
+            adKeyArray: [],
             setting: {
                 autoplay: true,
                 autoplaySpeed: 4000,
@@ -189,6 +187,7 @@ export default {
             this.userName = localStorage.getItem('username');
             this.getJobs();
             this.getEnterprises();
+            this.getAdImg();
         },
         handleSubmit () {
             this.$router.push({
@@ -213,6 +212,13 @@ export default {
                 name: 'search_index',
                 params: null
             });
+        },
+        getAdImg () {
+          this.$axios.get(this.adimgUrl)
+            .then(response => {
+              this.ad = response.data
+              this.adKeyArray = Object.keys(this.ad)
+            })
         }
     },
     mounted () {

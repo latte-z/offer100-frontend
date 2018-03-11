@@ -31,10 +31,10 @@
                     <p class="green">{{enterprise.jobCount}}</p>
                     <p class="grey">在招职位</p>
                 </a>
-                <a class="bottom-item bottom-3 f1" target="_blank">
+                <!-- <a class="bottom-item bottom-3 f1" target="_blank">
                     <p class="green">{{enterprise.resumeHanderRate}}</p>
                     <p class="grey">简历处理率</p>
-                </a>
+                </a> -->
             </div>
 
         </Card>
