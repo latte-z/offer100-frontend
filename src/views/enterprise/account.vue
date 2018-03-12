@@ -79,7 +79,7 @@
                             </div>
                         </div>
 
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -106,6 +106,7 @@ export default {
     },
     data () {
         return {
+            pageName: 'account',
             getCompanyUrl: 'http://47.93.20.40:8081/enterprise',      //获取企业信息的url
             updateAccountUrl: '',       //更新账户信息的url
             updateSecuUrl: '',         //维护账户安全的url

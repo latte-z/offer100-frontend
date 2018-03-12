@@ -1,0 +1,143 @@
+<style lang="less">
+    @import '../../styles/common.less';
+    @import './styles/account.less';
+</style>
+
+<template>
+<div id="editPage" style="width: 1024px; margin: 60px auto 0; padding-bottom: 80px">
+
+    <!--@require "common/widgets/account-c-sidebar/main.less"-->
+    <div class="user_bindSidebar">
+        <ul class="user_sideBarmenu">
+            <li class="[curPage === 'user_account' ? curClass : '']">
+                <a class="hover" @click="handlePush('user_account')" href="#">个人信息</a>
+            </li>
+            <li class="[curPage === 'user_resume' ? curClass : '']">
+                <a @click="handlePush('user_resume')" href="#">我的简历</a>
+            </li>
+            <li class="[curPage === 'user_favorite' ? curClass : '']">
+                <a @click="handlePush('user_favorite')" href="#">收藏夹</a>
+            </li>
+            <li class="[curPage === 'updatePWD' ? curClass : '']">
+                <a @click="handlePush('user_updatePWD')" href="#">修改密码</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="user_userinfo_content" id="userinfoEdit">
+        <div class="c_section">
+            <div class="userinfo_edit" id="userinfoEdit">
+                <Form :model="user" :rules="rules" ref="editForm" id="userinfoEditForm">
+                    <FormItem class="avatar">
+                        <img class="avatar_img" src="@/images/default_headpic.png" width="100" height="100" alt="田永涛"> 
+                        <Upload action="//jsonplaceholder.typicode.com/posts/">
+                            <Button type="ghost" icon="ios-cloud-upload-outline">上传头像</Button>
+                        </Upload>
+                    </FormItem>
+  
+                    <FormItem prop="name" class="username input_box" >
+                        <Input v-model="user.name" id="userinfoEditUserName" placeholder="请输入常用昵称"></Input>         
+                    </FormItem>
+
+                    <FormItem prop="sex" class="userinfo_sex input_box">
+                        <RadioGroup v-model="user.sex">
+                            <Radio label="男"></Radio>
+                            <Radio label="女"></Radio>
+                        </RadioGroup>
+                    </FormItem>
+
+                    <FormItem prop="position" class="userinfo_job input_box">
+                        <Input v-model="user.position" placeholder="输入职业信息" style="width: 400px"></Input>   
+                    </FormItem>
+
+                    <FormItem prop="introduce" class="userinfo_intro input_box">
+                        <Input v-model="user.introduce" placeholder="输入个人介绍" style="width: 400px"></Input> 
+                    </FormItem>
+                    <FormItem class="toolbar">
+                        <Button type="success" long>保存</Button>
+                    </FormItem>
+                </Form>
+            </div>
+                <p class="tips">* 此信息用于站内言职社区功能，不会同步修改简历</p>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+export default {
+    name: 'user_edit',
+    data () {
+        return {
+            user: {
+                name: '',
+                sex: '',
+                position: '',
+                introduce: ''
+            },
+            rules: {
+                name: [
+                    { required: true, message: '昵称不能为空', trigger: 'blur' }
+                ],
+                sex: [
+                    { required: true, message: '性别不能为空', trigger: 'blur' }
+                ],
+                position: [
+                    { required: true, message: '职业不能为空', trigger: 'blur' }
+                ],
+                introduce: [
+                    { required: true, message: '个人介绍不能为空', trigger: 'blur' }
+                ]
+
+            },
+
+        };
+    },
+    computed: {},
+    methods: {
+        handlePush(name) {
+            this.$router.push({
+                name: name
+            })
+        },
+        handleSubmit() {
+            this.$refs.loginForm.validate((valid) => {
+                if (valid) {
+                    // 0:guest 1:admin 2:enterprise 3:user
+                    // axios send login post request
+                    this.$axios.post(this.loginUrl, qs.stringify(this.form))
+                        .then(response => {
+                            this.msg = response.data.msg
+                            this.status = response.data.status
+                            if (this.status === 0) {
+                                // set user token
+                                localStorage.setItem('token', response.data.msg)
+                                localStorage.setItem('username', this.form.userName)
+                                this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg')
+                                // set user role
+                                if (response.data.accsss === 'admin') {
+                                    localStorage.setItem('access', 1)
+                                } else if (response.data.accsss === 'enterprise') {
+                                    localStorage.setItem('access', 2)
+                                } else {
+                                    localStorage.setItem('access', 3)
+                                }
+                                this.$router.push({
+                                    name: 'home_index'
+                                });
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+            });
+        }
+    }
+};
+</script>
+
+<style>
+
+</style>

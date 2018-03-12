@@ -126,8 +126,8 @@ export default {
     },
     methods: {
         init () {
-            for (let i = 0; i < page.pageSize; i++) {
-                data.push({
+            for (let i = 0; i < this.page.pageSize; i++) {
+                this.data.push({
                     // num: this.data[i].num,
                     // repostTime: this.data[i].repostTime,
                     // jobName: this.data[i].jobName,

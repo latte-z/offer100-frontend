@@ -45,34 +45,32 @@
             </div>
             <div class="mr_module">
                 <ul>
-                    <li class="active md_flag">
-                        <a class="clearfixs">
+                    <!-- :class="{'active':isAccount}" -->
+                    <li class="md_flag">
+                        <a @click="goSearch('account')" class="clearfixs">
                             <Icon type="ios-speedometer"></Icon>
-                            <span class="mr_m_name">仪表板</span>
+                            <span class="mr_m_name">账户管理</span>
                         </a>
                     </li>
                     <li class="md_flag">
-                        <a class="clearfixs">
+                        <!--  :class="{'active':isQualification}" -->
+                        <a @click="goSearch('qualification')" class="clearfixs">
                             <Icon type="ribbon-b"></Icon>
                             <span class="mr_m_name">资质认证</span>
                         </a>
                     </li>
                     <li class="md_flag">
-                        <a class="clearfixs">
+                        <!--  :class="{'active':isResume}" -->
+                        <a @click="goSearch('resume')" class="clearfixs">
                             <Icon type="document-text"></Icon>
                             <span class="mr_m_name">简历管理</span>
                         </a>
                     </li>
                     <li class="m_flag">
-                        <a class="clearfixs">
+                        <!--  :class="{'active':isJob}" -->
+                        <a @click="goSearch('job')" class="clearfixs">
                             <Icon type="briefcase"></Icon>
                             <span class="mr_m_name">岗位管理</span>
-                        </a>
-                    </li>
-                    <li class="m_flag">
-                        <a class="clearfixs">
-                            <Icon type="search"></Icon>
-                            <span class="mr_m_name">人才搜索</span>
                         </a>
                     </li>
                 </ul>
@@ -84,16 +82,57 @@
 <script>
 export default {
     name: 'main_navbar',
+    props: ['message'],
     data () {
         return {
-
+            currentPage: '',
+            isJob: false,
+            isResume: false,
+            isQualification: false,
+            isAccount: false
         };
     },
     methods: {
-
+        init () {
+            this.isJob = false;
+            this.isResume = false;
+            this.isQualification = false;
+            this.isAccount = false;
+            this.currentPage = this.message;
+            switch (this.currentPage) {
+                case 'account':
+                    this.isAccount = true;break;
+                case 'job':
+                    this.isJob = true;break;
+                case 'qualification':
+                    this.isQualification = true;break;
+                case 'resume':
+                    this.isResume = true;break;
+            }
+        },
+        goSearch (page) {
+            let goPage = '';
+            switch (page) {
+                case 'account':
+                    goPage = 'enterprise_account';break;
+                case 'job':
+                    goPage = 'enterprise_job';break;
+                case 'qualification':
+                    goPage = 'enterprise_qualification';break;
+                case 'resume':
+                    goPage = 'enterprise_resume';break;
+            }
+            this.$router.push({
+                name: goPage,
+                params: null
+            })
+        }
     },
     computed: {
 
+    },
+    mounted () {
+        this.init();
     }
 };
 </script>

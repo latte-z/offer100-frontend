@@ -118,7 +118,7 @@ export default {
             }
         };
         return {
-            loginUrl: 'http://www.mocky.io/v2/5a5ca3ff2e0000e4119f83a9',
+            loginUrl: 'http://localhost:8081/login/user/login',
             loginMsg: '',
             loginStatus: '',
             form: {
@@ -182,19 +182,24 @@ export default {
                 if (valid) {
                     // 0:guest 1:admin 2:enterprise 3:user
                     // axios send login post request
-                    this.$axios.post(this.loginUrl, qs.stringify(this.form))
+                    let postData = {
+                        "type":"user",
+                        "username":this.form.userName,
+                        "password":this.form.password
+                    }
+                    this.$axios.post(this.loginUrl, postData)
                         .then(response => {
                             this.loginMsg = response.data.msg;
-                            this.loginStatus = response.data.status;
-                            if (this.loginStatus === 0) {
+                            // this.loginStatus = response.data.status;
+                            // if (this.loginStatus === 0) {
                                 // set user token
-                                localStorage.setItem('token', response.data.msg);
+                                // localStorage.setItem('token', response.data.msg);
                                 localStorage.setItem('username', this.form.userName);
                                 this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                                 // set user role
-                                if (response.data.accsss === 'admin') {
+                                if (response.data.type === 'admin') {
                                     localStorage.setItem('access', 1);
-                                } else if (response.data.accsss === 'enterprise') {
+                                } else if (response.data.type === 'enterprise') {
                                     localStorage.setItem('access', 2);
                                 } else {
                                     localStorage.setItem('access', 3);
@@ -202,7 +207,7 @@ export default {
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            }
+                            // }
                         })
                         .catch(function (error) {
                             console.log(error);

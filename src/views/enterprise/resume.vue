@@ -83,7 +83,7 @@
                         </div>
                         </div>
                         
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -97,16 +97,23 @@
 <script>
 import mainNavbar from './components/main-navbar.vue'
 // import resume from './components/resume.vue'
+import resume_table1 from './components/sub_components/resume_table1.vue'
+import resume_table2 from './components/sub_components/resume_table2.vue'
+import resume_table3 from './components/sub_components/resume_table3.vue'
 import footerDiv from '@/views/main-components/footer/footer.vue'
 export default {
     name: 'enterprise_resume',
     components: {
         mainNavbar,
+        resume_table1,
+        resume_table2,
+        resume_table3,
         // resume,
         footerDiv
     },
     data () {
         return {
+            pageName: 'resume',
             keywordInput: '',
             params: '',
             searchUrl: 'http://47.93.20.40:8081/resume_post_record/manageResume',

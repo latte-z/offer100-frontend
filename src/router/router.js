@@ -198,6 +198,27 @@ export const appRouter = [
                 title: '个人收藏',
                 name: 'user_favorite',
                 component: () => import('@/views/user/favorite.vue')
+            },
+            {
+                path: 'updatePWD',
+                icon: 'android-star',
+                title: '个人收藏',
+                name: 'user_updatePWD',
+                component: () => import('@/views/user/updatePWD.vue')
+            },
+            {
+                path: 'edit',
+                icon: 'android-star',
+                title: '编辑',
+                name: 'user_edit',
+                component: () => import('@/views/user/edit.vue')
+            },
+            {
+                path: 'edit',
+                icon: 'android-star',
+                title: '投递箱',
+                name: 'user_delivery',
+                component: () => import('@/views/user/delivery.vue')
             }
         ]
     },

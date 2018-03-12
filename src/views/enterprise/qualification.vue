@@ -87,7 +87,7 @@
                             </div>
                         </div>
 
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -111,7 +111,7 @@ export default {
     },
     data () {
         return {
-
+            pageName: 'qualification',
         };
     },
     methods: {

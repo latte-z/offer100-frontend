@@ -39,7 +39,7 @@ export default {
     getNews () {
       this.$axios.get(this.getUrl + '?has=' + this.news.length + '&next=5')
         .then(response => {
-            console.log(this.news)
+            // console.log(this.news)
             response.data.forEach(element => {
               this.news.push(element)
             });
