@@ -34,7 +34,7 @@
                                     <div class="s clearfix">
                                         <input v-model="job_name" placeholder="输入职位名搜索"></input>
                                         <a class="s-btn" href="javascript:;">
-                                            <i class="ico ico-search"></i>
+                                            <i class="ico ico-search">搜索</i>
                                         </a>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                             </div>
                         </div>
 
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -118,35 +118,36 @@ export default {
     },
     data () {
         return {
+            pageName: 'job',
             job_name: '',
             label1: (h) => {
                 return h('div', [
                     h('span', '在线中'),
-                    h('Badge', {
-                        props: {
-                            count: 3
-                        }
-                    })
+                    // h('Badge', {
+                    //     props: {
+                    //         count: 3
+                    //     }
+                    // })
                 ])
             },
             label2: (h) => {
                 return h('div', [
                     h('span', '已下线'),
-                    h('Badge', {
-                        props: {
-                            count: 2
-                        }
-                    })
+                    // h('Badge', {
+                    //     props: {
+                    //         count: 2
+                    //     }
+                    // })
                 ])
             },
             label3: (h) => {
                 return h('div', [
                     h('span', '未上线'),
-                    h('Badge', {
-                        props: {
-                            count: 4
-                        }
-                    })
+                    // h('Badge', {
+                    //     props: {
+                    //         count: 4
+                    //     }
+                    // })
                 ])
             },
             columns7: [

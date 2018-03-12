@@ -23,23 +23,23 @@
                                         </p>
                                     </div>
 
-                                    <div class="fourp mtr10 clearfix" style="*z-index:11;z-index:11">
-                                        <span>
-                                            <font class="asterisk mr10">*</font> 单位性质</span>
-                                        <div class="selectBox shadow_bg selwidth fl" tabindex="-1" focusid="CompanyType" id="companytype_selector" bind_hidden="CompanyType">
-                                            <input type="text" id="companyType_input">
-                                        </div>
-                                        <font id="companyTypemsg" class="colef7"></font>
-                                        <!-- <input post="g" id="CompanyType" name="CompanyType" value="0" type="text" class="hiddenInput trueUpdown" require="true" msgid="companyTypemsg" msg="&nbsp;请选择单位性质" datatype="require"> -->
-                                    </div>
+                                    <!-- <div class="fourp mtr10 clearfix" style="*z-index:11;z-index:11">
+                    <span>
+                        <font class="asterisk mr10">*</font> 单位性质</span>
+                    <div class="selectBox shadow_bg selwidth fl" tabindex="-1" focusid="CompanyType" id="companytype_selector" bind_hidden="CompanyType">
+                        <input type="text" id="companyType_input">
+                    </div>
+                    <font id="companyTypemsg" class="colef7"></font>
+                </div> -->
                                     <p class="secondp clearfix">
                                         <span>证照名称</span>
-                                        <em class="licenses-name">北京华品博睿网络技术有限公司</em>
+                                        <!-- <em class="licenses-name">北京华品博睿网络技术有限公司</em> -->
+                                        <label class="licenses-name" v-model="companyName" style="margin-bottom: 10px;">{{this.companyName}}</label>
                                     </p>
                                     <p class="licenses-tip">请确认单位名称与证照名称一致，如不一致将无法通过单位认证！如单位名称不正确，可在下方进行修改。</p>
-                                    <div class="change-cname"><input type="text" id="changenName">
+                                    <div class="change-cname"><input type="text" id="changenName" v-model="newCompanyName">
                                         <p class="t-error">单位名称不能为空</p>
-                                        <a href="javascript:void(0)" class="btn btn-mid-blue" id="changeCnBtn">修改单位名称</a>
+                                        <Button type="info" @click="modifyName()">修改单位名称</Button>
                                     </div>
                                     <div class="sixp mt15">
                                         <div class="uptips">
@@ -50,10 +50,13 @@
                                         <p>
                                             <font class="reupload_tiptext">仅限最多上传5份资料，文件要求以GIF,PNG 或JPG格式，大小限制在3M以内</font>
                                         </p>
-                                        <div class="upload-btn">
-                                            <input type="file" id="licensefiles" name="licensefiles" value="上传" class="btn_reupload">
-                                            <a class="btn_reupload_location" id="tipagain" href="javascript:void(0)">上传图片</a>
-                                        </div>
+                                        <!-- <div class="upload-btn">
+                        <input type="file" id="licensefiles" name="licensefiles" value="上传" class="btn_reupload">
+                        <a class="btn_reupload_location" id="tipagain" href="javascript:void(0)">上传图片</a>
+                    </div> -->
+                                        <Upload class="upload-btn" action="http://47.93.20.40:8081/picture/fileUpload" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
+                                            <Button type="ghost" icon="ios-cloud-upload-outline">上传照片</Button>
+                                        </Upload>
                                     </div>
 
                                     <div class="perfect_upload">
@@ -76,15 +79,16 @@
                                     <div class="secondp">
                                         <span>
                                             <font class="asterisk fs18">*</font> 法人姓名</span>
-                                        <input type="text" id="legalperson" placeholder="请输入法人姓名" post="g" require="true" msgid="legalName" msg="法人姓名不能为空|最多可输入50个字符|请输入正确的法人姓名" datatype="require|limit|enandcn" min="1" max="50" value="" name="legalperson" class="licenses-area-inplong">
+                                        <input v-model="peopleName" type="text" id="legalperson" placeholder="请输入法人姓名" post="g" require="true" msgid="legalName" msg="法人姓名不能为空|最多可输入50个字符|请输入正确的法人姓名" datatype="require|limit|enandcn" min="1" max="50" value="" name="legalperson" class="licenses-area-inplong">
                                         <font id="legalName" class="t-error"></font>
                                     </div>
                                     <div class="submit-box">
-                                        <a class="btnblue190 mt20" href="javascript:void(0);" post="g" action="/company/completedata.do" id="subBtn">提交审核</a>
+                                        <!-- <a class="btnblue190 mt20" href="javascript:void(0);" post="g" action="/company/completedata.do" id="subBtn">提交审核</a> -->
+                                        <Button type="info" @click="submit()">提交审核</Button>
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
 
                         <main-navbar></main-navbar>
@@ -111,14 +115,62 @@ export default {
     },
     data () {
         return {
-
+            // companyProp: '',
+            enterpriseId: 9,
+            companyName: '',
+            newCompanyName: '',
+            // nameInput: '',
+            peopleName: '',
+            imageUrl: '',
+            getUrl: 'http://47.93.20.40:8081/enterprise',
+            submitUrl: 'http://47.93.20.40:8081/enterprise',
+            rows: {}
         };
     },
     methods: {
+        init () {
+            this.getUrl = 'http://47.93.20.40:8081/enterprise';
+            this.getUrl += '/' + this.enterpriseId;
 
+            this.$axios.get(this.getUrl)
+                .then(response => {
+                    this.companyName = response.data.name;
+                })
+        },
+        submit () {
+            this.submitUrl = 'http://47.93.20.40:8081/enterprise'
+            this.submitUrl += '/' + this.enterpriseId;
+
+            this.rows = {};
+
+            this.rows.name = this.companyName;
+            this.rows.linkman = this.peopleName;
+            this.rows.state = 0;
+            this.rows.imageLicense = this.imageUrl;
+
+            this.$axios.put(this.submitUrl, this.rows)
+                .then(response => {
+                    this.$Message.info('提交成功！');
+                })
+                .catch(function (error) {
+                    console.log(error)
+
+                })
+        },
+        modifyName () {
+            this.companyName = this.newCompanyName;
+        },
+        uploadSuccess(res) {
+            console.log(res);
+            //将上传的照片url返回回来
+            this.imageUrl = res;
+        }
     },
     computed: {
 
+    },
+    mounted () {
+        this.init();
     }
 };
 </script>

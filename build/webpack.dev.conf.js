@@ -32,6 +32,23 @@ module.exports = merge(webpackBaseConfig, {
             title: 'iView admin v' + package.version,
             filename: '../index.html',
             inject: false
-        })
+        }),
+        // add
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: './favicon.ico'
+        //     },
+        //     {
+        //         from: 'src/styles/fonts',
+        //         to: 'fonts'
+        //     }
+        // ], {
+        //     ignore: [
+        //         'text-editor.vue'
+        //     ]
+        // }),
+        // new cleanWebpackPlugin(['dist/*'], {
+        //     root: path.resolve(__dirname, '../')
+        // })
     ]
 });

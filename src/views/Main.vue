@@ -17,12 +17,12 @@
               <li :class="[curPage === 'home_index' ? curClass : '']">
                 <a @click="handlePush('home_index')" href="#">首页</a>
               </li>
-              <li :class="[curPage === 'enterprise_index' ? curClass : '']">
-                <a @click="handlePush('enterprise_index')" href="#">公司</a>
+              <li :class="[curPage === 'enterprise_account' ? curClass : '']">
+                <a @click="handlePush('enterprise_account')" href="#">公司</a>
               </li>
-              <li :class="[curPage === 'job_index' ? curClass : '']">
+              <!-- <li :class="[curPage === 'job_index' ? curClass : '']">
                 <a @click="handlePush('job_index')" href="#">求职</a>
-              </li>
+              </li> -->
               <li :class="[curPage === 'information_index' ? curClass : '']">
                 <a @click="handlePush('information_index')" href="#">资讯</a>
               </li>
@@ -43,6 +43,9 @@
                       </a>
                       <DropdownMenu slot="list">
                         <DropdownItem name="ownSpace" v-if="seen">个人中心</DropdownItem>
+                        <DropdownItem name="userResume" v-if="seen">我的简历</DropdownItem>
+                        <DropdownItem name="userFavorite" v-if="seen">收藏夹</DropdownItem>
+                        <DropdownItem name="userDelivery" v-if="seen">投递箱</DropdownItem>
                         <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
@@ -70,79 +73,97 @@ import messageTip from './main-components/message-tip.vue';
 import util from '@/libs/util.js';
 
 export default {
-    components: {
-        messageTip
+  components: {
+    messageTip
+  },
+  data () {
+    return {
+      userName: '',
+      seen: false,
+      curPage: '',
+      curClass: 'cur',
+      isLogin: false
+    };
+  },
+  computed: {
+    avatorPath () {
+      return localStorage.avatorImgPath;
     },
-    data () {
-        return {
-            userName: '',
-            seen: false,
-            curPage: '',
-            curClass: 'cur',
-            isLogin: false
-        };
-    },
-    computed: {
-        avatorPath () {
-            return localStorage.avatorImgPath;
-        },
-        mesCount () {
-            return this.$store.state.app.messageCount;
-        }
-    },
-    methods: {
-        init () {
-            // set curPage name
-            this.curPage = this.$route.name;
-            // 如果登录是用户，那么显示个人中心按钮
-            if (localStorage.getItem('access') === '3') {
-                this.seen = true;
-            }
-            if (localStorage.getItem('username')) {
-                this.userName = localStorage.getItem('username');
-                this.isLogin = true;
-            }
-
-            let messageCount = 3;
-            this.messageCount = messageCount.toString();
-            this.$store.commit('setMessageCount', 3);
-        },
-        handleClickUserDropdown (name) {
-            if (name === 'ownSpace') {
-                util.openNewPage(this, 'user_account');
-                this.$router.push({
-                    name: 'user_account'
-                });
-                // TODO
-            } else if (name === 'loginout') {
-                // 退出登录
-                this.$store.commit('logout', this);
-                this.$router.push({
-                    name: 'login'
-                });
-            }
-        },
-        handlePush (name) {
-            this.$router.push({
-                name: name
-            });
-        },
-        goLogin () {
-            this.$router.push({
-                name: 'login'
-            });
-        }
-    },
-    watch: {
-        $route (to) {
-            this.$store.commit('setCurrentPageName', to.name);
-            localStorage.currentPageName = to.name;
-        }
-    },
-    mounted () {
-        this.init();
-    },
-    created () {
+    mesCount () {
+      return this.$store.state.app.messageCount;
     }
+  },
+  methods: {
+    init () {
+      // set curPage name
+      this.curPage = this.$route.name;
+      // 如果登录是用户，那么显示个人中心按钮
+      if (localStorage.getItem('access') === '3') {
+        this.seen = true;
+      }
+      if (localStorage.getItem('username')) {
+        this.userName = localStorage.getItem('username');
+        this.isLogin = true;
+      }
+
+      let messageCount = 3;
+      this.messageCount = messageCount.toString();
+      this.$store.commit('setMessageCount', 3);
+    },
+    handleClickUserDropdown (name) {
+      if (name === 'ownSpace') {
+        util.openNewPage(this, 'user_account');
+        this.$router.push({
+          name: 'user_account'
+        });
+        // TODO
+      } else if (name === 'userResume') {
+        util.openNewPage(this, 'user_resume')
+        this.$router.push({
+          name: 'user_resume'
+        })
+        // TODO
+      } else if (name === 'userFavorite') {
+        util.openNewPage(this, 'user_favorite')
+        this.$router.push({
+          name: 'user_favorite'
+        })
+        // TODO
+      } else if (name === 'userDelivery') {
+        util.openNewPage(this, 'user_delivery')
+        this.$router.push({
+          name: 'user_delivery'
+        })
+        // TODO 
+      } else if (name === 'loginout') {
+        // 退出登录
+        this.$store.commit('logout', this);
+        this.$router.push({
+          name: 'login'
+        });
+      }
+    },
+    handlePush (name) {
+      this.$router.push({
+        name: name
+      });
+    },
+    goLogin () {
+      this.$router.push({
+        name: 'login'
+      });
+    }
+  },
+  watch: {
+    $route (to) {
+      this.$store.commit('setCurrentPageName', to.name);
+      localStorage.currentPageName = to.name;
+    }
+  },
+  mounted () {
+    this.init();
+  },
+  created () {
+  }
 };
 </script>
