@@ -33,12 +33,12 @@
               <img class="avatar_img" src="@/images/default_headpic.png" width="100" height="100" alt="田永涛">
             </div>
             <div class="view_nickname" style="display: inline">
-              <span>{{ user.userName }}</span> <span style="padding-left: 5px">{{ user.userSex }}</span>
+              <span>{{ user.name }}</span> <span style="padding-left: 5px">{{ user.sex }}</span>
             </div>
-            <div class="view_phone">{{ user.userPhone }}</div>
-            <div class="view_email">{{user.userEmail}}</div>
-            <div class="view_position">{{ user.userPosition }}</div>
-            <div class="view_introduce">{{ user.userIntroduce }}</div>
+            <div class="view_phone">{{ user.phone }}</div>
+            <div class="view_email">{{user.email}}</div>
+            <div class="view_position">{{ user.education }}</div>
+            <div class="view_introduce">{{ user.major }}</div>
           </div>
           <p class="tips">* 此信息用于站内言职社区功能，不会同步修改简历</p>
         </div>
@@ -55,12 +55,12 @@
       return {
         getUserByIdUrl: 'http://47.93.20.40:8081/users/',
         user: {
-          userName: '田永涛',
-          userSex: '男',
-          userPhone: '18330107775',
-          userEmail: 't2292453850@163.com',
-          userPosition: '学生',
-          userIntroduce: '做项目创建'
+          name: '',
+          sex: '',
+          phone: '',
+          email: '',
+          education: '',
+          major: '软件工程'
         }
 
       };
@@ -73,7 +73,25 @@
         })
       },
       init() {
-        // this.get()
+        this.get()
+      },
+      get() {
+        this.$axios.get(this.getUserByIdUrl + 1)
+          .then(response => {
+            this.user = response.data;
+            this.user.sex = (response.data.sex == '1' ? '男' : '女');
+            switch (response.data.education) {
+              case 1: this.user.education = '本科'; break;
+              case 2: this.user.education = '硕士'; break;
+              case 3: this.user.education = '博士'; break;
+              case 4: this.user.education = '高中'; break;
+              case 5: this.user.education = '初中'; break;
+              case 6: this.user.education = '大专'; break;
+            }
+            //TODO 专业
+            //this.$axios.get('' + 1)
+            this.user.major = "软件工程"
+          })
         // this.user = this.message
       }
     },

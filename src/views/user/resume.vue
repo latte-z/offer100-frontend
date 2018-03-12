@@ -14,7 +14,7 @@
                         <!-- 设置头像 -->
                         <div class="mr_top_bg" id="baseinfo">
                             <Upload id="uploadHeadPic" action="//jsonplaceholder.typicode.com/posts/">
-                                <Button type="ghost" icon="ios-cloud-upload-outline">上传头像</Button>
+                                <Button type="ghost" icon="ios-cloud-upload-outline" style="border:0px">上传头像</Button>
                             </Upload>
                         </div>
 
@@ -56,7 +56,7 @@
                                 <div class="info_t">
                                     <span class="shenfen">
                                         <i></i>
-                                        <em>{{ user.school }}</em>
+                                        <em>{{ user.schoolTitle }}</em>
                                         <em>{{ user.major }}</em>
                                     </span>
                                 </div>
@@ -75,7 +75,7 @@
                                 <div class="info_b">
                                     <span class="mobile">
                                         <i></i>
-                                        <em>{{ user.phoneNum }}</em>
+                                        <em>{{ user.telephone }}</em>
                                     </span>
                                     <span class="email">
                                         <i></i>
@@ -89,9 +89,9 @@
                             </div>
                             <Form v-show="isShowPersonForm" id="olinfoForm" novalidate="novalidate">
                                 <div class="mr_info_edit mr_info_on">
-                                    <FormItem prop="user.school">
+                                    <FormItem prop="user.schoolTitle">
                                         <label>学校</label>
-                                        <Input v-model="user.school" size="large" placeholder="请输入学校" style="width: 350px"></Input>
+                                        <Input v-model="user.schoolTitle" size="large" placeholder="请输入学校" style="width: 350px"></Input>
                                     </FormItem>
 
                                     <FormItem prop="user.major">
@@ -125,9 +125,9 @@
                                         <Cascader :data="city" v-model="user.nativePlace" style="width: 350px; height: 46px"></Cascader>
                                     </FormItem>
                                     
-                                    <FormItem prop="user.phoneNum">
+                                    <FormItem prop="user.telephone">
                                         <label>手机号码</label>
-                                        <Input v-model="user.phoneNum" size="large" placeholder="请输入手机号" style="width: 350px"></Input>
+                                        <Input v-model="user.telephone" size="large" placeholder="请输入手机号" style="width: 350px"></Input>
                                     </FormItem>
 
                                     <FormItem prop="user.email">
@@ -225,13 +225,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="mr_content_r">
-                                                    <div class="mr_edit mr_c_r_t" data-expid="11891237" data-logo="" data-comname="华中科技大学" data-posname="学生" data-startime="2017.09"
-                                                        data-endtime="至今" data-content="<p>学生<br/></p>" style="cursor: pointer;">
+                                                    <div class="mr_edit mr_c_r_t" style="cursor: pointer;">
                                                         <i></i>
                                                         <em>编辑</em>
                                                     </div>
                                                     <span>2017.09</span>
-                                                    <span> — </span>
+                                                    <span>-</span>
                                                     <span>至今</span>
                                                 </div>
                                             </div>
@@ -256,15 +255,17 @@
                                                 </div>
                                                 <div class="mr_content_r">
                                                     <div class="mr_edit mr_c_r_t" style="cursor: pointer;">
+                                                        <!--
                                                         <i></i>
                                                         <em>编辑</em>
+                                                        -->
+                                                        <span>2017</span>
+                                                        <span>-</span>
+                                                        <span>2018</span>
                                                     </div>
-                                                    <span>2017</span>
-                                                    <span> — </span>
-                                                    <span>2018</span>
                                                 </div>
                                             </div>
-                                            <div class="dn mr_content_m ueditor_parse" style="display: block;">
+                                            <div class="dn mr_content_m ueditor_parse" style="display: flex; ">
                                                 <p>{{ projectExp.projectDesc }}<br></p>
                                             </div>
                                         </div>                      
@@ -292,7 +293,7 @@
                                 <Form v-show="isShowAddEduExp" class="eduExpForm" id="addEduForm" novalidate="novalidate">
                                     <div class="mr_add_work">
                                         <label>学校名称</label>
-                                            <Input v-model="educationExp.school" placeholder="请输入学校名称" style="width: 350px"></Input>
+                                            <Input v-model="educationExp.schoolTitle" placeholder="请输入学校名称" style="width: 350px"></Input>
                                         <label>所学专业</label>
                                             <Input v-model="educationExp.major" placeholder="请输入专业" style="width: 350px"></Input>
                                         <label>学历</label>
@@ -325,20 +326,22 @@
                                             </div>
                                             -->
                                             <div class="l2">
-                                                <h4>{{ educationExp.school }}</h4>
+                                                <h4>{{ educationExp.schoolTitle }}</h4>
                                                 <span>{{ educationExp.major }}</span>
                                                 <span>{{ educationExp.education }}</span>
                                             </div>
                                         </div>
                                         <div class="mr_content_r">
                                             <div class="mr_edit mr_c_r_t" style="cursor: pointer;">
+                                                <!--
                                                 <i></i>
                                                 <em>编辑</em>
-                                            </div>
-                                            <div >
+                                                -->
                                                 <span>{{ educationExp.startTime }}</span>
                                                 <span>-</span>
                                                 <span>{{ educationExp.endTime }}</span>
+                                            </div>
+                                            <div>
                                             </div>
                                         </div>
                                     </div>
@@ -366,17 +369,17 @@
                                     <div class="mr_add_else">
                                         <FormItem>
                                             <label>专业技能</label>
-                                            <Input v-model="elseForm.proSkill" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
+                                            <Input v-model="user.professinalSkill" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
                                         </FormItem>
 
                                         <FormItem>
                                             <label>自我评价</label>
-                                            <Input v-model="elseForm.selfEvl" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
+                                            <Input v-model="user.selfEvaluation" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
                                         </FormItem>
 
                                         <FormItem>
                                             <label>获奖情况</label>
-                                            <Input v-model="elseForm.reward" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
+                                            <Input v-model="user.reward" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
                                         </FormItem>
                                         <div class="mr_ope clearfixs">
                                             <Button type="success" style="width: 100px">保存</Button>
@@ -391,20 +394,20 @@
                                         <Col span="20" style="margin-bottom: 5px">
                                             <Card dis-hover style="background-color: #fafafa; border: 0px">
                                                 <p slot="title" style="border-bottom: 0px">专业技能</p>
-                                                <p>{{ elseForm.proSkill }}</p>
+                                                <p>{{ user.professinalSkill }}</p>
                                             </Card>
                                         </Col>
                                         <Col span="20" style="margin-bottom: 15px">
                                             <Card dis-hover style="border: 0px;background-color: #fafafa">
                                                 <p slot="title" style="border-bottom: 0px">自我评价</p>
-                                                <p>{{ elseForm.selfEvl }}</p>z
+                                                <p>{{ user.selfEvaluation }}</p>z
                                                 
                                             </Card>
                                         </Col>
                                         <Col span="20">
                                             <Card dis-hover style="border: 0px;background-color: #fafafa">
                                                 <p slot="title" style="border-bottom: 0px">获奖情况</p>
-                                                <p>{{ elseForm.reward }}</p>
+                                                <p>{{ user.reward }}</p>
                                             </Card>
                                         </Col>
                                     </Row>
@@ -451,25 +454,28 @@
                         <div class="mr_module">
                             <ul>
                                 <li class="active md_flag" data-md="baseinfo">
-                                    <a class="clearfixs">
+                                    <a class="clearfixs" @click="locateInfo">
                                         <i class="mr_base_i"></i>
                                         <span class="mr_m_name">基本信息</span>
                                     </a>
                                 </li>
                                 <li data-md="workExperience" class="md_flag">
-                                    <a class="clearfixs">
+                                    <a class="clearfixs" @click="locatePro">
                                         <span class="mr_require flag_work dn">必填</span>
                                         <i class="mr_works_i"></i>
-                                        <span class="mr_m_name"> 实习经历 </span>
+                                        <span class="mr_m_name"> 项目经历 </span>
                                     </a>
                                 </li>
                                 <li data-md="educationalBackground" class="md_flag">
-                                    <a class="clearfixs">
-                
-                                        <span class="mr_require flag_edu dn">必填</span>
-                
+                                    <a class="clearfixs" @click="locateEdu">
                                         <i class="mr_edu_i"></i>
                                         <span class="mr_m_name">教育经历</span>
+                                    </a>
+                                </li>
+                                <li data-md="educationalBackground" class="md_flag">
+                                    <a class="clearfixs" @click="locateElse">
+                                        <i class="mr_edu_i"></i>
+                                        <span class="mr_m_name">其他经历</span>
                                     </a>
                                 </li>
                             </ul>
@@ -489,15 +495,24 @@
             return {
                 user: {
                     userName: '田永涛',
-                    introduce: '做项目使用',
-                    school: '华中科技大学',
-                    major: '软件工程',
+                    graduatedSchool: '华中科技大学',
+                    profession: '', //专业
                     sex: '男',
                     age: '24',
-                    education: '硕士',
-                    nativePlace: '武汉',
-                    email: 't2292453850@163.com',
-                    phoneNum: '18330107775',
+                    personPhoto:'',
+                    education: '',
+                    nativePlace: '',
+                    email: '',
+                    telephone: '',
+                    professinalSkill: "",
+                    reward:"",
+                    selfEvaluation:'',
+                    userId: '',
+                    scoreRank: '',
+                    majorCourse:'',
+                    id:'',
+                    communicationAddress:'',
+
                 },
                 
                 projectExp: {
@@ -509,21 +524,14 @@
                 },
 
                 educationExp: {
-                    school: '华中科技大学',
+                    schoolTitle: '华中科技大学',
                     major: '软件工程',
                     education: '硕士',
                     startTime: '2017-9',
                     endTime: '2020-3',
+                    userId: 1,
+                    //userName: user.userName
                 },
-
-                elseForm: {
-                    proSkill: 'hhh',
-                    selfEvl: 'lll',
-                    reward: 'eee',
-                },
-
-
-                jobContent: '',
                 addEduExpEm: '添加',
                 addElseEm: '添加',
                 addEm: '添加',
@@ -538,7 +546,6 @@
                 isShowNameForm: false,
                 isShowIntroduceForm: false,
                 isShowPersonForm: false,
-                value1: [],
                 city: [
                     {
                         value: 'hubei',
@@ -637,7 +644,44 @@
         computed: {
 
         },
+        mounted() {
+            this.init()
+        },
         methods: {
+            init(){
+                this.get()
+            },
+            get(){
+                this.$axios.get('http://47.93.20.40:8081/resume/' + 12)
+                    .then(response => {
+                        this.user = response.data;
+                        this.user.sex = (response.data.sex == '1' ? '男' : '女');
+                        switch (response.data.education) {
+                            case 1: this.user.education = '本科'; break;
+                            case 2: this.user.education = '硕士'; break;
+                            case 3: this.user.education = '博士'; break;
+                            case 4: this.user.education = '高中'; break;
+                            case 5: this.user.education = '初中'; break;
+                            case 6: this.user.education = '大专'; break;
+                            default: this.user.education = response.data.education;
+                        }
+                        //TODO 专业
+                        //this.$axios.get('' + 1)
+                        this.user.major = "软件工程"
+                    })
+
+                // this.$axios.get('http://47.93.20.40:8081/education/' + 1)
+                //     .then(response => {
+                //         this.educationExp = response.data;
+                //     })
+                this.$axios.get('http://47.93.20.40:8081/project_experience/' + 4)
+                    .then(response => {
+                        this.projectExp = response.data;
+                    })
+        // this.user = this.message
+            },
+
+
             showNameForm: function () {
                 this.isShowNameForm = !this.isShowNameForm
             },

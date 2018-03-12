@@ -19,14 +19,19 @@
         </div>
       </div>
     </div>
+    <Row>
+      <footerDiv></footerDiv>
+    </Row>
   </div>
 </template>
 
 <script>
 import util from '@/libs/util.js'
+import footerDiv from '@/views/main-components/footer/footer.vue';
 export default {
   name: 'news_detail',
   components: {
+    footerDiv
   },
   data () {
     return {

@@ -27,7 +27,7 @@
                                                 <Input v-model="form.phone" readonly unselectable="on"></Input>
                                             </FormItem>
                                             <FormItem>
-                                                <Button type="primary" @click="handleSubmit('form')">更新</Button>
+                                                <Button type="primary" @click="handleSubmitAcc()">更新</Button>
                                             </FormItem>
                                         </Form>
                                     </TabPane>
@@ -43,7 +43,7 @@
                                                 <Input type="password" v-model="form.confirmPassword"></Input>
                                             </FormItem>
                                             <FormItem>
-                                                <Button type="primary" @click="handleSubmit('form')">修改</Button>
+                                                <Button type="primary" @click="handleModify()">修改</Button>
                                             </FormItem>
                                         </Form>
                                     </TabPane>
@@ -52,26 +52,26 @@
                                             <FormItem label="公司名称：" prop="companyName">
                                                 <Input v-model="form.companyName"></Input>
                                             </FormItem>
-                                            <FormItem label="所属行业：" prop="industry">
+                                            <!-- <FormItem label="所属行业：" prop="industry">
                                                 <Cascader :data="data4" v-model="form.industry"></Cascader>
-                                            </FormItem>
+                                            </FormItem> -->
                                             <FormItem label="融资状态：" prop="companyStage">
                                                 <Select v-model="form.companyStage">
                                                     <Option v-for="item in companystage" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                                 </Select>
                                             </FormItem>
-                                            <FormItem label="公司logo：" prop="companyLogo">
+                                            <!-- <FormItem label="公司logo：" prop="companyLogo">
                                                 <div class="company_logo">
                                                     <a href="#">
                                                         <Avatar shape="square" size="large">LOGO</Avatar>
                                                     </a>
                                                 </div>
-                                            </FormItem>
+                                            </FormItem> -->
                                             <FormItem label="公司地址：" prop="companyAddress">
                                                 <Input v-model="form.companyAddress"></Input>
                                             </FormItem>
                                             <FormItem>
-                                                <Button type="primary" @click="handleSubmit('form')">更新</Button>
+                                                <Button type="primary" @click="modifyCompany()">更新</Button>
                                             </FormItem>
                                         </Form>
                                     </TabPane>
@@ -79,7 +79,7 @@
                             </div>
                         </div>
 
-                        <main-navbar :message="pageName"></main-navbar>
+                        <main-navbar></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -105,14 +105,34 @@ export default {
         footerDiv
     },
     data () {
+        const validatePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('密码不能为空'));
+            } else {
+                if (this.form.confirmPassword !== '') {
+                    // 对第二个密码框单独验证
+                    this.$refs.form.validateField('confirmPassword');
+                }
+                callback();
+            }
+        };
+        const validatePassCheck = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== this.form.newPassword) {
+                callback(new Error('两次输入的密码不相同'));
+            } else {
+                callback();
+            }
+        };
         return {
-            pageName: 'account',
             getCompanyUrl: 'http://47.93.20.40:8081/enterprise',      //获取企业信息的url
-            updateAccountUrl: '',       //更新账户信息的url
-            updateSecuUrl: '',         //维护账户安全的url
-            updateCompanyUrl: '',       //更新单位信息的url
+            updateUrl: 'http://47.93.20.40:8081/enterprise',       //更新企业信息的url
+            // updateUrl: '',         //维护账户安全的url
+            // updateUrl: '',       //更新单位信息的url
 
-            enterpriseId: 2,
+            enterpriseId: 5,
+            rows: {},
             form: {
                 login: '',
                 name: '',
@@ -120,7 +140,11 @@ export default {
                 phone: '',
                 oldPassword: '',
                 newPassword: '',
-                confirmPassword: ''
+                confirmPassword: '',
+                companyName: '',
+                industry: '',
+                companystage: 0,
+                companyAddress: ''
 
             },
             ruleValidate: {
@@ -135,10 +159,12 @@ export default {
                     { required: true, message: 'The password cannot be empty', trigger: 'blur' }
                 ],
                 newPassword: [
-                    { required: true, message: 'The password cannot be empty', trigger: 'blur' }
+                    { required: true, message: 'The password cannot be empty', trigger: 'blur' },
+                    { validator: validatePass, trigger: 'blur' }
                 ],
                 confirmPassword: [
-                    { required: true, message: 'The password cannot be empty', trigger: 'blur' }
+                    { required: true, message: 'The password cannot be empty', trigger: 'blur' },
+                    { validator: validatePassCheck, trigger: 'blur' }
                 ]
 
             },
@@ -158,42 +184,42 @@ export default {
             ],
             companystage: [
                 {
-                    value: '0',
+                    value: 0,
                     label: '未融资'
                 },
                 {
-                    value: '1',
+                    value: 1,
                     label: '天使轮融资'
                 },
                 {
-                    value: '2',
+                    value: 2,
                     label: 'A轮融资'
                 },
                 {
-                    value: '3',
+                    value: 3,
                     label: 'B轮融资'
                 },
                 {
-                    value: '4',
+                    value: 4,
                     label: 'C轮融资'
                 },
                 {
-                    value: '5',
+                    value: 5,
                     label: 'D轮融资'
                 },
                 {
-                    value: '6',
+                    value: 6,
                     label: '上市'
                 }
             ]
         };
     },
     methods: {
-        init() {
+        init () {
             // this.$nextTick(function(){
-                 this.getCompanyInfo();
+            this.getCompanyInfo();
             // })
-           
+
         },
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
@@ -209,16 +235,86 @@ export default {
             this.getCompanyUrl += '/' + this.enterpriseId;
         },
         getCompanyInfo () {
-            // alert(1234); 
+            // this.form = {};
+
             this.buildUrl();
             console.log(this.getCompanyUrl);
             this.$axios.get(this.getCompanyUrl)
                 .then(response => {
+                    console.log(response.data);
                     this.form.login = response.data.userName;
                     this.form.name = response.data.linkman;
                     this.form.mail = response.data.email;
                     this.form.phone = response.data.phone;
                     this.form.oldPassword = response.data.userPassword;
+                    this.form.companyName = response.data.name;
+                    // this.form.industry = response.data.industryId;
+                    this.form.companystage = response.data.stage;
+                    this.form.companyAddress = response.data.address
+                    console.log(this.form);
+                })
+                .catch(function (error) {
+                    console.log(error)
+
+                })
+        },
+        buildAcc() {
+            this.rows = {};
+
+            this.rows.email = this.form.mail;
+            this.rows.linkman = this.form.name;
+        },
+        //更新账户信息
+        handleSubmitAcc () {
+            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl += '/' + this.enterpriseId;
+            this.buildAcc();
+            this.$axios.put(this.updateUrl,this.rows)
+                .then(response => {
+                    this.$Message.info('提交成功！');
+                })
+                .catch(function (error) {
+                    console.log(error)
+
+                })
+
+        },
+        //修改账户密码
+        handleModify() {
+            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl += '/' + this.enterpriseId;
+
+            this.rows = {};
+            this.rows.userPassword = this.form.newPassword;
+
+            this.$axios.put(this.updateUrl,this.rows)
+                .then(response => {
+                    this.$Message.info('提交成功！');
+                    console.log(this.form.newPassword);
+                })
+                .catch(function (error) {
+                    console.log(error)
+
+                })
+        },
+        buildCompany() {
+            this.rows = {};
+
+            this.rows.name = this.form.companyName;
+            this.rows.address = this.form.companyAddress;
+            this.rows.stage = this.form.companystage;
+        },
+        //修改企业地址信息等
+        modifyCompany() {
+            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl += '/' + this.enterpriseId;
+
+            this.buildCompany();
+
+            this.$axios.put(this.updateUrl,this.rows)
+                .then(response => {
+                    this.$Message.info('提交成功！');
+                    console.log(this.rows);
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -229,7 +325,7 @@ export default {
     computed: {
 
     },
-    mounted() {
+    mounted () {
         this.init();
     }
 };
