@@ -96,10 +96,13 @@ export default {
                                     marginRight: '15px'
                                 },
                                 on: {
-
                                     click: () => {
-                                        // this.show(params.index)
-                                        this.filterPass()
+                                        let id = params.row.resume_post_record_id;
+                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=2';
+                                        this.$axios.put(url)
+                                            .then(response => {
+                                                this.$Message.info('已通过');
+                                            })
                                     }
                                 }
                             }, '筛选通过'),
@@ -109,9 +112,14 @@ export default {
                                     size: 'small'
                                 },
                                 on: {
-                                    // click: () => {
-                                    //     this.remove(params.index)
-                                    // }
+                                    click: () => {
+                                        let id = params.row.resume_post_record_id;
+                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
+                                        this.$axios.put(url)
+                                            .then(response => {
+                                                this.$Message.info('已拒绝');
+                                            })
+                                    }
                                 }
                             }, '不合适')
                         ]);

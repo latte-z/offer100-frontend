@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import util from '@/libs/util.js'
 export default {
     props: ['message'],
     name: 'enterprise_resume_resumeTable',
@@ -83,27 +84,27 @@ export default {
                         ]);
                     }
                 },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    // click: () => {
-                                    //     this.remove(params.index)
-                                    // }
-                                }
-                            }, '删除')
-                        ]);
-                    }
-                }
+                // {
+                //     title: '操作',
+                //     key: 'action',
+                //     width: 300,
+                //     align: 'center',
+                //     render: (h, params) => {
+                //         return h('div', [
+                //             h('Button', {
+                //                 props: {
+                //                     type: 'error',
+                //                     size: 'small'
+                //                 },
+                //                 on: {
+                //                     // click: () => {
+                //                     //     this.remove(params.index)
+                //                     // }
+                //                 }
+                //             }, '删除')
+                //         ]);
+                //     }
+                // }
             ]
         };
     },

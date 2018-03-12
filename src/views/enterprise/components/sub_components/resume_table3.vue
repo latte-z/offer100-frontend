@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import util from '@/libs/util.js'
 export default {
     props: ['message'],
     name: 'enterprise_resume_resumeTable',
@@ -99,9 +100,14 @@ export default {
                                     marginRight: '15px'
                                 },
                                 on: {
-                                    // click: () => {
-                                    //     this.remove(params.index)
-                                    // }
+                                    click: () => {
+                                        let id = params.row.resume_post_record_id;
+                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=0';
+                                        this.$axios.put(url)
+                                            .then(response => {
+                                                this.$Message.info('已通过');
+                                            })
+                                    }
                                 }
                             }, '面试通过'),
                             h('Button', {
@@ -110,9 +116,14 @@ export default {
                                     size: 'small'
                                 },
                                 on: {
-                                    // click: () => {
-                                    //     this.remove(params.index)
-                                    // }
+                                    click: () => {
+                                        let id = params.row.resume_post_record_id;
+                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
+                                        this.$axios.put(url)
+                                            .then(response => {
+                                                this.$Message.info('已拒绝');
+                                            })
+                                    }
                                 }
                             }, '不合适')
                         ]);
