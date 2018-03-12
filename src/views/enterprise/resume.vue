@@ -12,72 +12,19 @@
                         <div class="mr_myresume_l">
                             <div class="resume-container" style="display: block;">
                             <Tabs value="name1">
-                                <TabPane :label="label1" name="name1">
-                                    <!-- 筛选条件 -->
-                                    <div class="resume_choose">
-                                        <div class="optionbox fl">
-                                            <span class="keyword fl">岗位名：</span>
-                                            <div class="placeCombox fl">
-                                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
-                                            </div>
-                                        </div>
-                                        <div class="fl">
-                                            <Button type="primary" icon="ios-search" @click="handleSearch">Search</Button>
-                                        </div>
-                                    </div>
+                                <TabPane label="已投递" name="name1">
                                     <!-- 简历表格 -->
-                                    <resume_table1 :page="page" :resumeRows="rows"></resume_table1>
+                                    <resumeTable1 :message="enterpriseId"></resumeTable1>
                                 </TabPane>
-                                <TabPane :label="label2" name="name2">
-                                    <!-- 筛选条件 -->
-                                    <div class="resume_choose">
-                                        <div class="optionbox fl">
-                                            <span class="keyword fl">岗位名：</span>
-                                            <div class="placeCombox fl">
-                                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
-                                            </div>
-                                        </div>
-                                        <div class="fl">
-                                            <Button type="primary" icon="ios-search">Search</Button>
-                                        </div>
-                                    </div>
-                                    <resume_table2></resume_table2>
+                                <TabPane label="待沟通" name="name2">
+                                    <resumeTable2 :message="enterpriseId"></resumeTable2>
                                 </TabPane>
-                                <TabPane :label="label3" name="name3">
-                                    <!-- 筛选条件 -->
-                                    <div class="resume_choose">
-                                        <div class="optionbox fl">
-                                            <span class="keyword fl">岗位名：</span>
-                                            <div class="placeCombox fl">
-                                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
-                                            </div>
-                                        </div>
-                                        <div class="fl">
-                                            <Button type="primary" icon="ios-search">Search</Button>
-                                        </div>
-                                    </div>
-                                    <resume_table3></resume_table3>
+                                <TabPane label="已邀请" name="name3">
+                                    <resumeTable3 :message="enterpriseId"></resumeTable3>
                                 </TabPane>
-                                <TabPane :label="label4" name="name4">
-                                    <!-- 筛选条件 -->
-                                    <div class="resume_choose">
-                                        <div class="optionbox fl">
-                                            <span class="keyword fl">岗位名：</span>
-                                            <div class="placeCombox fl">
-                                                <input v-model="keywordInput" type="text" value="" id="keyWork" placeholder="请输入搜索岗位名" class="comboBoxInput">
-                                            </div>
-                                        </div>
-                                        <div class="fl">
-                                            <Button type="primary" icon="ios-search">Search</Button>
-                                        </div>
-                                    </div>
+                                <TabPane label="不合适" name="name4">
                                     <!-- <resume_table4></resume_table4> -->
-                                    <Table border stripe :columns="columns" :data="data"></Table>
-                                    <div style="margin: 10px;overflow: hidden">
-                                        <div style="float: right;">
-                                            <Page :total="100" :current="1" @on-change="changePage"></Page>
-                                        </div>
-                                    </div>
+                                    <resumeTable4 :message="enterpriseId"></resumeTable4>
                                 </TabPane>
                             </Tabs>
                         </div>
@@ -97,203 +44,30 @@
 <script>
 import mainNavbar from './components/main-navbar.vue'
 // import resume from './components/resume.vue'
-import resume_table1 from './components/sub_components/resume_table1.vue'
-import resume_table2 from './components/sub_components/resume_table2.vue'
-import resume_table3 from './components/sub_components/resume_table3.vue'
+import resumeTable1 from './components/sub_components/resume_table1.vue'
+import resumeTable2 from './components/sub_components/resume_table2.vue'
+import resumeTable3 from './components/sub_components/resume_table3.vue'
+import resumeTable4 from './components/sub_components/resume_table4.vue'
 import footerDiv from '@/views/main-components/footer/footer.vue'
 export default {
     name: 'enterprise_resume',
     components: {
         mainNavbar,
-        resume_table1,
-        resume_table2,
-        resume_table3,
+        resumeTable1,
+        resumeTable2,
+        resumeTable3,
+        resumeTable4,
         // resume,
         footerDiv
     },
     data () {
         return {
             pageName: 'resume',
-            keywordInput: '',
-            params: '',
-            searchUrl: 'http://47.93.20.40:8081/resume_post_record/manageResume',
-
-            rows: [],
-            page: {
-                current: 1,
-                total: 0,
-                pageSize: 10,
-                pageSizeOpts: [10, 20, 30],
-            },
-            label1: (h) => {
-                return h('div', [
-                    h('span', '待筛选 '),
-                    h('Badge', {
-                        props: {
-                            count: 2,
-                            className: 'badge-alone'
-                        }
-                    })
-                ])
-            },
-            label2: (h) => {
-                return h('div', [
-                    h('span', '待沟通 '),
-                    h('Badge', {
-                        props: {
-                            count: 2,
-                            className: 'badge-alone'
-                        }
-                    })
-                ])
-            },
-            label3: (h) => {
-                return h('div', [
-                    h('span', '已邀请 '),
-                    h('Badge', {
-                        props: {
-                            count: 4,
-                            className: 'badge-alone'
-                        }
-                    })
-                ])
-            },
-            label4: (h) => {
-                return h('div', [
-                    h('span', '不合适 '),
-                    h('Badge', {
-                        props: {
-                            count: 4,
-                            className: 'badge-alone'
-                        }
-                    })
-                ])
-            },
-            columns: [
-                {
-                    title: '序号',
-                    key: 'num',
-                    width: 100,
-                    align: 'center'
-                },
-                {
-                    title: '投递时间',
-                    key: 'repostTime',
-                    align: 'center'
-                },
-                {
-                    title: '求职岗位',
-                    key: 'jobName',
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('i', {
-                                style: {
-                                    cursor: 'default'
-                                }
-                            }, params.row.jobName)
-                        ]);
-                    }
-                },
-                {
-                    title: '学历',
-                    key: 'education',
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('i', {
-                                style: {
-                                    cursor: 'default'
-                                }
-                            }, params.row.education)
-                        ]);
-                    }
-                },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    // click: () => {
-                                    //     this.remove(params.index)
-                                    // }
-                                }
-                            }, '删除')
-                        ]);
-                    }
-                }
-            ],
-            data: [
-                {
-                    num: '01',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '02',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '03',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '硕士'
-                }
-            ]
+            enterpriseId: 1
         };
     },
     methods: {
-        init () {
-            this.params = this.$route.params.keywordInput;
-            this.keywordInput = this.params;
-            this.handleSearch();
-        },
 
-        handleSearch () {
-            if (this.keywordInput) {
-                let keys = { "key": [this.keywordInput] };
-                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize, keys)
-                    .then(response => {
-                        this.page.total = response.data.total;
-                        this.rows = response.data;
-                        this.$Loading.finish();
-                    })
-            } else {
-                this.$axios.put(this.searchUrl + '?page=' + this.page.current + '&rows=' + this.page.pageSize)
-                    .then(response => {
-                        this.page.total = response.data.total;
-                        this.rows = response.data;
-                        this.$Loading.finish();
-                    })
-            }
-        },
-        mockTableData1 () {
-            let data = [];
-            for (let i = 0; i < 10; i++) {
-                data.push({
-                    num: this.data[i].num,
-                    repostTime: this.data[i].repostTime,
-                    jobName: this.data[i].jobName,
-                    education: this.data[i].education
-
-                })
-            }
-            return data;
-        },
-        changePage () {
-            this.tableData1 = this.mockTableData1();
-        }
     },
     computed: {
 

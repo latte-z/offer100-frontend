@@ -7,33 +7,50 @@
         <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <!-- <Page :total="100" :current="1" @on-change="changePage"></Page> -->
-                <Page :current="this.page.current" :total="this.page.total" :page-size="this.page.pageSize" :page-size-opts="this.page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
+                <Page :total="10" :current="1"></Page>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import util from '@/libs/util.js'
 export default {
+    props: ['message'],
     name: 'enterprise_resume_resumeTable',
-    props: [
-        'page',
-        'resumeRows'
-    ],
     data () {
         return {
+            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=1',
+            data: [],
             columns: [
                 {
                     title: '序号',
                     key: 'num',
                     width: 100,
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('i', {
+                                style: {
+                                    cursor: 'default'
+                                }
+                            }, params.row.job_id)
+                        ]);
+                    }
                 },
                 {
                     title: '投递时间',
                     key: 'repostTime',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('i', {
+                                style: {
+                                    cursor: 'default'
+                                }
+                            }, util.longToDate(params.row.posttime))
+                        ]);
+                    }
                 },
                 {
                     title: '求职岗位',
@@ -45,7 +62,7 @@ export default {
                                 style: {
                                     cursor: 'default'
                                 }
-                            }, params.row.jobName)
+                            }, params.row.title)
                         ]);
                     }
                 },
@@ -101,43 +118,14 @@ export default {
                     }
                 }
             ],
-            // data6: this.mockTableData1()
-            data: [
-                // {
-                //     num: '01',
-                //     repostTime: '2018-01-01',
-                //     jobName: "java开发",
-                //     education: '本科'
-                // },
-                // {
-                //     num: '02',
-                //     repostTime: '2018-01-01',
-                //     jobName: "java开发",
-                //     education: '本科'
-                // },
-                // {
-                //     num: '03',
-                //     repostTime: '2018-01-01',
-                //     jobName: "java开发",
-                //     education: '硕士'
-                // }
-            ]
         };
     },
     methods: {
         init () {
-            for (let i = 0; i < this.page.pageSize; i++) {
-                this.data.push({
-                    // num: this.data[i].num,
-                    // repostTime: this.data[i].repostTime,
-                    // jobName: this.data[i].jobName,
-                    // education: this.data[i].education
+            this.$axios.get(this.url)
+                .then(response => {
+                    this.data = response.data.rows;
                 })
-            }
-            this.data = this.resumeRows;
-        },
-        filterPass () {
-
         },
         show (index) {
             this.$Modal.info({
@@ -148,23 +136,6 @@ export default {
         remove (index) {
             this.data.splice(index, 1);
         },
-        // mockTableData1 () {
-        //     let data = [];
-        //     for (let i = 0; i < 10; i++) {
-        //         data.push({
-        //             num: this.data[i].num,
-        //             repostTime: this.data[i].repostTime,
-        //             jobName: this.data[i].jobName,
-        //             education: this.data[i].education
-
-        //         })
-        //     }
-        //     return data;
-        // },
-        // changePage () {
-        //     // The simulated data is changed directly here, and the actual usage scenario should fetch the data from the server
-        //     this.tableData1 = this.mockTableData1();
-        // }
 
     },
     mounted () {

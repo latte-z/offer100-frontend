@@ -4,10 +4,10 @@
 
 <template>
     <div>
-        <Table border stripe :columns="columns" :data="data" ></Table>
+        <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="100" :current="1" @on-change="changePage"></Page>
+                <Page :total="10" :current="1"></Page>
             </div>
         </div>
     </div>
@@ -15,25 +15,45 @@
 
 <script>
 export default {
+    props: ['message'],
     name: 'enterprise_resume_resumeTable',
-    
     data () {
         return {
             name1: 'name1',
             name2: 'name2',
             name3: 'name3',
             name4: 'name4',
+            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=2',
+            data: [],
             columns: [
-                {
+{
                     title: '序号',
                     key: 'num',
                     width: 100,
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('i', {
+                                style: {
+                                    cursor: 'default'
+                                }
+                            }, params.row.job_id)
+                        ]);
+                    }
                 },
                 {
                     title: '投递时间',
                     key: 'repostTime',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('i', {
+                                style: {
+                                    cursor: 'default'
+                                }
+                            }, util.longToDate(params.row.posttime))
+                        ]);
+                    }
                 },
                 {
                     title: '求职岗位',
@@ -45,7 +65,7 @@ export default {
                                 style: {
                                     cursor: 'default'
                                 }
-                            }, params.row.jobName)
+                            }, params.row.title)
                         ]);
                     }
                 },
@@ -98,27 +118,6 @@ export default {
                         ]);
                     }
                 }
-            ],
-            // data6: this.mockTableData1()
-            data: [
-                {
-                    num: '01',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '02',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '本科'
-                },
-                {
-                    num: '03',
-                    repostTime: '2018-01-01',
-                    jobName: "java开发",
-                    education: '硕士'
-                }
             ]
         };
     },
@@ -153,6 +152,12 @@ export default {
     },
     computed: {
 
+    },
+    mounted () {
+        this.$axios.get(this.url)
+            .then(response => {
+                this.data = response.data.rows;
+            })
     }
 };
 </script>

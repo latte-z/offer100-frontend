@@ -132,14 +132,6 @@ export const appRouter = [
                 component: () => import('@/views/enterprise/account.vue')
             },
             {
-                path: 'register',
-                icon: 'plus',
-                title: '企业注册',
-                // access: 0,
-                name: 'enterprise_register',
-                component: () => import('@/views/enterprise/components/register.vue')
-            },
-            {
                 path: 'qualification',
                 icon: 'ribbon-b',
                 title: '资质认证',
