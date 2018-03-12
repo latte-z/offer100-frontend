@@ -5,16 +5,8 @@
 <template>
     <div class="lgad_container">
         <!--广告位-->
-        <div class="lgad_jsonp" style="margin-bottom: 15px;">
-            <a href="#" target="_blank" rel="nofollow"><img src="../images/ad1.jpg"></a>
-        </div>
-
-        <div class="lgad_jsonp" style="margin-bottom: 15px;">
-            <a href="#" target="_blank" rel="nofollow"><img src="../images/ad2.jpg"></a>
-        </div>
-        
-        <div class="lgad_jsonp" style="margin-bottom: 15px;">
-            <a href="#" target="_blank" rel="nofollow"><img src="../images/ad3.jpg"></a>
+        <div class="lgad_jsonp" style="margin-bottom: 15px;" v-for="obj in ad" :key="ad.index">
+            <a href="#" target="_blank" rel="nofollow"><img :src="obj"></a>
         </div>
     </div>
 </template>
@@ -27,7 +19,8 @@ export default {
     ],
     data () {
         return {
-
+            url: 'http://localhost:8081/mainpage/getAdImage?location=search',
+            ad: []
         };
     },
     computed: {
@@ -35,6 +28,12 @@ export default {
     },
     methods: {
 
+    },
+    mounted () {
+        this.$axios.get(this.url)
+            .then(response => {
+                this.ad = Object.keys(response.data)
+            })
     }
 };
 </script>

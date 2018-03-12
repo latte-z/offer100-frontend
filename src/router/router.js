@@ -76,12 +76,39 @@ export const otherRouter = {
             name: 'search_index',
             title: '搜索',
             component: () => import('@/views/search/search.vue')
+        },
+        {
+            path: 'companylist',
+            name: 'enterprise_list',
+            title: '名企招聘',
+            component: () => import('@/views/search/enterprise-search.vue')
         }
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
+    // news page
+    {
+        path: '/news',
+        title: '新闻',
+        name: 'news',
+        component: Main,
+        children: [
+            {
+                path: 'index',  
+                title: '新闻',
+                name: 'information_index',
+                component: () => import('@/views/news/news.vue')
+            },
+            {
+                path: 'detail/:newsId',
+                title: ':title', 
+                name: 'news_detail', 
+                component: () => import('@/views/news/newsDetail.vue')
+            }
+        ]
+    },
     {
         path: '/enterprise',
         icon: 'briefcase',
@@ -93,7 +120,7 @@ export const appRouter = [
             {
                 path: 'index',
                 icon: 'locked',
-                title: '账户管理',
+                title: '仪表板',
                 name: 'enterprise_index',
                 component: () => import('@/views/enterprise/enterprise.vue')
             },
@@ -102,36 +129,28 @@ export const appRouter = [
                 icon: 'locked',
                 title: '账户管理',
                 name: 'enterprise_account',
-                component: () => import('@/views/enterprise/components/account.vue')
-            },
-            {
-                path: 'register',
-                icon: 'plus',
-                title: '企业注册',
-                // access: 0,
-                name: 'enterprise_register',
-                component: () => import('@/views/enterprise/components/register.vue')
+                component: () => import('@/views/enterprise/account.vue')
             },
             {
                 path: 'qualification',
                 icon: 'ribbon-b',
                 title: '资质认证',
                 name: 'enterprise_qualification',
-                component: () => import('@/views/enterprise/components/qualification.vue')
+                component: () => import('@/views/enterprise/qualification.vue')
             },
             {
                 path: 'enterprise_resume',
                 icon: 'ios-paper',
                 title: '简历管理',
                 name: 'enterprise_resume',
-                component: () => import('@/views/enterprise/components/resume.vue')
+                component: () => import('@/views/enterprise/resume.vue')
             },
             {
                 path: 'job',
                 icon: 'social-codepen',
                 title: '岗位管理',
                 name: 'enterprise_job',
-                component: () => import('@/views/enterprise/components/job.vue')
+                component: () => import('@/views/enterprise/job.vue')
             }
         ]
     },
@@ -171,6 +190,27 @@ export const appRouter = [
                 title: '个人收藏',
                 name: 'user_favorite',
                 component: () => import('@/views/user/favorite.vue')
+            },
+            {
+                path: 'updatePWD',
+                icon: 'android-star',
+                title: '个人收藏',
+                name: 'user_updatePWD',
+                component: () => import('@/views/user/updatePWD.vue')
+            },
+            {
+                path: 'edit',
+                icon: 'android-star',
+                title: '编辑',
+                name: 'user_edit',
+                component: () => import('@/views/user/edit.vue')
+            },
+            {
+                path: 'edit',
+                icon: 'android-star',
+                title: '投递箱',
+                name: 'user_delivery',
+                component: () => import('@/views/user/delivery.vue')
             }
         ]
     },

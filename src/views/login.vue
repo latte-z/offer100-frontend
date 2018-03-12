@@ -51,7 +51,7 @@
             <Card :bordered="false" shadow>
                 <p slot="title" style="height:auto;">
                     注册用户类型：
-                    <RadioGroup v-model="usertype" type="button">
+                    <RadioGroup v-model="usertype" type="button" @on-change="setGender">
                         <Radio label="个人"></Radio>
                         <Radio label="企业"></Radio>
                     </RadioGroup>
@@ -70,7 +70,7 @@
                         <FormItem label="用户名" prop="username">
                             <Input v-model="user.username" placeholder=""></Input>
                         </FormItem>
-                        <FormItem label="性别" prop="gender">
+                        <FormItem label="性别" prop="gender" :class="{'dn':hasGender}">
                             <RadioGroup v-model="user.gender">
                                 <Radio label="男"></Radio>
                                 <Radio label="女"></Radio>
@@ -92,9 +92,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import axios from 'axios'
-import qs from 'qs'
+import Vue from 'vue';
+import axios from 'axios';
+import qs from 'qs';
 export default {
     data () {
         const validatePass = (rule, value, callback) => {
@@ -118,8 +118,7 @@ export default {
             }
         };
         return {
-            // loginUrl: 'http://192.168.43.189:8080/templete-webmvc/login',
-            loginUrl: 'http://www.mocky.io/v2/5a5ca3ff2e0000e4119f83a9',
+            loginUrl: 'http://localhost:8081/login/user/login',
             loginMsg: '',
             loginStatus: '',
             form: {
@@ -138,8 +137,9 @@ export default {
             // 注册部分内容
             registToggle: false,
             usertype: '个人',
-            userRegistUrl: '',
-            enterpriseRegistUrl: '',
+            hasGender: false,
+            userRegistUrl: 'http://localhost:8081/users',
+            enterpriseRegistUrl: 'http://localhost:8081/enterprise/admin/enterprise',
             registMsg: '',
             registStatus: '',
             user: {
@@ -182,49 +182,76 @@ export default {
                 if (valid) {
                     // 0:guest 1:admin 2:enterprise 3:user
                     // axios send login post request
-                    this.$axios.post(this.loginUrl, qs.stringify(this.form))
+                    let postData = {
+                        "type":"user",
+                        "username":this.form.userName,
+                        "password":this.form.password
+                    }
+                    this.$axios.post(this.loginUrl, postData)
                         .then(response => {
-                            this.loginMsg = response.data.msg
-                            this.loginStatus = response.data.status
-                            if (this.loginStatus === 0) {
+                            this.loginMsg = response.data.msg;
+                            // this.loginStatus = response.data.status;
+                            // if (this.loginStatus === 0) {
                                 // set user token
-                                localStorage.setItem('token', response.data.msg)
-                                localStorage.setItem('username', this.form.userName)
-                                this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg')
+                                // localStorage.setItem('token', response.data.msg);
+                                localStorage.setItem('username', this.form.userName);
+                                this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                                 // set user role
-                                if (response.data.accsss === 'admin') {
-                                    localStorage.setItem('access', 1)
-                                } else if (response.data.accsss === 'enterprise') {
-                                    localStorage.setItem('access', 2)
+                                if (response.data.type === 'admin') {
+                                    localStorage.setItem('access', 1);
+                                } else if (response.data.type === 'enterprise') {
+                                    localStorage.setItem('access', 2);
                                 } else {
-                                    localStorage.setItem('access', 3)
+                                    localStorage.setItem('access', 3);
                                 }
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            }
+                            // }
                         })
                         .catch(function (error) {
-                            console.log(error)
-                        })
+                            console.log(error);
+                        });
                 }
             });
         },
         // 提交注册信息
         handleRegist () {
-            var url = (usertype === '个人') ? this.userRegistUrl : this.enterpriseRegistUrl;
             this.$refs.registForm.validate((valid) => {
                 if (valid) {
-                    this.$axios.post(url, qs.stringify(this.user))
+                    var url = (this.usertype === '个人') ? this.userRegistUrl : this.enterpriseRegistUrl;
+                    let postData = {};
+                    if (this.usertype === '个人') {
+                        postData = {
+                            'email': this.user.email,
+                            'password': this.user.password,
+                            'username': this.user.username,
+                            'sex': this.user.gender === '男' ? 0 : 1,
+                            'phone': this.user.phone
+                        };
+                    } else {
+                        postData = {
+                            'email': this.user.email,
+                            'userPassword': this.user.password,
+                            'userName': this.user.username,
+                            // "sex": this.user.gender === '男' ? 0 : 1,
+                            'phone': this.user.phone
+                        };
+                    }
+                    this.$axios.post(url, postData)
                         .then(response => {
-                            this.registMsg = response.data.msg;
-                            this.registStatus = response.data.registStatus;
-                            if (this.registStatus === 0) {
+                            console.log(postData);
+                            // this.registMsg = response.data.msg;
+                            // this.registStatus = response.data.registStatus;
+                            // if (this.registStatus === 0) {
 
-                            }
-                        })
+                            // }
+                        });
                 }
-            })
+            });
+        },
+        setGender () {
+            return this.hasGender = !this.hasGender;
         },
         // 切换注册mod显示状态
         registSwitch () {

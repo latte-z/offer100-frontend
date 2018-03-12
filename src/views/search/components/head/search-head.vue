@@ -46,11 +46,10 @@
                     <RadioGroup v-model="experience" type="button" size="small" @on-change="sendMsgToParent">
                         <Radio label="不限"></Radio>
                         <Radio label="应届毕业生"></Radio>
-                        <Radio label="3年及以下"></Radio>
-                        <Radio label="3-5年"></Radio>
-                        <Radio label="5-10年"></Radio>
+                        <Radio label="3年"></Radio>
+                        <Radio label="5年"></Radio>
+                        <Radio label="10年"></Radio>
                         <Radio label="10年以上"></Radio>
-                        <Radio label="不要求"></Radio>
                     </RadioGroup>
                 </li>
 
@@ -89,12 +88,12 @@
             <li class="wrapper">
                 <div class="item order">
                     <span class="title">排序方式：</span>
-                    <RadioGroup v-model="sorting" type="button" size="small" style="margin-left:5px;">
+                    <RadioGroup v-model="sorting" type="button" size="small" style="margin-left:5px;" @on-change="sendMsgToParent">
                         <Radio label="默认"></Radio>
                         <Radio label="最新"></Radio>
                     </RadioGroup>
                 </div>
-                <div class="item page">
+                <!-- <div class="item page">
                     <div class="prev ban">
                         &lt;
                     </div>
@@ -106,7 +105,7 @@
                         /
                         <span class="span totalNum">30</span>
                     </div>
-                </div>
+                </div> -->
             </li>
         </ul>
     </div>
@@ -131,15 +130,33 @@ export default {
 
     methods: {
         sendMsgToParent () {
+            let tmp;
+            switch (this.experience) {
+                case '10年以上':
+                    tmp = 11;
+                case '10年':
+                    tmp = 10;
+                case '5年':
+                    tmp = 5;
+                case '3年':
+                    tmp = 3;
+                case '应届毕业生':
+                    tmp = 0;
+                case '不限':
+                    tmp = '不限';
+            }
             this.message = [
                 { key: "city", value: this.city },
-                { key: "experience", value: this.experience },
+                { key: "experience", value: tmp },
                 { key: "education", value: this.education },
                 { key: "industry", value: this.industry },
                 { key: "sorting", value: this.sorting }
             ];
             this.$emit("listenToChildEvent", this.message);
         }
+    },
+    mounted () {
+        // this.sendMsgToParent();
     }
 };
 </script>

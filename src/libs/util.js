@@ -20,6 +20,15 @@ util.ajax = axios.create({
     timeout: 30000
 });
 
+util.longToDate = function (data) {
+    var da = data;
+    da = new Date(da);
+    var year = da.getFullYear();
+    var month = da.getMonth() + 1;
+    var date = da.getDate();
+    return [year, month, date].join('/');
+};
+
 util.inOf = function (arr, targetArr) {
     let res = true;
     arr.forEach(item => {

@@ -45,14 +45,9 @@
           <!-- AD Banner -->
           <Col :md="24" :lg="16">
           <Carousel class="carousel" v-model="value" :autoplay="setting.autoplay" :autoplay-speed="setting.autoplaySpeed" :dots="setting.dots" :radius-dot="setting.radiusDot" :trigger="setting.trigger" :arrow="setting.arrow">
-            <CarouselItem>
+            <CarouselItem v-for="obj in adKeyArray" :key="adKeyArray.index">
               <div>
-                <img class="banner-img" src="@/views/home/images/banner1.jpg">
-              </div>
-            </CarouselItem>
-            <CarouselItem>
-              <div>
-                <img class="banner-img" src="@/views/home/images/banner2.jpg">
+                <img class="banner-img" :src="obj">
               </div>
             </CarouselItem>
           </Carousel>
@@ -68,21 +63,21 @@
             <Row :gutter="5">
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (0 || 3 || 6)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 0 || index === 3 || index === 6" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (1 || 4 || 7)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 1 || index === 4 || index === 7" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="8">
               <Row :gutter="5">
-                <div v-for="(job,index) in jobs" v-if="index === (2 || 5 || 8)" style="padding:5px">
+                <div v-for="(job,index) in jobs" v-if="index === 2 || index === 5 || index === 8" style="padding:5px">
                   <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
                 </div>
               </Row>
@@ -91,7 +86,7 @@
           </TabPane>
         </Tabs>
         <div style="display:flex;margin-top:20px">
-          <Button type="success" style="margin:auto;width:200px;font-size:15px">查看更多</Button>
+          <Button type="success" style="margin:auto;width:200px;font-size:15px" @click="goSearch">查看更多</Button>
         </div>
       </Row>
     </div>
@@ -103,28 +98,28 @@
             <Row :gutter="5">
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (0 || 4 || 8)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 0 || index === 4" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (1 || 5 || 9)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 1 || index === 5" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (2 || 6 || 10)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 2 || index === 6" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
               </Col>
               <Col :md="24" :lg="6">
               <Row :gutter="5">
-                <div v-for="(enterprise,index) in enterprises" v-if="index === (3 || 7 || 11)" style="padding:5px">
+                <div v-for="(enterprise,index) in enterprises" v-if="index === 3 || index === 7" style="padding:5px">
                   <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
                 </div>
               </Row>
@@ -144,73 +139,90 @@
 </template>
 
 <script>
-import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue'
-import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
-import footerDiv from '@/views/main-components/footer/footer.vue'
-import jobNav from './components/job-nav/job-nav.vue'
-import qs from 'qs'
+import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue';
+import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue';
+import footerDiv from '@/views/main-components/footer/footer.vue';
+import jobNav from './components/job-nav/job-nav.vue';
+import qs from 'qs';
 export default {
-  name: 'home',
-  components: {
-    jobsCard,
-    enterpriseCard,
-    footerDiv,
-    jobNav
-  },
-  data () {
-    return {
-      value: 0,
-      search: '',
-      jobs: [],
-      enterprises: [],
-      jobsUrl: 'http://localhost:8081/mainpage/hotJob',
-      enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
-      setting: {
-        autoplay: true,
-        autoplaySpeed: 4000,
-        dots: 'inside',
-        radiusDot: false,
-        trigger: 'click',
-        arrow: 'hover',
-        // height: '385px'
-      },
-      searchForm: {
-        input: ''
-      }
-    }
-  },
-  computed: {
-    avatorPath () {
-      return localStorage.avatorImgPath
-    }
-  },
-  methods: {
-    init () {
-      this.userName = localStorage.getItem('username')
-      this.getJobs()
-      this.getEnterprises()
+    name: 'home',
+    components: {
+        jobsCard,
+        enterpriseCard,
+        footerDiv,
+        jobNav
     },
-    handleSubmit () {
-      this.$router.push({
-        name: 'search_index',
-        params: {searchInput: this.searchForm.input}
-      })
+    data () {
+        return {
+            value: 0,
+            search: '',
+            jobs: [],
+            enterprises: [],
+            adimgUrl: 'http://localhost:8081/mainpage/getAdImage?location=mainpage',
+            jobsUrl: 'http://localhost:8081/mainpage/hotJob',
+            enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
+            ad: {},
+            adKeyArray: [],
+            setting: {
+                autoplay: true,
+                autoplaySpeed: 4000,
+                dots: 'inside',
+                radiusDot: false,
+                trigger: 'click',
+                arrow: 'hover'
+                // height: '385px'
+            },
+            searchForm: {
+                input: ''
+            }
+        };
     },
-    getJobs () {
-      this.$axios.get(this.jobsUrl)
-        .then(response => {
-          this.jobs = response.data
-        })
+    computed: {
+        avatorPath () {
+            return localStorage.avatorImgPath;
+        }
     },
-    getEnterprises () {
-      this.$axios.get(this.enterprisesUrl)
-        .then(response => {
-          this.enterprises = response.data
-        })
+    methods: {
+        init () {
+            this.userName = localStorage.getItem('username');
+            this.getJobs();
+            this.getEnterprises();
+            this.getAdImg();
+        },
+        handleSubmit () {
+            this.$router.push({
+                name: 'search_index',
+                params: {searchInput: this.searchForm.input}
+            });
+        },
+        getJobs () {
+            this.$axios.get(this.jobsUrl)
+                .then(response => {
+                    this.jobs = response.data;
+                });
+        },
+        getEnterprises () {
+            this.$axios.get(this.enterprisesUrl)
+                .then(response => {
+                    this.enterprises = response.data;
+                });
+        },
+        goSearch () {
+            this.$router.push({
+                name: 'search_index',
+                params: null
+            });
+        },
+        getAdImg () {
+          this.$axios.get(this.adimgUrl)
+            .then(response => {
+              this.ad = response.data
+              this.adKeyArray = Object.keys(this.ad)
+            })
+        }
+    },
+    mounted () {
+        this.init();
     }
-  },
-  mounted () {
-    this.init()
-  }
-}
+};
 </script>
