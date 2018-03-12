@@ -76,7 +76,7 @@
 
 <script>
 export default {
-    name: 'enterprise_account',
+    name: 'enterprise_acc',
     data () {
         return {
             formValidate: {

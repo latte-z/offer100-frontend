@@ -9,7 +9,8 @@
                 <div class="container clearfix">
                     <div class="clearfixs mr_created">
                         <!-- <resume class="mr_myresume_l"></resume> -->
-                        <div class="resume-container" style="display: block;">
+                        <div class="mr_myresume_l">
+                            <div class="resume-container" style="display: block;">
                             <Tabs value="name1">
                                 <TabPane :label="label1" name="name1">
                                     <!-- 筛选条件 -->
@@ -80,6 +81,8 @@
                                 </TabPane>
                             </Tabs>
                         </div>
+                        </div>
+                        
                         <main-navbar></main-navbar>
                     </div>
                 </div>
