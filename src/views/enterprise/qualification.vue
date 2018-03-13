@@ -23,23 +23,16 @@
                                         </p>
                                     </div>
 
-                                    <!-- <div class="fourp mtr10 clearfix" style="*z-index:11;z-index:11">
-                    <span>
-                        <font class="asterisk mr10">*</font> 单位性质</span>
-                    <div class="selectBox shadow_bg selwidth fl" tabindex="-1" focusid="CompanyType" id="companytype_selector" bind_hidden="CompanyType">
-                        <input type="text" id="companyType_input">
-                    </div>
-                    <font id="companyTypemsg" class="colef7"></font>
-                </div> -->
                                     <p class="secondp clearfix">
                                         <span>证照名称</span>
                                         <!-- <em class="licenses-name">北京华品博睿网络技术有限公司</em> -->
                                         <label class="licenses-name" v-model="companyName" style="margin-bottom: 10px;">{{this.companyName}}</label>
                                     </p>
                                     <p class="licenses-tip">请确认单位名称与证照名称一致，如不一致将无法通过单位认证！如单位名称不正确，可在下方进行修改。</p>
-                                    <div class="change-cname"><input type="text" id="changenName" v-model="newCompanyName">
-                                        <p class="t-error">单位名称不能为空</p>
-                                        <Button type="info" @click="modifyName()">修改单位名称</Button>
+                                    <div class="change-cname">
+                                        <Input type="text" id="changenName" v-model="newCompanyName"></Input>
+                                        <p class="t-error" ref="tError">单位名称不能为空</p>
+                                        <Button type="info" @click="modifyName()" style="margin-top:10px;">修改单位名称</Button>
                                     </div>
                                     <div class="sixp mt15">
                                         <div class="uptips">
@@ -48,15 +41,15 @@
                                                 <font class="asterisk fs18">*</font> 上传证照原件照片</span>
                                         </div>
                                         <p>
-                                            <font class="reupload_tiptext">仅限最多上传5份资料，文件要求以GIF,PNG 或JPG格式，大小限制在3M以内</font>
+                                            <font class="reupload_tiptext">仅限最多上传5份资料，文件要求以JPEG,PNG 或JPG格式，大小限制在3M以内</font>
                                         </p>
-                                        <!-- <div class="upload-btn">
-                        <input type="file" id="licensefiles" name="licensefiles" value="上传" class="btn_reupload">
-                        <a class="btn_reupload_location" id="tipagain" href="javascript:void(0)">上传图片</a>
-                    </div> -->
-                                        <Upload class="upload-btn" action="http://47.93.20.40:8081/picture/fileUpload" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
+                                        <Upload class="upload-btn" action="http://47.93.20.40:8081/picture/fileUpload" :show-upload-list="false" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
                                             <Button type="ghost" icon="ios-cloud-upload-outline">上传照片</Button>
                                         </Upload>
+                                    </div>
+                                    <!-- 展示图片的区域 -->
+                                    <div class="displayPhoto" ref="displayPhoto">
+                                        <img :src="imageUrl" >
                                     </div>
 
                                     <div class="perfect_upload">
@@ -158,12 +151,18 @@ export default {
                 })
         },
         modifyName () {
-            this.companyName = this.newCompanyName;
+            if(this.newCompanyName !== ''){
+                this.companyName = this.newCompanyName;
+            }else{
+                this.$refs.tError.style.display = "block";
+            }
+            
         },
         uploadSuccess(res) {
             console.log(res);
-            //将上传的照片url返回回来
+            //将上传的照片url返回来
             this.imageUrl = res;
+            this.$refs.displayPhoto.style.display = "block";
         }
     },
     computed: {

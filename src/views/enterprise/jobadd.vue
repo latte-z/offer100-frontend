@@ -8,7 +8,7 @@
             <div class="container clearfix">
                 <div class="post-cont">
                     <div class="group-box">
-                        <Form ref="formValidate1" :model="formValidate" :rules="ruleValidate" :label-width="170" >
+                        <Form ref="formValidate1" :model="formValidate" :rules="ruleValidate" :label-width="170">
                             <FormItem label="职位名称：" prop="jobName">
                                 <Input v-model="formValidate.jobName" style="width: 300px;"></Input>
                             </FormItem>
@@ -21,7 +21,8 @@
                                 </RadioGroup>
                             </FormItem>
                             <FormItem label="职位类别：" prop="jobCategory">
-                                <Cascader v-model="formValidate.jobCategory" :data="categoryData" style="width:200px;"></Cascader>
+                                <!-- <Cascader v-model="formValidate.jobCategory" :data="categoryData" style="width:200px;"></Cascader> -->
+                                <Cascader v-model="formValidate.jobCategory" :data="categoryData" change-on-select :render-format="CategoryFormat" style="width: 200px;"></Cascader>
                             </FormItem>
                             <FormItem label="职位月薪：" prop="jobSalary">
                                 <Select v-model="formValidate.jobSalary" ref="jobwage" style="width:150px">
@@ -33,8 +34,7 @@
                                 </Select>
                             </FormItem>
                             <FormItem label="工作地区：" prop="jobZone">
-                                <!-- <distpicker @selected="onSelected"></distpicker> -->
-                                <Cascader @on-change="onChanged" v-model="formValidate.jobZone" :data="zoneData" style="width: 200px;"></Cascader>
+                                <Cascader v-model="formValidate.jobZone" :data="zoneData" :load-data="loadData" change-on-select :render-format="zoneFormat" style="width: 200px;"></Cascader>
                             </FormItem>
                             <FormItem label="详细地址：" prop="jobAddress">
                                 <Input v-model="formValidate.jobAddress" style="width: 400px;"></Input>
@@ -73,10 +73,10 @@
                                 </Select>
                             </FormItem>
                             <FormItem label="职位描述：" prop="jobDesc">
-                                <Input v-model="formValidate.jobDesc" type="textarea" :rows="7" placeholder="Enter something..."></Input>
+                                <Input v-model="formValidate.jobDesc" type="textarea" :rows="7" placeholder="请输入职位描述" style="width:500px;"></Input>
                             </FormItem>
                             <FormItem label="福利待遇：" prop="welfare" style="font-size: 20px;">
-                                <Input v-model="formValidate.welfare" type="textarea" :rows="7" placeholder="Enter something..."></Input>
+                                <Input v-model="formValidate.welfare" type="textarea" :rows="7" placeholder="请输入福利待遇" style="width:500px;"></Input>
                             </FormItem>
                         </Form>
                     </div>
@@ -92,65 +92,35 @@
 </template>
 
 <script>
-import distpicker from 'v-distpicker'
 import axios from 'axios'
 import qs from 'qs'
+import index from 'vue';
 
 export default {
     name: 'enterprise_jobadd',
     components: {
-        distpicker
     },
     data () {
         return {
             // 岗位详情数据的存放
             job: {},
-            jobaddUrl: 'http://47.93.20.40:8081/job/postJob',
+            jobaddUrl: 'http://47.93.20.40:8081/job',
             submitMsg: '',
             submitStatus: '',
-            categoryData: [
-                {
-                    value: 'internet',
-                    label: '互联网',
-                    children: [
-                        {
-                            value: 'ended',
-                            label: '后端'
-                        },
-                        {
-                            value: 'fronted',
-                            label: '前端'
-                        }
-                    ]
-                }
-            ],
-            zoneData: [
-                {
-                    value: 'beijing',
-                    label: '北京',
-                    children: [
-                        {
-                            value: 'chaoyang',
-                            label: '朝阳区'
-                        },
-                        {
-                            value: 'haidian',
-                            label: '海淀区'
-                        }
-                    ]
-                }
-            ],
-            // zoneData: {
-            //     province:'',
-            //     city: '',
-            //     area: ''
-            // },
+            //获取行业类别
+            getCategoryUrl: 'http://47.93.20.40:8081/industry/getAll',
+            categoryData: [],
+
+            //用当前地区id获取下一级的地区
+            getZoneUrl: 'http://47.93.20.40:8081/zone/getZoneByParentId/',
+            zoneData: [],
+
             formValidate: {
                 jobName: '',
                 jobProp: '',
-                jobCategory: [1655],
+                jobCategory: [],
                 jobSalary: 0,
-                jobZone: [503],
+                jobZone: [],
                 jobAddress: '',
                 startTime: '',
                 endTime: '',
@@ -188,28 +158,72 @@ export default {
     },
     methods: {
         init () {
-
+            this.getJobCategory();
+            this.getJobZone();
         },
-        // onSelected(data) {
-        //     console.log(data.province);
-        //     this.zoneData.province = data.province;
-        //     this.zoneData.city = data.city;
-        //     this.zoneData.area = data.area;
-        //     console.log(this.zoneData);
-        // },
-        onChanged (data) {
+        getJobCategory () {
+            this.$axios.get(this.getCategoryUrl)
+                .then(response => {
+                    this.categoryData = response.data.children;
+                    console.log(this.categoryData);
+                })
+        },
+        getJobZone () {
+            this.$axios.get(this.getZoneUrl + 1)
+                .then(response => {
+                    this.zoneData = response.data;
+                    this.zoneData.forEach(element => {
+                        element.label = element.name;
+                        // element.value = element.id;
+                        if (element.level < 4) { element.children = [] }
+                        element.loading = false
+                    })
+                })
+        },
+        zoneFormat (label, selectedData) {
+            const index = label.length - 1
+            const data = selectedData[index] || false
+            this.formValidate.jobZone[index] = data.id;
+            console.log(this.formValidate.jobZone);
 
-            // this.$axios.post(this.zoneUrl, qs.stringify)
+            return label.join('/');
+        },
+        loadData (item, callback) {
+            item.loading = true;
+            this.$axios.get(this.getZoneUrl + item.id)
+                .then(response => {
+                    item.children = response.data;
+                    item.children.forEach(element => {
+                        element.label = element.name;
+                        // element.value = element.id;
+                        if (element.level < 3) {
+                            element.children = []
+                            element.loading = false
+                        }
+                    })
+                })
+            item.loading = false
+            callback()
+        },
+        CategoryFormat (labels, selectedData) {
+            const index = labels.length - 1;
+            const data = selectedData[index] || false;
+            this.formValidate.jobCategory[index] = data.id;
+            console.log('jobCategory' + this.formValidate.jobCategory);
+            return labels.join('/');
         },
         //将岗位信息进行拼接
         buildJob () {
             this.job = {};  //岗位信息清空
+            //获取地区和行业类别的长度
+            let categoryLength = this.formValidate.jobCategory.length;
+            let zoneLength = this.formValidate.jobZone.length;
 
             this.job.enterpriseId = 1;
             this.job.title = this.formValidate.jobName;
             this.job.nature = this.formValidate.jobProp;
-            this.job.industryId = this.formValidate.jobCategory[0];
-            this.job.zoneId = this.formValidate.jobZone[0];
+            this.job.industryId = this.formValidate.jobCategory[categoryLength - 1];
+            this.job.zoneId = this.formValidate.jobZone[zoneLength - 1];
             this.job.address = this.formValidate.jobAddress;
             this.job.effectiveTime = this.formValidate.startTime;
             this.job.expirationTime = this.formValidate.endTime;
@@ -222,13 +236,10 @@ export default {
 
 
         },
-        // buildUrl() {
-
-        // },
         handleSubmit () {
-            
+
             this.buildJob();
-            console.log(this.job);
+            console.log('job:'+this.job);
             if (JSON.stringify(this.job) != '{}') {
                 this.$axios.post(this.jobaddUrl, this.job)
                     .then(response => {
@@ -248,6 +259,9 @@ export default {
     },
     computed: {
 
+    },
+    mounted () {
+        this.init();
     }
 };
 </script>
