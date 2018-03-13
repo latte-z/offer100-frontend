@@ -1,5 +1,5 @@
 <template>
-    <div><Cascader :data="data" :load-data="loadData" :render-format="format" ></Cascader>
+    <div><Cascader :data="data" :load-data="loadData" :render-format="format" change-on-select></Cascader>
     <div>{{cunrrentId}}</div>
     </div>
     
@@ -29,6 +29,7 @@ export default {
                 const index = labels.length - 1
                 const data = selectedData[index] || false
                 this.cunrrentId = data.id
+                return labels.join('-')
             },
         loadData (item, callback) {
             item.loading = true;

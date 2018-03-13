@@ -1,0 +1,396 @@
+.row-wrapper {
+    background-color: white;
+    padding: 30px;
+  }
+  .container {
+      width: 1200px;
+      margin: 35px auto 0;
+      padding-bottom: 80px;
+  }
+  .mr_myresume_l {
+    width: 870px;
+    margin-bottom: 20px;
+    float: left;
+  }
+  // 发布职位和职位搜索
+.icon-add {
+  width: 22px;
+  height: 22px;
+  background-position: -18px -151px;
+}
+.ico-search {
+  width: 18px;
+  height: 18px;
+  background-position: -271px -114px;
+}
+
+.top-fn .publishjob {
+  height: 44px;
+  line-height: 44px;
+  background: #29a9db;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  display: block;
+  border-radius: 4px;
+  float: left;
+  width: 240px;
+}
+.top-fn .publishjob:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+.top-fn .s {
+  float: right;
+  background: white;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.top-fn .s input {
+  height: 44px;
+  line-height: 44px;
+  padding-left: 24px;
+  width: 306px;
+  float: left;
+  font-size: 14px;
+  // border: none;
+}
+.top-fn .s .s-btn {
+  width: 70px;
+  height: 44px;
+  background: #29a9db;
+  float: left;
+  text-align: center;
+}
+.top-fn .s .s-btn:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.category {
+  font-size: 14px;
+  padding-top: 16px;
+}
+.category > a {
+  margin-right: 15px;
+  color: #666;
+}
+.category > a.on {
+  color: #29a9db;
+}
+
+// .joblist {
+//   padding-top: 10px;
+// }
+
+.common-empty-1 {
+    width: 530px;
+    margin: 0 auto;
+    padding: 38px 0;
+}
+.common-empty-1 .pic {
+    float: left;
+    margin-right: 36px;
+}
+.common-empty-1 .txt {
+    overflow: hidden;
+}
+.common-empty-1 .txt p{
+    margin: 42px 0 20px 0;
+    line-height: 28px;
+    color: #829bc0;
+    font-size: 16px;
+}
+
+.empty-box {
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+/*职位列表*/
+.job-item {
+  margin-bottom: 20px;
+}
+.job-item .cont {
+  background: white;
+  padding: 28px 0;
+  padding-left: 20px;
+  padding-right: 15px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  position: relative;
+}
+.job-item .cont .l {
+  float: left; /*overflow: hidden;*/
+  position: relative;
+}
+.job-item .cont .l .title {
+  margin-top: 1px;
+}
+.job-item .cont .l .title .name {
+  display: inline-block;
+  max-width: 142px;
+  font-size: 18px;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.job-item .cont .l .title .locale {
+  font-size: 16px;
+  color: #666666;
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.job-item .cont .l .info {
+  font-size: 14px;
+  color: #999999;
+  margin-top: 10px;
+}
+
+
+/*展示框底部样式设置*/
+.fn-c-1,
+.fn-c-2 {
+  display: inline-block;
+}
+.bottom-fn .onlytext {
+  font-size: 14px;
+  color: #29a9db;
+}
+.bottom-fn .vline {
+  font-size: 14px;
+  color: #29a9db;
+  margin: 0 8px;
+}
+.bottom-fn .checkall {
+  display: inline-block;
+  cursor: pointer;
+}
+.bottom-fn .checkall i {
+  vertical-align: top;
+}
+.bottom-fn .checkall .txt {
+  font-size: 14px;
+  color: #666666;
+  padding-right: 20px;
+  padding-left: 10px;
+}
+.bottom-fn .more {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 14px;
+  position: relative;
+}
+.bottom-fn .more > a {
+  display: inline-block;
+  width: 68px;
+  height: 22px;
+  text-align: center;
+  color: #999999;
+  border: 1px solid #d1dfe6;
+  border-radius: 4px;
+  background: white;
+}
+.bottom-fn .more .morelist {
+  position: absolute;
+  width: 68px;
+  border: 1px solid #d1dfe6;
+  border-radius: 4px;
+  background: white;
+  top: 23px;
+  left: 0;
+  border-bottom: 0 none;
+  display: none;
+}
+.bottom-fn .more .morelist a {
+  display: block;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-bottom: 1px solid #d1dfe6;
+  font-size: 14px;
+  color: #999999;
+}
+.bottom-fn .more .morelist a:hover {
+  background: #f0f3fb;
+}
+
+
+/*通用页面设置*/
+.paging,
+.rankPage {
+  text-align: center;
+  padding: 10px 0 34px;
+}
+
+.clearfix {
+  zoom: 1;
+  display: block;
+}
+.clearfix:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/*岗位管理主界面*/
+.main-cont {
+  padding: 0 20px;
+  width: 850px;
+  margin: 0 auto;
+}
+.laypage_main span {
+  height: auto;
+  line-height: normal;
+}
+ 
+
+/*分页设置*/
+.selectItems {
+  float: right;
+  margin-right: 70px;
+  margin-top: 6px;
+}
+
+.selectItems .comboBox {
+  width: 55px;
+  margin: 8px 5px 0 10px;
+  height: 25px;
+  line-height: 25px;
+  border: #d3d8de solid 1px;
+  border-radius: 4px;
+  // position: relative;
+  background: #fff;
+}
+.selectItems span.word {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+.fl {
+  float: left;
+}
+.selectItems .comboBoxInput {
+  height: 27px;
+  line-height: 27px;
+}
+.selectItems .arrow {
+  top: 8px;
+}
+.selectItems .comboBoxUl {
+  top: 25px;
+}
+.selectItems .comboBoxUl li {
+  height: 25px;
+  line-height: 25px;
+}
+/* 职位排名 */
+.jobRankWrap {
+  display: none;
+}
+.jobTabs {
+  margin: 16px 0 5px;
+  border-bottom: 2px solid #29a9db;
+}
+.jobTabs .jobTab {
+  display: inline-block;
+  margin-bottom: 1px;
+  margin-right: 10px;
+  padding: 11px 40px;
+  background-color: #fff;
+  color: #666;
+}
+.jobTabs .jobTab:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+.jobTabs a.on {
+  margin-bottom: 0px;
+  padding-bottom: 12px;
+  background-color: #369edc;
+  color: #fff;
+  font-size: 16px;
+}
+.rankdingTip {
+  padding: 12px 15px;
+  color: #b17a2c;
+  background-color: #fff9d7;
+}
+.rankdingTip .tipBtn {
+  margin-left: 16px;
+}
+.listRule {
+  padding: 15px 0;
+  text-align: center;
+  margin-right: 70px;
+}
+.listRule .onlineJob,
+.listRule .onlineNums {
+  color: #29a9db;
+}
+.pageOptin .comboBox,
+.pageOptin .comboBoxInput {
+  width: 55px;
+  margin: 0 10px;
+  height: 25px;
+  line-height: 25px;
+}
+.pageOptin .arrow {
+  top: 6px;
+}
+.pageOptin span {
+  margin-top: 3px;
+}
+.rankJob,
+.rankingMsg {
+  border: 1px solid #dcdcdc;
+  padding: 12px 25px;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+.rankJob.ranking {
+  margin-bottom: 0;
+}
+  
+
+  /*管理职位*/
+  .jobTabs .jobTab .corns.cur {
+    background: url('//img03.zhaopin.cn/IHRNB/ui/img/windrowAnswer.png')
+      no-repeat 0 0;
+  }
+  .boxTipClone {
+    z-index: 999;
+    position: absolute;
+    top: -84px;
+    left: 24px;
+    padding: 5px 10px;
+    width: 265px;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 0 10px #999;
+  }
+  .boxTipClone p {
+    color: #666;
+    text-align: justify;
+    font-size: 12px;
+    line-height: 24px;
+  }
+  .boxTipClone .innerCore {
+    position: absolute;
+    bottom: -8px;
+    left: 136px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid #fff;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+  }
+ 
+

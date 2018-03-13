@@ -170,6 +170,13 @@ export const appRouter = [
         component: Main,
         children: [
             {
+                path: 'resume_post_record',
+                icon: 'plus',
+                title: '简历投递',
+                name: 'user_resume_post_record',
+                component: () => import('@/views/user/resume_post_record.vue')
+            },
+            {
                 path: 'register',
                 icon: 'plus',
                 title: '用户注册',

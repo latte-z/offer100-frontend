@@ -44,10 +44,10 @@ export default {
       this.getNews();
     },
     getNews () {
-      this.$axios.get(this.getUrl + '?has=' + this.news.length + '&next=5')
+      this.$axios.get(this.getUrl + '?pageNumber=' + (this.news.length/5+1) + '&pageSize=5')
         .then(response => {
           // console.log(this.news)
-          response.data.forEach(element => {
+          response.data.rows.forEach(element => {
             this.news.push(element)
           });
         })
