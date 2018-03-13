@@ -34,7 +34,7 @@
                                 </Select>
                             </FormItem>
                             <FormItem label="工作地区：" prop="jobZone">
-                                <Cascader v-model="formValidate.jobZone" :data="zoneData" :load-data="loadData" change-on-select :render-format="zoneFormat" style="width: 200px;"></Cascader>
+                                <Cascader @on-change="onChanged" v-model="formValidate.jobZone" :data="zoneData" style="width: 200px;"></Cascader>
                             </FormItem>
                             <FormItem label="详细地址：" prop="jobAddress">
                                 <Input v-model="formValidate.jobAddress" style="width: 400px;"></Input>

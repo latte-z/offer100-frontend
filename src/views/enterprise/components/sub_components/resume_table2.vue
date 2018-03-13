@@ -7,7 +7,7 @@
         <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="10" :current="1"></Page>
+                <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
             </div>
         </div>
     </div>
@@ -24,10 +24,16 @@ export default {
             name2: 'name2',
             name3: 'name3',
             name4: 'name4',
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=2',
+            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=2&pageNumber=1&pageSize=10',
             data: [],
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
             columns: [
-{
+                {
                     title: '序号',
                     key: 'num',
                     width: 100,
@@ -93,7 +99,7 @@ export default {
                         return h('div', [
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'success',
                                     size: 'small'
                                 },
                                 style: {
@@ -106,6 +112,7 @@ export default {
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已邀请');
+                                                this.data.splice(params.index, 1);
                                             })
                                     }
                                 }
@@ -122,6 +129,7 @@ export default {
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已拒绝');
+                                                this.data.splice(params.index, 1);
                                             })
                                     }
                                 }
@@ -133,42 +141,36 @@ export default {
         };
     },
     methods: {
-        show (index) {
-            this.$Modal.info({
-                title: 'Job Info',
-                content: `序号：${this.data[index].num}<br>投递时间：${this.data[index].repostTime}<br>投递岗位: ${this.data[index].jobName}<br>学历: ${this.data[index].education}`
-            })
+        buildUrl () {
+            let enterpriseId = 1;
+            let url = this.url + '?enterpriseId=' + enterpriseId + '&state=2';
+            url += '&pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
+            return url;
         },
-        remove (index) {
-            this.data.splice(index, 1);
-        },
-        mockTableData1 () {
-            let data = [];
-            for (let i = 0; i < 10; i++) {
-                data.push({
-                    num: this.data[i].num,
-                    repostTime: this.data[i].repostTime,
-                    jobName: this.data[i].jobName,
-                    education: this.data[i].education
-
+        init () {
+            this.buildUrl();
+            this.$axios.get(this.url)
+                .then(response => {
+                    this.data = response.data.rows;
+                    this.page.current = response.data.pageNum;
+                    this.page.pageSize = response.data.pageSize;
+                    this.page.total = response.data.total;
                 })
-            }
-            return data;
         },
-        changePage () {
-            // The simulated data is changed directly here, and the actual usage scenario should fetch the data from the server
-            this.tableData1 = this.mockTableData1();
+        pageChange (page) {
+            this.page.current = page;
+            this.init();
+        },
+        pageSizeChange (pageSize) {
+            this.page.pageSize = pageSize;
+            this.init();
         }
-
     },
     computed: {
 
     },
     mounted () {
-        this.$axios.get(this.url)
-            .then(response => {
-                this.data = response.data.rows;
-            })
+        this.init();
     }
 };
 </script>

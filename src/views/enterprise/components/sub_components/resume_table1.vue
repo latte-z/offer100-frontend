@@ -7,9 +7,33 @@
         <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="10" :current="1"></Page>
+                <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
             </div>
         </div>
+        <Modal v-model="modal" width="600">
+            <p slot="header" style="color:#348EED;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>简历信息</span>
+            </p>
+            <div style="text-align:center;font-size:16px;">
+                <span>
+                    <Avatar icon="person" :src="resumeObj.personPhoto" size="large"></Avatar><br><br></span>
+                <span>姓名：{{this.resumeObj.userName}}<br><br></span>
+                <span>性别：{{this.resumeObj.sex}}<br><br></span>
+                <span>电话: {{this.resumeObj.telephone}}<br><br></span>
+                <span>籍贯: {{this.resumeObj.nativePlace}}<br><br></span>
+                <span>联系地址: {{this.resumeObj.communicationAddress}}<br><br></span>
+                <span>电子邮件: {{this.resumeObj.email}}<br><br></span>
+                <span>毕业院校: {{this.resumeObj.graduatedSchool}}<br><br></span>
+                <span>专业: {{this.resumeObj.profession}}<br><br></span>
+                <span>教育程度: {{this.resumeObj.education}}<br><br></span>
+                <span>获得奖项: {{this.resumeObj.reward}}<br><br></span>
+                <span>自我评价: {{this.resumeObj.selfEvaluation}}<br><br></span>
+            </div>
+            <div slot="footer">
+                <Button type="primary" long @click="modal = false">关闭</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -20,8 +44,16 @@ export default {
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=1',
+            url: 'http://localhost:8081/resume_post_record/manageResume',
             data: [],
+            modal: false,
+            resumeObj: {},
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
             columns: [
                 {
                     title: '序号',
@@ -97,11 +129,27 @@ export default {
                                 },
                                 on: {
                                     click: () => {
+                                        this.show(params.row.resume_id);
+                                    }
+                                }
+                            }, '查看简历'),
+                            h('Button', {
+                                props: {
+                                    type: 'success',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '15px'
+                                },
+                                on: {
+                                    click: () => {
                                         let id = params.row.resume_post_record_id;
                                         let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=2';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已通过');
+                                                // splice params: index, len, result
+                                                this.data.splice(params.index, 1);
                                             })
                                     }
                                 }
@@ -118,6 +166,7 @@ export default {
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已拒绝');
+                                                this.data.splice(params.index, 1);
                                             })
                                     }
                                 }
@@ -129,22 +178,40 @@ export default {
         };
     },
     methods: {
+        buildUrl () {
+            let enterpriseId = 1;
+            let url = this.url + '?enterpriseId=' + enterpriseId + '&state=1';
+            url += '&pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
+            return url;
+        },
         init () {
-            this.$axios.get(this.url)
+            this.buildUrl();
+            this.$axios.get(this.buildUrl())
                 .then(response => {
                     this.data = response.data.rows;
+                    this.page.current = response.data.pageNum;
+                    this.page.pageSize = response.data.pageSize;
+                    this.page.total = response.data.total;
                 })
         },
-        show (index) {
-            this.$Modal.info({
-                title: 'Job Info',
-                content: `序号：${this.data[index].num}<br>投递时间：${this.data[index].repostTime}<br>投递岗位: ${this.data[index].jobName}<br>学历: ${this.data[index].education}`
-            })
+        show (id) {
+            this.resumeObj = {};
+            this.$axios.get('http://localhost:8081/resume/' + id)
+                .then(response => {
+                    this.resumeObj = response.data;
+                    if (this.resumeObj.personPhoto === '没照片')
+                        this.resumeObj.personPhoto = '';
+                })
+            this.modal = true;
         },
-        remove (index) {
-            this.data.splice(index, 1);
+        pageChange (page) {
+            this.page.current = page;
+            this.init();
         },
-
+        pageSizeChange (pageSize) {
+            this.page.pageSize = pageSize;
+            this.init();
+        }
     },
     mounted () {
         this.init();

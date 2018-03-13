@@ -19,6 +19,10 @@
                     <Icon type="log-in"></Icon>
                     欢迎登录
                 </p>
+                <RadioGroup v-model="logintype" type="button">
+                    <Radio label="个人"></Radio>
+                    <Radio label="企业"></Radio>
+                </RadioGroup>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
@@ -40,7 +44,7 @@
                             <Button @click="registSwitch" type="success" style="margin-left:20px;">注册</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p>
+                    <!-- <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p> -->
                     <p class="login-tip" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
                 </div>
             </Card>
@@ -121,6 +125,7 @@ export default {
             loginUrl: 'http://localhost:8081/login/user/login',
             loginMsg: '',
             loginStatus: '',
+            logintype: '个人',
             form: {
                 userName: '',
                 password: ''
@@ -182,16 +187,17 @@ export default {
                 if (valid) {
                     // 0:guest 1:admin 2:enterprise 3:user
                     // axios send login post request
+                    let usertype = this.logintype === '个人' ? 'user' : 'enterprise';
                     let postData = {
-                        "type":"user",
-                        "username":this.form.userName,
-                        "password":this.form.password
+                        "type": usertype,
+                        "username": this.form.userName,
+                        "password": this.form.password
                     }
                     this.$axios.post(this.loginUrl, postData)
                         .then(response => {
                             this.loginMsg = response.data.msg;
                             // this.loginStatus = response.data.status;
-                            // if (this.loginStatus === 0) {
+                            if (response.data.msg !== '此用户不存在，请先注册') {
                                 // set user token
                                 // localStorage.setItem('token', response.data.msg);
                                 localStorage.setItem('username', this.form.userName);
@@ -207,7 +213,9 @@ export default {
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            // }
+                            } else {
+                                this.$Message.info('登录失败，请检查用户名或密码');
+                            }
                         })
                         .catch(function (error) {
                             console.log(error);
@@ -240,7 +248,9 @@ export default {
                     }
                     this.$axios.post(url, postData)
                         .then(response => {
-                            console.log(postData);
+                            this.$Message.info('注册成功');
+                            this.registSwitch();
+                            // console.log(postData);
                             // this.registMsg = response.data.msg;
                             // this.registStatus = response.data.registStatus;
                             // if (this.registStatus === 0) {

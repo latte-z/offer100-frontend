@@ -109,7 +109,7 @@ export default {
     data () {
         return {
             // companyProp: '',
-            enterpriseId: 9,
+            enterpriseId: 1,
             companyName: '',
             newCompanyName: '',
             // nameInput: '',

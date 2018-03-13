@@ -151,6 +151,13 @@ export const appRouter = [
                 title: '岗位管理',
                 name: 'enterprise_job',
                 component: () => import('@/views/enterprise/job.vue')
+            },
+            {
+                path: 'jobadd',
+                icon: 'social-codepen',
+                title: '增加岗位',
+                name: 'enterprise_jobadd',
+                component: () => import('@/views/enterprise/jobadd.vue')
             }
         ]
     },

@@ -12,7 +12,7 @@
                         <div class="mr_myresume_l">
                             <div class="main-cont clearfix">
                                 <div class="top-fn clearfix">
-                                    <a class="publishjob" href="/job/jobadd.html">
+                                    <a @click="goJobAdd" class="publishjob">
                                         <i class="ico icon-add"></i>&nbsp;&nbsp;发布职位</a>
                                     <div class="vip-info" style="display: none;">
                                         <div class="vip-total">
@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="s clearfix">
                                         <input v-model="job_name" placeholder="输入职位名搜索"></input>
-                                        <a class="s-btn" href="javascript:;">
+                                        <a  class="s-btn" href="javascript:;">
                                             <i class="ico ico-search">搜索</i>
                                         </a>
                                     </div>
@@ -50,7 +50,7 @@
                                             <Table stripe :columns="columns7" :data="data6"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                                                    <Page :total="10" :current="1" ></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -60,7 +60,7 @@
                                             <Table stripe :columns="columns7" :data="data6"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                                                    <Page :total="10" :current="1" ></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -69,7 +69,7 @@
                                             <Table stripe :columns="columns7" :data="data6"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                                                    <Page :total="10" :current="1" ></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -204,7 +204,7 @@ export default {
                                         this.show(params.index)
                                     }
                                 }
-                            }, 'View'),
+                            }, '查看'),
                             h('Button', {
                                 props: {
                                     type: 'error',
@@ -215,7 +215,7 @@ export default {
                                         this.remove(params.index)
                                     }
                                 }
-                            }, 'Delete')
+                            }, '删除')
                         ]);
                     }
                 }
@@ -240,7 +240,11 @@ export default {
         };
     },
     methods: {
-
+        goJobAdd() {
+            this.$router.push({
+                name: 'enterprise_jobadd',
+            });
+        }
     },
     computed: {
 

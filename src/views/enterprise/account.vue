@@ -131,7 +131,7 @@ export default {
             // updateUrl: '',         //维护账户安全的url
             // updateUrl: '',       //更新单位信息的url
 
-            enterpriseId: 5,
+            enterpriseId: 1,
             rows: {},
             form: {
                 login: '',
