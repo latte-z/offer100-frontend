@@ -210,6 +210,8 @@ export default {
                                 } else {
                                     localStorage.setItem('access', 3);
                                 }
+                                this.$store.commit('setUserId', response.data.id);
+                                this.$store.commit('setCurrentPageName', response.data.type);
                                 this.$router.push({
                                     name: 'home_index'
                                 });
