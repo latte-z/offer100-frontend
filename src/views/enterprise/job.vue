@@ -12,28 +12,11 @@
                         <div class="mr_myresume_l">
                             <div class="main-cont clearfix">
                                 <div class="top-fn clearfix">
-                                    <a @click="goJobAdd" class="publishjob">
+                                    <a class="publishjob" href="/job/jobadd.html">
                                         <i class="ico icon-add"></i>&nbsp;&nbsp;发布职位</a>
-                                    <div class="vip-info" style="display: none;">
-                                        <div class="vip-total">
-                                            <span class="fl">今日可发布在线职位数：</span>
-                                            <span id="totalJobTimes" class="totalJobTimes fl"></span>
-                                            <div class="timesIconBox fl">
-                                                <i class="ico timesIcon icon-question-ls"></i>
-                                                <div class="jobtimeTip">
-                                                    <p>
-                                                        同时在线职位数
-                                                        <span id="totalTimes">10</span>个；<br> 每日发布职位次数不超过
-                                                        <span id="dayTimes">10</span>个；<br> 以上数据均以公司为单位计算，在线职位数可升级。
-                                                    </p>
-                                                    <a href="/systemhelp/#vip" target="_blank">升级会员</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="s clearfix">
-                                        <input v-model="job_name" placeholder="输入职位名搜索"></input>
-                                        <a  class="s-btn" href="javascript:;">
+                                        <input v-model="searchName" placeholder="输入职位名搜索"></input>
+                                        <a class="s-btn" href="javascript:;">
                                             <i class="ico ico-search">搜索</i>
                                         </a>
                                     </div>
@@ -42,34 +25,31 @@
                                     <a class="fs18 jobTab on" href="javascript:;" data-tab="manage">管理职位</a>
                                 </div>
                                 <div class="jobListWrap" style="display: block;">
-
                                     <Tabs value="name1">
-                                        <TabPane :label="label1" name="name1">
-
+                                        <TabPane label="在线中" name="name1">
                                             <!-- <job_table></job_table> -->
-                                            <Table stripe :columns="columns7" :data="data6"></Table>
+                                            <Table stripe :columns="jobColumns" :data="jobData1"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" ></Page>
+                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
-                                        <TabPane :label="label2" name="name2">
+                                        <TabPane label="已下线" name="name2">
 
                                             <!-- <job_table></job_table> -->
-                                            <Table stripe :columns="columns7" :data="data6"></Table>
+                                            <Table stripe :columns="jobColumns" :data="jobData2"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" ></Page>
+                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
-                                        <TabPane :label="label3" name="name3">
-                                            <!-- <job_table></job_table> -->
-                                            <Table stripe :columns="columns7" :data="data6"></Table>
+                                        <TabPane label="未上线" name="name3">
+                                            <Table stripe :columns="jobColumns" :data="jobData3"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" ></Page>
+                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -119,41 +99,15 @@ export default {
     data () {
         return {
             pageName: 'job',
-            job_name: '',
-            label1: (h) => {
-                return h('div', [
-                    h('span', '在线中'),
-                    // h('Badge', {
-                    //     props: {
-                    //         count: 3
-                    //     }
-                    // })
-                ])
-            },
-            label2: (h) => {
-                return h('div', [
-                    h('span', '已下线'),
-                    // h('Badge', {
-                    //     props: {
-                    //         count: 2
-                    //     }
-                    // })
-                ])
-            },
-            label3: (h) => {
-                return h('div', [
-                    h('span', '未上线'),
-                    // h('Badge', {
-                    //     props: {
-                    //         count: 4
-                    //     }
-                    // })
-                ])
-            },
-            columns7: [
+            //输入搜索的职位名
+            searchName: '',
+            enterpriseId: 1,
+            // pageSize: 10,
+            getJobUrl: 'http://47.93.20.40:8081/job?',
+            jobColumns: [
                 {
                     title: '岗位名称',
-                    key: 'jobName',
+                    key: 'title',
                     render: (h, params) => {
                         return h('div', [
                             h('strong', [
@@ -161,27 +115,27 @@ export default {
                                     props: {
                                         href: '#'
                                     }
-                                }, params.row.jobName)
+                                }, params.row.title)
                             ])
                         ]);
                     }
                 },
                 {
-                    title: '岗位数量',
-                    key: 'jobNumber',
+                    title: '招聘人数',
+                    key: 'peopleNumber',
                     render: (h, params) => {
                         return h('div', [
                             h('i', {
                                 style: {
                                     cursor: 'default'
                                 }
-                            }, params.row.jobNumber + '人')
+                            }, params.row.peopleNumber + '人')
                         ]);
                     }
                 },
                 {
                     title: '发布日期',
-                    key: 'jobDate'
+                    key: 'effectiveTime'
 
                 },
                 {
@@ -201,53 +155,88 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        // this.show(params.index)
+                                        console.log('params:'+params);
+                                        this.goNewPage(params.index);
                                     }
                                 }
                             }, '查看'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.remove(params.index)
-                                    }
-                                }
-                            }, '删除')
+                            // h('Button', {
+                            //     props: {
+                            //         type: 'error',
+                            //         size: 'small'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             // this.remove(params.index)
+                            //         }
+                            //     }
+                            // }, '下线')
                         ]);
                     }
                 }
             ],
-            data6: [
-                {
-                    jobName: 'java开发',
-                    jobNumber: 18,
-                    jobDate: '2018-01-01'
-                },
-                {
-                    jobName: '前端开发',
-                    jobNumber: 24,
-                    jobDate: '2018-01-01'
-                },
-                {
-                    jobName: '大数据',
-                    jobNumber: 30,
-                    jobDate: '2018-01-01'
-                }
-            ]
+            jobData1: [],
+            jobData2: [],
+            jobData3: []
         };
     },
     methods: {
-        goJobAdd() {
+        init () {
+            this.getOnlineJob();
+            this.getOutlineJob();
+            this.getNotOnlineJob();
+        },
+        getOnlineJob () { //获取在线中的职位
+            this.getJobUrl = 'http://47.93.20.40:8081/job?';
+            this.getJobUrl += 'state=1&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+
+            this.$axios.get(this.getJobUrl)
+                .then(response => {
+                    this.jobData1 = response.data.rows;
+                    console.log(this.jobData1);
+                })            
+
+        },
+        getOutlineJob () { //获取已下线的职位
+            this.getJobUrl = 'http://47.93.20.40:8081/job?';
+            this.getJobUrl += 'state=2&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+
+            this.$axios.get(this.getJobUrl)
+                .then(response => {
+                    this.jobData2 = response.data.rows;
+                    console.log(this.jobData2);
+                })            
+
+        },
+        getNotOnlineJob () { //获取未上线的职位
+            this.getJobUrl = 'http://47.93.20.40:8081/job?';
+            this.getJobUrl += 'state=0&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+
+            this.$axios.get(this.getJobUrl)
+                .then(response => {
+                    this.jobData3 = response.data.rows;
+                    console.log(this.jobData3);
+                })            
+
+        },
+        changePage () {
+
+        },
+        goNewPage(index) {
+            console.log('job页面jobid：'+this.jobData1[index].id);
             this.$router.push({
                 name: 'enterprise_jobadd',
-            });
+                params: this.jobData1[index].id
+                
+                })
         }
     },
     computed: {
 
+    },
+    mounted () {
+        this.init();
     }
 };
 </script>

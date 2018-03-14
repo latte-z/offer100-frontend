@@ -3,102 +3,113 @@
 </style>
 
 <template>
-    <div class="row-wrapper">
-        <Row :gutter="10" style="width:1200px;margin:0 auto;overflow:hidden;padding-bottom:100px">
-            <div class="container clearfix">
-                <div class="post-cont">
-                    <div class="group-box">
-                        <Form ref="formValidate1" :model="formValidate" :rules="ruleValidate" :label-width="170">
-                            <FormItem label="职位名称：" prop="jobName">
-                                <Input v-model="formValidate.jobName" style="width: 300px;"></Input>
-                            </FormItem>
-                            <FormItem label="职位性质：" prop="jobProp">
-                                <RadioGroup v-model="formValidate.jobProp" type="button">
-                                    <Radio label="全职" style="margin-right:10px;"></Radio>
-                                    <Radio label="兼职" style="margin-right:5px;border-left:1px solid #dddee1"></Radio>
-                                    <Radio label="实习" style="margin-right:5px;border-left:1px solid #dddee1"></Radio>
-                                    <Radio label="校园" style="border-left:1px solid #dddee1"></Radio>
-                                </RadioGroup>
-                            </FormItem>
-                            <FormItem label="职位类别：" prop="jobCategory">
-                                <!-- <Cascader v-model="formValidate.jobCategory" :data="categoryData" style="width:200px;"></Cascader> -->
-                                <Cascader v-model="formValidate.jobCategory" :data="categoryData" change-on-select :render-format="CategoryFormat" style="width: 200px;"></Cascader>
-                            </FormItem>
-                            <FormItem label="职位月薪：" prop="jobSalary">
-                                <Select v-model="formValidate.jobSalary" ref="jobwage" style="width:150px">
-                                    <Option value=1000>1000元以下</Option>
-                                    <Option value=1500>1000-2000元</Option>
-                                    <Option value=3000>2000-4000元</Option>
-                                    <Option value=5000>4000-6000元</Option>
-                                    <Option value=7000>6000-8000元</Option>
-                                </Select>
-                            </FormItem>
-                            <FormItem label="工作地区：" prop="jobZone">
-                                <Cascader @on-change="onChanged" v-model="formValidate.jobZone" :data="zoneData" style="width: 200px;"></Cascader>
-                            </FormItem>
-                            <FormItem label="详细地址：" prop="jobAddress">
-                                <Input v-model="formValidate.jobAddress" style="width: 400px;"></Input>
-                            </FormItem>
-                            <FormItem label="发布时间：" prop="startTime">
-                                <DatePicker v-model="formValidate.startTime" value="" format="yyyy-MM-dd" type="date" placement="bottom-start" placeholder="Select date" style="width: 200px"></DatePicker>
-                            </FormItem>
-                            <FormItem label="失效时间：" prop="endTime" class="jobDuration">
-                                <DatePicker v-model="formValidate.endTime" value="" format="yyyy-MM-dd" type="date" placement="bottom-start" placeholder="Select date" style="width: 200px"></DatePicker>
-                            </FormItem>
-                        </Form>
-                    </div>
-                    <div class="group-box">
-                        <Form ref="formValidate2" :model="formValidate" :rules="ruleValidate" :label-width="170">
-                            <FormItem label="招聘人数：" prop="employeeNum">
-                                <Input v-model="formValidate.employeeNum" style="width:150px;" number></Input>
-                                <label for="">人</label>
-                            </FormItem>
-                            <FormItem label="学历要求：" prop="education">
-                                <Select v-model="formValidate.education" style="width:150px">
-                                    <Option value="学历不限">学历不限</Option>
-                                    <Option value="本科">本科</Option>
-                                    <Option value="硕士">硕士</Option>
-                                    <Option value="博士">博士</Option>
-                                    <Option value="大专">大专</Option>
-                                </Select>
-                                <label for="">及以上</label>
-                            </FormItem>
-                            <FormItem label="工作年限：" prop="jobYear">
-                                <Select v-model="formValidate.jobYear" style="width:150px">
-                                    <Option value="年限不限">年限不限</Option>
-                                    <Option value="1年以下">1年以下</Option>
-                                    <Option value="1-3年">1-3年</Option>
-                                    <Option value="3-5年">3-5年</Option>
-                                    <Option value="5年及以上">5年及以上</Option>
-                                </Select>
-                            </FormItem>
-                            <FormItem label="职位描述：" prop="jobDesc">
-                                <Input v-model="formValidate.jobDesc" type="textarea" :rows="7" placeholder="请输入职位描述" style="width:500px;"></Input>
-                            </FormItem>
-                            <FormItem label="福利待遇：" prop="welfare" style="font-size: 20px;">
-                                <Input v-model="formValidate.welfare" type="textarea" :rows="7" placeholder="请输入福利待遇" style="width:500px;"></Input>
-                            </FormItem>
-                        </Form>
-                    </div>
-                    <div class="operate-btn">
-                        <Button type="primary" @click="handleSubmit()" style="margin-right:50px">发布职位</Button>
-                        <!-- <Button type="ghost" @click="handleSubmit('formValidate')">职位预览</Button> -->
+    <div>
+        <div class="row-wrapper">
+            <Row :gutter="10" style="width:1200px;margin:0 auto;overflow:hidden;padding-bottom:100px">
+                <div class="container clearfix">
+                    <div class="clearfixs mr_created">
+                        <div class="post-cont mr_myresume_l">
+                            <div class="group-box">
+                                <Form ref="formValidate1" :model="formValidate" :rules="ruleValidate" :label-width="170">
+                                    <FormItem label="职位名称：" prop="jobName">
+                                        <Input v-model="formValidate.jobName" style="width: 300px;"></Input>
+                                    </FormItem>
+                                    <FormItem label="职位性质：" prop="jobProp">
+                                        <RadioGroup v-model="formValidate.jobProp" type="button">
+                                            <Radio label="全职" style="margin-right:10px;"></Radio>
+                                            <Radio label="兼职" style="margin-right:5px;border-left:1px solid #dddee1"></Radio>
+                                            <Radio label="实习" style="margin-right:5px;border-left:1px solid #dddee1"></Radio>
+                                            <Radio label="校园" style="border-left:1px solid #dddee1"></Radio>
+                                        </RadioGroup>
+                                    </FormItem>
+                                    <FormItem label="职位类别：" prop="jobCategory">
+                                        <Cascader v-model="formValidate.jobCategory" :data="categoryData" change-on-select :render-format="CategoryFormat" style="width: 200px;"></Cascader>
+                                    </FormItem>
+                                    <FormItem label="职位月薪：" prop="jobSalary">
+                                        <Select v-model="formValidate.jobSalary" ref="jobwage" style="width:150px">
+                                            <Option value=1000>1000元以下</Option>
+                                            <Option value=1500>1000-2000元</Option>
+                                            <Option value=3000>2000-4000元</Option>
+                                            <Option value=5000>4000-6000元</Option>
+                                            <Option value=7000>6000-8000元</Option>
+                                        </Select>
+                                    </FormItem>
+                                    <FormItem label="工作地区：" prop="jobZone">
+                                        <Cascader v-model="formValidate.jobZone" :data="zoneData" style="width: 200px;"></Cascader>
+                                    </FormItem>
+                                    <FormItem label="详细地址：" prop="jobAddress">
+                                        <Input v-model="formValidate.jobAddress" style="width: 400px;"></Input>
+                                    </FormItem>
+                                    <FormItem label="发布时间：" prop="startTime">
+                                        <DatePicker v-model="formValidate.startTime" value="" format="yyyy-MM-dd" type="date" placement="bottom-start" placeholder="Select date" style="width: 200px"></DatePicker>
+                                    </FormItem>
+                                    <FormItem label="失效时间：" prop="endTime" class="jobDuration">
+                                        <DatePicker v-model="formValidate.endTime" value="" format="yyyy-MM-dd" type="date" placement="bottom-start" placeholder="Select date" style="width: 200px"></DatePicker>
+                                    </FormItem>
+                                </Form>
+                            </div>
+                            <div class="group-box">
+                                <Form ref="formValidate2" :model="formValidate" :rules="ruleValidate" :label-width="170">
+                                    <FormItem label="招聘人数：" prop="employeeNum">
+                                        <Input v-model="formValidate.employeeNum" style="width:150px;" number></Input>
+                                        <label for="">人</label>
+                                    </FormItem>
+                                    <FormItem label="学历要求：" prop="education">
+                                        <Select v-model="formValidate.education" style="width:150px">
+                                            <Option value="学历不限">学历不限</Option>
+                                            <Option value="本科">本科</Option>
+                                            <Option value="硕士">硕士</Option>
+                                            <Option value="博士">博士</Option>
+                                            <Option value="大专">大专</Option>
+                                        </Select>
+                                        <label for="">及以上</label>
+                                    </FormItem>
+                                    <FormItem label="工作年限：" prop="jobYear">
+                                        <Select v-model="formValidate.jobYear" style="width:150px">
+                                            <Option value="年限不限">年限不限</Option>
+                                            <Option value="1年以下">1年以下</Option>
+                                            <Option value="1-3年">1-3年</Option>
+                                            <Option value="3-5年">3-5年</Option>
+                                            <Option value="5年及以上">5年及以上</Option>
+                                        </Select>
+                                    </FormItem>
+                                    <FormItem label="职位描述：" prop="jobDesc">
+                                        <Input v-model="formValidate.jobDesc" type="textarea" :rows="7" placeholder="请输入职位描述" style="width:500px;"></Input>
+                                    </FormItem>
+                                    <FormItem label="福利待遇：" prop="welfare" style="font-size: 20px;">
+                                        <Input v-model="formValidate.welfare" type="textarea" :rows="7" placeholder="请输入福利待遇" style="width:500px;"></Input>
+                                    </FormItem>
+                                </Form>
+                            </div>
+                            <div class="operate-btn">
+                                <Button type="primary" @click="handleSubmit()" style="margin-right:50px">发布职位</Button>
+                                <!-- <Button type="ghost" @click="handleSubmit('formValidate')">职位预览</Button> -->
+                            </div>
+                        </div>
+                        <main-navbar ></main-navbar>
                     </div>
                 </div>
-
-            </div>
+            </Row>
+        </div>
+        <Row>
+            <footerDiv></footerDiv>
         </Row>
     </div>
+
 </template>
 
 <script>
 import axios from 'axios'
+import footerDiv from '@/views/main-components/footer/footer.vue'
+import mainNavbar from './components/main-navbar.vue'
 import qs from 'qs'
 import index from 'vue';
 
 export default {
     name: 'enterprise_jobadd',
     components: {
+        footerDiv,
+        mainNavbar
     },
     data () {
         return {
@@ -114,6 +125,8 @@ export default {
             //用当前地区id获取下一级的地区
             getZoneUrl: 'http://47.93.20.40:8081/zone/getZoneByParentId/',
             zoneData: [],
+
+            jobId: 0,   //用于存储路由传过来的参数
 
             formValidate: {
                 jobName: '',
@@ -160,6 +173,8 @@ export default {
         init () {
             this.getJobCategory();
             this.getJobZone();
+
+            console.log('传过来的岗位id为：'+this.$route.params);
         },
         getJobCategory () {
             this.$axios.get(this.getCategoryUrl)
@@ -239,7 +254,7 @@ export default {
         handleSubmit () {
 
             this.buildJob();
-            console.log('job:'+this.job);
+            console.log('job:' + this.job);
             if (JSON.stringify(this.job) != '{}') {
                 this.$axios.post(this.jobaddUrl, this.job)
                     .then(response => {
