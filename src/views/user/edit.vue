@@ -58,7 +58,6 @@
                     </FormItem>
                 </Form>
             </div>
-                <p class="tips">* 此信息用于站内言职社区功能，不会同步修改简历</p>
             </div>
         </div>
     </div>
