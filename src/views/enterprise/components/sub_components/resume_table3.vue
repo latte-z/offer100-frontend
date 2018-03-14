@@ -20,7 +20,7 @@ export default {
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=3&pageNumber=1&pageSize=10',
+            url: '/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=3&pageNumber=1&pageSize=10',
             data: [],
             name1: 'name1',
             name2: 'name2',
@@ -102,12 +102,13 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=0';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=0';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已通过');
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/getResumeMail/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
                                     }
                                 }
                             }, '面试通过'),
@@ -119,12 +120,13 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=4';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
                                     }
                                 }
                             }, '不合适')

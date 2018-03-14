@@ -16,19 +16,51 @@
                 <span>简历信息</span>
             </p>
             <div style="text-align:center;font-size:16px;">
-                <span>
-                    <Avatar icon="person" :src="resumeObj.personPhoto" size="large"></Avatar><br><br></span>
-                <span>姓名：{{this.resumeObj.userName}}<br><br></span>
-                <span>性别：{{this.resumeObj.sex}}<br><br></span>
-                <span>电话: {{this.resumeObj.telephone}}<br><br></span>
-                <span>籍贯: {{this.resumeObj.nativePlace}}<br><br></span>
-                <span>联系地址: {{this.resumeObj.communicationAddress}}<br><br></span>
-                <span>电子邮件: {{this.resumeObj.email}}<br><br></span>
-                <span>毕业院校: {{this.resumeObj.graduatedSchool}}<br><br></span>
-                <span>专业: {{this.resumeObj.profession}}<br><br></span>
-                <span>教育程度: {{this.resumeObj.education}}<br><br></span>
-                <span>获得奖项: {{this.resumeObj.reward}}<br><br></span>
-                <span>自我评价: {{this.resumeObj.selfEvaluation}}<br><br></span>
+                <Row>
+                    <span>
+                        <Avatar icon="person" :src="resumeObj.personPhoto" size="large"></Avatar>
+                    </span>
+                </Row>
+                <Row>
+                    <span>姓名：{{this.resumeObj.userName}}</span>
+                </Row>
+                <Row>
+                    <span>性别：{{this.resumeObj.sex}}</span>
+                </Row>
+                <Row>
+                    <span>电话: {{this.resumeObj.telephone}}</span>
+                </Row>
+                <Row>
+                    <span>籍贯: {{this.resumeObj.nativePlace}}</span>
+                </Row>
+                <Row>
+                    <span>联系地址: {{this.resumeObj.communicationAddress}}</span>
+                </Row>
+                <Row>
+                    <span>电子邮件: {{this.resumeObj.email}}</span>
+                </Row>
+                <Row>
+                    <span>毕业院校: {{this.resumeObj.graduatedSchool}}</span>
+                </Row>
+                <Row>
+                    <span>专业: {{this.resumeObj.profession}}</span>
+                </Row>
+                <Row>
+                    <span>教育程度: {{this.resumeObj.education}}</span>
+                </Row>
+                <Row>
+                    <span>获得奖项: {{this.resumeObj.reward}}</span>
+                </Row>
+                <Row>
+                    <span>自我评价: {{this.resumeObj.selfEvaluation}}</span><br><br>
+                </Row>
+                <Row>
+                    院校信息：{{this.education.schoolTitle}} 记录：{{this.education.note}} 时间：{{this.education.startTime}} - {{this.education.endTime}}<br><br>
+                </Row>
+                <Row>
+                    工作信息：{{this.experience.job}} 项目：{{this.experience.projectName}} 描述：{{this.experience.projectDesc}} 时间：{{this.experience.startTime}} - {{this.experience.endTime}}
+                </Row>
+
             </div>
             <div slot="footer">
                 <Button type="primary" long @click="modal = false">关闭</Button>
@@ -44,10 +76,12 @@ export default {
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
-            url: 'http://localhost:8081/resume_post_record/manageResume',
+            url: '/resume_post_record/manageResume',
             data: [],
             modal: false,
             resumeObj: {},
+            education: {},
+            experience: {},
             page: {
                 current: 1,
                 total: 0,
@@ -144,13 +178,14 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=2';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=2';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已通过');
                                                 // splice params: index, len, result
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
                                     }
                                 }
                             }, '筛选通过'),
@@ -162,12 +197,13 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=4';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
                                     }
                                 }
                             }, '不合适')
@@ -179,7 +215,7 @@ export default {
     },
     methods: {
         buildUrl () {
-            let enterpriseId = 1;
+            let enterpriseId = localStorage.getItem('userid');
             let url = this.url + '?enterpriseId=' + enterpriseId + '&state=1';
             url += '&pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
             return url;
@@ -196,9 +232,16 @@ export default {
         },
         show (id) {
             this.resumeObj = {};
-            this.$axios.get('http://localhost:8081/resume/' + id)
+            this.$axios.get('/resume/getResumeVOByResumeId/' + id)
                 .then(response => {
                     this.resumeObj = response.data;
+                    console.log(this.resumeObj)
+                    this.education = this.resumeObj.educations[0];
+                    this.education.startTime = util.longToDate(this.education.startTime);
+                    this.education.endTime = util.longToDate(this.education.endTime);
+                    this.experience = this.resumeObj.projectExperiences[0];
+                    this.experience.startTime = util.longToDate(this.experience.startTime);
+                    this.experience.endTime = util.longToDate(this.experience.endTime);
                     if (this.resumeObj.personPhoto === '没照片')
                         this.resumeObj.personPhoto = '';
                 })

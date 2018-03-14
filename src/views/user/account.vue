@@ -53,7 +53,7 @@
     name: 'user_account',
     data() {
       return {
-        getUserByIdUrl: 'http://47.93.20.40:8081/users/',
+        getUserByIdUrl: '/users/',
         user: {
           name: '',
           sex: '',

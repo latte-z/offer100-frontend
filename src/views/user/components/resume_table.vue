@@ -20,10 +20,12 @@ export default {
     name: 'user_resume_post_table',
     data () {
         return {
-            enterpriseId: 1,
+            userid: '',
             state: 1,
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=',
+            url: '/resume_post_record/manageResume?userId=',
             data: [],
+            modal: false,
+            resumeObj: {},
             page: {
                 current: 1,
                 total: 0,
@@ -79,82 +81,39 @@ export default {
                     key: 'state',
                     align: 'center',
                     render: (h, params) => {
+                        let state = '';
+                        switch (params.row.state) {
+                            case 1: state = '已投递'; break;
+                            case 2: state = '待沟通'; break;
+                            case 3: state = '已邀请'; break;
+                            case 4: state = '已拒绝'; break;
+                        }
                         return h('div', [
                             h('i', {
                                 style: {
                                     cursor: 'default'
                                 }
-                            }, params.row.state)
+                            }, state)
                         ]);
                     }
                 },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '15px'
-                                },
-                                on: {
-                                    click: () => {
-                                        let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=2';
-                                        this.$axios.put(url)
-                                            .then(response => {
-                                                this.$Message.info('已通过');
-                                            })
-                                    }
-                                }
-                            }, '筛选通过'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
-                                        this.$axios.put(url)
-                                            .then(response => {
-                                                this.$Message.info('已拒绝');
-                                            })
-                                    }
-                                }
-                            }, '不合适')
-                        ]);
-                    }
-                }
             ],
         };
     },
     methods: {
         buildUrl () {
-            this.url += this.enterpriseId + '&state=' + this.state + '&pageNumber=1&pageSize=10';
+            this.userid = localStorage.getItem('userid');
+            this.url += this.userid + '&state=' + this.state + '&pageNumber=1&pageSize=10';
             return this.url;
         },
         init () {
             this.$axios.get(this.buildUrl())
                 .then(response => {
                     this.data = response.data.rows;
+                    this.page.current = response.data.pageNum;
+                    this.page.pageSize = response.data.pageSize;
+                    this.page.total = response.data.total;
                 })
-        },
-        show (index) {
-            this.$Modal.info({
-                title: 'Job Info',
-                content: `序号：${this.data[index].num}<br>投递时间：${this.data[index].repostTime}<br>投递岗位: ${this.data[index].jobName}<br>学历: ${this.data[index].education}`
-            })
-        },
-        remove (index) {
-            this.data.splice(index, 1);
         },
         pageChange (page) {
             this.page.current = page;

@@ -45,13 +45,13 @@ export const otherRouter = {
     component: Main,
     children: [
         {
-            path: 'jobs',
+            path: 'jobs/:job_id',
             title: 'jobs',
             name: 'jobs',
             component: () => import('@/views/detail/jobs.vue')
         },
         {
-            path: 'companys',
+            path: 'companys/:company_id',
             title: 'companys',
             name: 'companys',
             component: () => import('@/views/detail/companys.vue')
@@ -68,6 +68,7 @@ export const otherRouter = {
             path: 'message',
             title: '消息中心',
             name: 'message_index',
+            access: ['user', 'enterprise'],
             component: () => import('@/views/message/message.vue')
         },
         // main page search component
@@ -96,15 +97,15 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'index',  
+                path: 'index',
                 title: '新闻',
                 name: 'information_index',
                 component: () => import('@/views/news/news.vue')
             },
             {
                 path: 'detail/:newsId',
-                title: ':title', 
-                name: 'news_detail', 
+                title: ':title',
+                name: 'news_detail',
                 component: () => import('@/views/news/newsDetail.vue')
             }
         ]
@@ -113,7 +114,7 @@ export const appRouter = [
         path: '/enterprise',
         icon: 'briefcase',
         title: '企业管理',
-        // access: 2,
+        access: ['enterprise'],
         name: 'enterprise',
         component: Main,
         children: [
@@ -121,6 +122,7 @@ export const appRouter = [
                 path: 'index',
                 icon: 'locked',
                 title: '仪表板',
+                access: ['enterprise'],
                 name: 'enterprise_index',
                 component: () => import('@/views/enterprise/enterprise.vue')
             },
@@ -128,6 +130,7 @@ export const appRouter = [
                 path: 'account',
                 icon: 'locked',
                 title: '账户管理',
+                access: ['enterprise'],
                 name: 'enterprise_account',
                 component: () => import('@/views/enterprise/account.vue')
             },
@@ -135,6 +138,7 @@ export const appRouter = [
                 path: 'qualification',
                 icon: 'ribbon-b',
                 title: '资质认证',
+                access: ['enterprise'],
                 name: 'enterprise_qualification',
                 component: () => import('@/views/enterprise/qualification.vue')
             },
@@ -142,6 +146,7 @@ export const appRouter = [
                 path: 'enterprise_resume',
                 icon: 'ios-paper',
                 title: '简历管理',
+                access: ['enterprise'],
                 name: 'enterprise_resume',
                 component: () => import('@/views/enterprise/resume.vue')
             },
@@ -149,6 +154,7 @@ export const appRouter = [
                 path: 'job',
                 icon: 'social-codepen',
                 title: '岗位管理',
+                access: ['enterprise'],
                 name: 'enterprise_job',
                 component: () => import('@/views/enterprise/job.vue')
             },
@@ -156,6 +162,7 @@ export const appRouter = [
                 path: 'jobadd',
                 icon: 'social-codepen',
                 title: '增加岗位',
+                access: ['enterprise'],
                 name: 'enterprise_jobadd',
                 component: () => import('@/views/enterprise/jobadd.vue')
             }
@@ -165,7 +172,7 @@ export const appRouter = [
         path: '/user',
         icon: 'person',
         title: '用户中心',
-        access: 3,
+        access: ['user'],
         name: 'user',
         component: Main,
         children: [
@@ -173,6 +180,7 @@ export const appRouter = [
                 path: 'resume_post_record',
                 icon: 'plus',
                 title: '简历投递',
+                access: ['user'],
                 name: 'user_resume_post_record',
                 component: () => import('@/views/user/resume_post_record.vue')
             },
@@ -180,6 +188,7 @@ export const appRouter = [
                 path: 'register',
                 icon: 'plus',
                 title: '用户注册',
+                access: ['user'],
                 name: 'user_register',
                 access: 0,
                 component: () => import('@/views/user/register.vue')
@@ -188,6 +197,7 @@ export const appRouter = [
                 path: 'account',
                 icon: 'locked',
                 title: '账户管理',
+                access: ['user'],
                 name: 'user_account',
                 component: () => import('@/views/user/account.vue')
             },
@@ -195,6 +205,7 @@ export const appRouter = [
                 path: 'resume',
                 icon: 'ios-paper',
                 title: '个人简历',
+                access: ['user'],
                 name: 'user_resume',
                 component: () => import('@/views/user/resume.vue')
             },
@@ -202,6 +213,7 @@ export const appRouter = [
                 path: 'favorite',
                 icon: 'android-star',
                 title: '个人收藏',
+                access: ['user'],
                 name: 'user_favorite',
                 component: () => import('@/views/user/favorite.vue')
             },
@@ -209,6 +221,7 @@ export const appRouter = [
                 path: 'updatePWD',
                 icon: 'android-star',
                 title: '个人收藏',
+                access: ['user'],
                 name: 'user_updatePWD',
                 component: () => import('@/views/user/updatePWD.vue')
             },
@@ -216,6 +229,7 @@ export const appRouter = [
                 path: 'edit',
                 icon: 'android-star',
                 title: '编辑',
+                access: ['user'],
                 name: 'user_edit',
                 component: () => import('@/views/user/edit.vue')
             },
@@ -223,6 +237,7 @@ export const appRouter = [
                 path: 'edit',
                 icon: 'android-star',
                 title: '投递箱',
+                access: ['user'],
                 name: 'user_delivery',
                 component: () => import('@/views/user/delivery.vue')
             }

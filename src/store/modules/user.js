@@ -34,7 +34,7 @@ const user = {
             localStorage.setItem('usertype', 'visitor');
             localStorage.removeItem('username');
             localStorage.removeItem('usertoken');
-            // this.$axios.post('http://localhost:8081/login/exit/' + state.username);
+            // this.$axios.post('/login/exit/' + state.username);
         }
     }
 };

@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       has: 0,
-      getUrl: 'http://localhost:8081/news',
+      getUrl: '/news',
       news: []
     };
   },

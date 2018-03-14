@@ -43,7 +43,7 @@
                                         <p>
                                             <font class="reupload_tiptext">仅限最多上传5份资料，文件要求以JPEG,PNG 或JPG格式，大小限制在3M以内</font>
                                         </p>
-                                        <Upload class="upload-btn" action="http://47.93.20.40:8081/picture/fileUpload" :show-upload-list="false" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
+                                        <Upload class="upload-btn" action="/picture/manageFile" :show-upload-list="false" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
                                             <Button type="ghost" icon="ios-cloud-upload-outline">上传照片</Button>
                                         </Upload>
                                     </div>
@@ -84,7 +84,7 @@
 
                         </div>
 
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -108,22 +108,24 @@ export default {
     },
     data () {
         return {
+            pageName: 'qualification',
             // companyProp: '',
-            enterpriseId: 1,
+            enterpriseId: '',
             companyName: '',
             newCompanyName: '',
             // nameInput: '',
             peopleName: '',
             imageUrl: '',
-            getUrl: 'http://47.93.20.40:8081/enterprise',
-            submitUrl: 'http://47.93.20.40:8081/enterprise',
+            getUrl: '/enterprise',
+            submitUrl: '/enterprise',
             rows: {}
         };
     },
     methods: {
         init () {
-            this.getUrl = 'http://47.93.20.40:8081/enterprise';
+            this.getUrl = '/enterprise';
             this.getUrl += '/' + this.enterpriseId;
+            this.enterpriseId = localStorage.getItem('userid');
 
             this.$axios.get(this.getUrl)
                 .then(response => {
@@ -131,7 +133,7 @@ export default {
                 })
         },
         submit () {
-            this.submitUrl = 'http://47.93.20.40:8081/enterprise'
+            this.submitUrl = '/enterprise'
             this.submitUrl += '/' + this.enterpriseId;
 
             this.rows = {};

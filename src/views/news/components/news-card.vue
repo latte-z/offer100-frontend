@@ -29,7 +29,7 @@ export default {
     },
     data () {
         return {
-            getUrl: 'http://localhost:8081/news',
+            getUrl: '/news',
             news: {
                 id: 0,
                 title: '',

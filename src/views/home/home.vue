@@ -158,9 +158,9 @@ export default {
             search: '',
             jobs: [],
             enterprises: [],
-            adimgUrl: 'http://localhost:8081/mainpage/getAdImage?location=mainpage',
-            jobsUrl: 'http://localhost:8081/mainpage/hotJob',
-            enterprisesUrl: 'http://localhost:8081/mainpage/hotEnterprise',
+            adimgUrl: '/mainpage/getAdImage?location=mainpage',
+            jobsUrl: '/mainpage/hotJob',
+            enterprisesUrl: '/mainpage/hotEnterprise',
             ad: {},
             adKeyArray: [],
             setting: {

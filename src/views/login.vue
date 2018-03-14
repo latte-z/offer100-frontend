@@ -19,10 +19,10 @@
                     <Icon type="log-in"></Icon>
                     欢迎登录
                 </p>
-                <RadioGroup v-model="logintype" type="button">
+                <!-- <RadioGroup v-model="logintype" type="button">
                     <Radio label="个人"></Radio>
                     <Radio label="企业"></Radio>
-                </RadioGroup>
+                </RadioGroup> -->
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
@@ -45,7 +45,7 @@
                         </FormItem>
                     </Form>
                     <!-- <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p> -->
-                    <p class="login-tip" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
+                    <p class="login-tip" style="color:red" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
                 </div>
             </Card>
         </div>
@@ -122,7 +122,7 @@ export default {
             }
         };
         return {
-            loginUrl: 'http://localhost:8081/login/login',
+            loginUrl: '/login/login',
             loginMsg: '',
             loginStatus: '',
             logintype: '个人',
@@ -143,8 +143,8 @@ export default {
             registToggle: false,
             usertype: '个人',
             hasGender: false,
-            userRegistUrl: 'http://localhost:8081/users',
-            enterpriseRegistUrl: 'http://localhost:8081/enterprise/admin/enterprise',
+            userRegistUrl: '/users',
+            enterpriseRegistUrl: '/enterprise/admin/enterprise',
             registMsg: '',
             registStatus: '',
             user: {
@@ -189,18 +189,16 @@ export default {
                     // axios send login post request
                     let usertype = this.logintype === '个人' ? 'user' : 'enterprise';
                     let postData = {
-                        "type": usertype,
+                        // "type": usertype,
                         "username": this.form.userName,
                         "password": this.form.password
                     }
                     this.$axios.post(this.loginUrl, postData)
                         .then(response => {
                             this.loginMsg = response.data.msg;
-                            // this.loginStatus = response.data.status;
-                            if (response.data.msg !== '此用户不存在，请先注册') {
+                            if (response.data.status === '1') {
                                 // set user token
-                                console.log(response.headers)
-                                this.$store.commit('setUserToken', response.headers['access-token']);
+                                this.$store.commit('setUserToken', response.data.token);
                                 this.$store.commit('setUserName', response.data.username);
                                 this.$store.commit('setUserType', response.data.type);
                                 this.$store.commit('setUserId', response.data.id);
@@ -208,12 +206,12 @@ export default {
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            } else {
-                                this.$Message.info('登录失败，请检查用户名或密码');
+                            } else if (response.data.status === '0') {
+                                this.$Message.error(response.data.msg)
                             }
                         })
                         .catch(error => {
-                            console.log(error);
+                            this.$Message.info(error.data.msg);
                         });
                 }
             });

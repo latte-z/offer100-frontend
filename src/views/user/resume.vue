@@ -653,7 +653,7 @@ export default {
             this.get()
         },
         get () {
-            this.$axios.get('http://47.93.20.40:8081/resume/' + 12)
+            this.$axios.get('/resume/' + 12)
                 .then(response => {
                     this.user = response.data;
                     this.user.sex = (response.data.sex == '1' ? '男' : '女');
@@ -671,11 +671,11 @@ export default {
                     this.user.major = "软件工程"
                 })
 
-            // this.$axios.get('http://47.93.20.40:8081/education/' + 1)
+            // this.$axios.get('/education/' + 1)
             //     .then(response => {
             //         this.educationExp = response.data;
             //     })
-            this.$axios.get('http://47.93.20.40:8081/project_experience/' + 4)
+            this.$axios.get('/project_experience/' + 4)
                 .then(response => {
                     this.projectExp = response.data;
                 })

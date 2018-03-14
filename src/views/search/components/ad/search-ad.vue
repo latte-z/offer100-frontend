@@ -19,7 +19,7 @@ export default {
     ],
     data () {
         return {
-            url: 'http://localhost:8081/mainpage/getAdImage?location=search',
+            url: '/mainpage/getAdImage?location=search',
             ad: []
         };
     },

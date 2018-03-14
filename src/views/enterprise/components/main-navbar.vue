@@ -96,16 +96,16 @@ export default {
     },
     methods: {
         func1 () {
-            return this.$axios.get('http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=1&pageNumber=1&pageSize=10');
+            return this.$axios.get('/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=1&pageNumber=1&pageSize=10');
         },
         func2 () {
-            return this.$axios.get('http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=2&pageNumber=1&pageSize=10');
+            return this.$axios.get('/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=2&pageNumber=1&pageSize=10');
         },
         func3 () {
-            return this.$axios.get('http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=3&pageNumber=1&pageSize=10');
+            return this.$axios.get('/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=3&pageNumber=1&pageSize=10');
         },
         func4 () {
-            return this.$axios.get('http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=4&pageNumber=1&pageSize=10');
+            return this.$axios.get('/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=4&pageNumber=1&pageSize=10');
         },
         init () {
             this.isJob = false;

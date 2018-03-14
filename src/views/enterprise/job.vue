@@ -12,14 +12,15 @@
                         <div class="mr_myresume_l">
                             <div class="main-cont clearfix">
                                 <div class="top-fn clearfix">
-                                    <a class="publishjob" href="/job/jobadd.html">
-                                        <i class="ico icon-add"></i>&nbsp;&nbsp;发布职位</a>
-                                    <div class="s clearfix">
+                                    <Button class="publishjob" @click="jobAddPage" type="primary" size="large">发布职位</Button>
+                                    <!-- <a class="publishjob" href="">
+                                        <i class="ico icon-add"></i>&nbsp;&nbsp;发布职位</a> -->
+                                    <!-- <div class="s clearfix">
                                         <input v-model="searchName" placeholder="输入职位名搜索"></input>
                                         <a class="s-btn" href="javascript:;">
                                             <i class="ico ico-search">搜索</i>
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="jobTabs">
                                     <a class="fs18 jobTab on" href="javascript:;" data-tab="manage">管理职位</a>
@@ -27,21 +28,18 @@
                                 <div class="jobListWrap" style="display: block;">
                                     <Tabs value="name1">
                                         <TabPane label="在线中" name="name1">
-                                            <!-- <job_table></job_table> -->
                                             <Table stripe :columns="jobColumns" :data="jobData1"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
+                                                    <Page @on-change="pageChange1" @on-page-size-change="pageSizeChange1" placement="top" :current="page1.current" :total="page1.total" :page-size="page1.pageSize" :page-size-opts="page1.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
                                         <TabPane label="已下线" name="name2">
-
-                                            <!-- <job_table></job_table> -->
                                             <Table stripe :columns="jobColumns" :data="jobData2"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
+                                                    <Page @on-change="pageChange2" @on-page-size-change="pageSizeChange2" placement="top" :current="page2.current" :total="page2.total" :page-size="page2.pageSize" :page-size-opts="page2.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -49,7 +47,7 @@
                                             <Table stripe :columns="jobColumns" :data="jobData3"></Table>
                                             <div style="margin: 10px;overflow: hidden">
                                                 <div style="float: right;">
-                                                    <Page :total="10" :current="1" @on-change="changePage"></Page>
+                                                    <Page @on-change="pageChange3" @on-page-size-change="pageSizeChange3" placement="top" :current="page3.current" :total="page3.total" :page-size="page3.pageSize" :page-size-opts="page3.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -101,9 +99,9 @@ export default {
             pageName: 'job',
             //输入搜索的职位名
             searchName: '',
-            enterpriseId: 1,
+            enterpriseId: '',
             // pageSize: 10,
-            getJobUrl: 'http://47.93.20.40:8081/job?',
+            getJobUrl: '/job?',
             jobColumns: [
                 {
                     title: '岗位名称',
@@ -135,7 +133,12 @@ export default {
                 },
                 {
                     title: '发布日期',
-                    key: 'effectiveTime'
+                    key: 'effectiveTime',
+                    render: (h, params) => {
+                        return h('div',
+                            new Date(params.row.effectiveTime).Format('yyyy-MM-dd')
+                        );/*这里的this.row能够获取当前行的数据*/
+                    }
 
                 },
                 {
@@ -155,8 +158,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        // this.show(params.index)
-                                        console.log('params:'+params);
+                                        // console.log('params.index:' + params.index);
                                         this.goNewPage(params.index);
                                     }
                                 }
@@ -178,7 +180,25 @@ export default {
             ],
             jobData1: [],
             jobData2: [],
-            jobData3: []
+            jobData3: [],
+            page1: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
+            page2: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
+            page3: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            }
         };
     },
     methods: {
@@ -186,50 +206,110 @@ export default {
             this.getOnlineJob();
             this.getOutlineJob();
             this.getNotOnlineJob();
+            this.enterpriseId = localStorage.getItem('userid');
+
         },
         getOnlineJob () { //获取在线中的职位
-            this.getJobUrl = 'http://47.93.20.40:8081/job?';
-            this.getJobUrl += 'state=1&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+            this.getJobUrl = '/job?';
+            this.getJobUrl += 'state=1&enterpriseId=' + this.enterpriseId + '&pageSize=' + this.page1.pageSize + '&pageNumber=' + this.page1.current;
 
             this.$axios.get(this.getJobUrl)
                 .then(response => {
                     this.jobData1 = response.data.rows;
+                    this.page1.total = response.data.total;
+                    this.initFormatter();
                     console.log(this.jobData1);
-                })            
+                })
 
         },
         getOutlineJob () { //获取已下线的职位
-            this.getJobUrl = 'http://47.93.20.40:8081/job?';
-            this.getJobUrl += 'state=2&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+            this.getJobUrl = '/job?';
+            this.getJobUrl += 'state=2&enterpriseId=' + this.enterpriseId + '&pageSize=' + this.page2.pageSize + '&pageNumber=' + this.page2.current;
 
             this.$axios.get(this.getJobUrl)
                 .then(response => {
                     this.jobData2 = response.data.rows;
+                    this.page2.total = response.data.total;
+                    this.initFormatter();
                     console.log(this.jobData2);
-                })            
+                })
 
         },
         getNotOnlineJob () { //获取未上线的职位
-            this.getJobUrl = 'http://47.93.20.40:8081/job?';
-            this.getJobUrl += 'state=0&enterpriseId=' + this.enterpriseId + '&pageSize=10&pageNumber=' + 1;
+            this.getJobUrl = '/job?';
+            this.getJobUrl += 'state=0&enterpriseId=' + this.enterpriseId + '&pageSize=' + this.page3.pageSize + '&pageNumber=' + this.page3.current;
 
             this.$axios.get(this.getJobUrl)
                 .then(response => {
                     this.jobData3 = response.data.rows;
+                    this.page3.total = response.data.total;
+                    this.initFormatter();
                     console.log(this.jobData3);
-                })            
+                })
 
         },
         changePage () {
 
         },
-        goNewPage(index) {
-            console.log('job页面jobid：'+this.jobData1[index].id);
+        pageChange1 (page) {
+            this.page1.current = page;
+            this.getOnlineJob();
+        },
+        pageChange2 (page) {
+            this.page2.current = page;
+            this.getOutlineJob();
+        },
+        pageChange3 (page) {
+            this.page3.current = page;
+            this.getNotOnlineJob();
+        },
+        pageSizeChange1 (pageSize) {
+            this.page1.pageSize = pageSize;
+            this.getOnlineJob();
+        },
+        pageSizeChange2 (pageSize) {
+            this.page2.pageSize = pageSize;
+            this.getOutlineJob();
+        },
+        pageSizeChange3 (pageSize) {
+            this.page3.pageSize = pageSize;
+            this.getNotOnlineJob();
+        },
+        goNewPage (index) {
+            console.log('job页面jobid：' + this.jobData1[index].id);
             this.$router.push({
                 name: 'enterprise_jobadd',
-                params: this.jobData1[index].id
-                
-                })
+                params: {
+                    jobId: this.jobData1[index].id
+                }
+            })
+        },
+        jobAddPage() {
+            this.$router.push({
+                name: 'enterprise_jobadd'
+            })
+        },
+        // formatDate (timestramp) {
+        //     return new Date(timestramp).Format('yyyy-MM-dd');
+        // },
+        initFormatter () {
+            Date.prototype.Format = function (fmt) { //  
+                let o = {
+                    "M+": this.getMonth() + 1,                 //月份    
+                    "d+": this.getDate(),                    //日    
+                    "h+": this.getHours(),                   //小时    
+                    "m+": this.getMinutes(),                 //分    
+                    "s+": this.getSeconds(),                 //秒    
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度    
+                    "S": this.getMilliseconds()             //毫秒    
+                };
+                if (/(y+)/.test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt))
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
         }
     },
     computed: {

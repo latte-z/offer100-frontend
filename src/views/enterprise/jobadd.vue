@@ -35,7 +35,7 @@
                                         </Select>
                                     </FormItem>
                                     <FormItem label="工作地区：" prop="jobZone">
-                                        <Cascader v-model="formValidate.jobZone" :data="zoneData" style="width: 200px;"></Cascader>
+                                        <Cascader v-model="formValidate.jobZone" :data="zoneData" :load-data="loadData" :render-format="zoneFormat" style="width: 200px;"></Cascader>
                                     </FormItem>
                                     <FormItem label="详细地址：" prop="jobAddress">
                                         <Input v-model="formValidate.jobAddress" style="width: 400px;"></Input>
@@ -82,11 +82,16 @@
                                 </Form>
                             </div>
                             <div class="operate-btn">
-                                <Button type="primary" @click="handleSubmit()" style="margin-right:50px">发布职位</Button>
-                                <!-- <Button type="ghost" @click="handleSubmit('formValidate')">职位预览</Button> -->
+                                <div ref="createJob">
+                                    <Button type="primary" @click="handleSubmit()" size="large">发布职位</Button>
+                                </div>
+                                <div ref="modifyJob" style="display: none">
+                                    <Button type="primary" @click="modifySubmit()" size="large">修改职位</Button>
+                                </div>
+
                             </div>
                         </div>
-                        <main-navbar ></main-navbar>
+                        <main-navbar></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -115,16 +120,20 @@ export default {
         return {
             // 岗位详情数据的存放
             job: {},
-            jobaddUrl: 'http://47.93.20.40:8081/job',
+            jobaddUrl: '/job',
             submitMsg: '',
             submitStatus: '',
             //获取行业类别
-            getCategoryUrl: 'http://47.93.20.40:8081/industry/getAll',
+            getCategoryUrl: '/industry/getAll',
             categoryData: [],
 
             //用当前地区id获取下一级的地区
-            getZoneUrl: 'http://47.93.20.40:8081/zone/getZoneByParentId/',
+            getZoneUrl: '/zone/getZoneByParentId/',
             zoneData: [],
+
+            //查询岗位详情
+            getJobUrl: '/job/',
+            updateJobUrl: '/job/',
 
             jobId: 0,   //用于存储路由传过来的参数
 
@@ -170,12 +179,60 @@ export default {
         };
     },
     methods: {
-        init () {
+        init () {   //默认是发布岗位
             this.getJobCategory();
             this.getJobZone();
-
-            console.log('传过来的岗位id为：'+this.$route.params);
+            if (this.$route.params.jobId !== undefined) {//修改岗位
+                console.log('发布岗位')
+                this.jobId = this.$route.params.jobId;
+                this.$refs.createJob.style.display = 'none';
+                this.$refs.modifyJob.style.display = 'inline-block';
+                this.getJobInfo(this.$route.params.jobId);
+            } 
         },
+        //更加jobId获取job信息，用于岗位修改
+        getJobInfo (jobid) {
+            this.getJobUrl = '/job/' + jobid;
+            this.$axios.get(this.getJobUrl)
+                .then(response => {
+                    // console.log('response:'+response.data.address);
+                    this.formValidate.jobName = response.data.title;
+                    this.formValidate.jobProp = response.data.nature;
+                    this.formValidate.jobCategory[0] = response.data.industryId;
+                    this.formValidate.jobZone[0] = response.data.zoneId;
+                    this.formValidate.jobAddress = response.data.address;
+                    this.formValidate.startTime = response.data.effectiveTime;
+                    this.formValidate.endTime = response.data.expirationTime;
+                    this.formValidate.jobSalary = response.data.wage;
+                    this.formValidate.employeeNum = response.data.peopleNumber;
+                    this.formValidate.education = response.data.education;
+                    this.formValidate.jobYear = response.data.serviceYear;
+                    this.formValidate.jobDesc = response.data.description;
+                    this.formValidate.welfare = response.data.welfare;
+                    console.log('jobSalary:' + this.formValidate.jobSalary);
+                })
+
+        },
+        //提交修改后的岗位信息
+        modifySubmit () {
+            this.updateJobUrl += this.jobId;
+            this.buildJob();
+
+            if (JSON.stringify(this.job) != '{}') {
+                this.$axios.put(this.updateJobUrl, this.job)
+                    .then(response => {
+                        this.$Message.info('提交成功！');
+                        //清空表单
+                        // this.$refs.formValidate1.resetFields();
+                        // this.$refs.formValidate2.resetFields();
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    }
+                    )
+            }
+        },
+        //获取行业类别
         getJobCategory () {
             this.$axios.get(this.getCategoryUrl)
                 .then(response => {
@@ -183,6 +240,7 @@ export default {
                     console.log(this.categoryData);
                 })
         },
+        //获取地区信息
         getJobZone () {
             this.$axios.get(this.getZoneUrl + 1)
                 .then(response => {
@@ -234,7 +292,7 @@ export default {
             let categoryLength = this.formValidate.jobCategory.length;
             let zoneLength = this.formValidate.jobZone.length;
 
-            this.job.enterpriseId = 1;
+            this.job.enterpriseId = localStorage.getItem('userid');
             this.job.title = this.formValidate.jobName;
             this.job.nature = this.formValidate.jobProp;
             this.job.industryId = this.formValidate.jobCategory[categoryLength - 1];

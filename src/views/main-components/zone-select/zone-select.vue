@@ -9,7 +9,7 @@ export default {
     data () {
         return {
             cunrrentId: 1,
-            getUrl: 'http://localhost:8081/zone/getZoneByParentId/',
+            getUrl: '/zone/getZoneByParentId/',
             data: []
         }
     },

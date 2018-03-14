@@ -22,16 +22,18 @@
                 </Col>
                 <Col span="6" offset="10" class="detailheader-right">
                 <Row style="margin-top:50px;">
-                    <Button type="primary" icon="star" size="large">收藏</Button>
-                    <Button type="primary" size="large">投个简历</Button>
+                    <Button @click="favorite" type="primary" icon="star" size="large">收藏</Button>
+                    <Button @click="sendResume" type="primary" size="large">投个简历</Button>
                 </Row>
                 </Col>
             </Row>
         </div>
         <Row class="detailcontent">
             <Col span="18" style="box-shadow: 5px 0 5px -5px rgba(100, 100, 100, 1);padding:30px;margin-left:100px;width:696px;">
-            <p><div v-html="job.description">
-            </div></p>
+            <p>
+                <div v-html="job.description">
+                </div>
+            </p>
             </Col>
             <Col span="6" style="padding:30px;">
             <Row type="flex" justify="start" align="bottom">
@@ -67,6 +69,9 @@
         <Row>
             <footerDiv></footerDiv>
         </Row>
+        <Modal v-model="modal" :loading="loading" title="是否确认递交简历？" @on-ok="send">
+            <p>请确认提交简历</p>
+        </Modal>
     </div>
 </template>
 <script>
@@ -80,8 +85,11 @@ export default {
     data () {
         return {
             index: 0,
-            jobUrl: 'http://localhost:8081/job/getJob/',
-            enterpriseUrl: 'http://localhost:8081/enterprise/',
+            jobUrl: '/job/',
+            enterpriseUrl: '/enterprise/',
+            modal: false,
+            loading: true,
+            resumeid: 0,
             job: {
                 enterprise: '',
                 enterpriseId: '',
@@ -106,6 +114,7 @@ export default {
     methods: {
         init () {
             this.index = this.$route.params.job_id;
+            this.enterpriseId = localStorage.getItem('userid');
             this.getJob();
         },
         getJob () {
@@ -121,6 +130,29 @@ export default {
                             this.enterprise = response.data;
                         })
                 });
+        },
+        sendResume () {
+            this.$axios.get('/resume/getResumeList/' + localStorage.getItem('userid') + '?pageNumber=1&pageSize=10')
+                .then(response => {
+                    let rows = response.data.rows;
+                    let row = rows[0];
+                    this.resumeid = row.id;
+                })
+                .catch(error => {
+                    this.$Message.info('您没有简历信息')
+                })
+            this.modal = true;
+        },
+        send () {
+            this.$axios.get('/resume_post_record/' + localStorage.getItem('userid') + '/' + this.resumeid + '/' + this.job.enterpriseId)
+                .then(response => {
+                    this.$Message.info('投递成功')
+                    this.loading = false;
+                    this.modal = false;
+                })
+        },
+        favorite () {
+
         }
     },
     mounted () {

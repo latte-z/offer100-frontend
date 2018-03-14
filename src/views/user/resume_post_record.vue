@@ -10,14 +10,14 @@
                     <div class="clearfixs mr_created">
                         <div class="mr_myresume_l">
                             <div class="main-cont clearfix">
-                                <div class="top-fn clearfix">
+                                <!-- <div class="top-fn clearfix">
                                     <div class="s clearfix">
                                         <input v-model="job_name" placeholder="输入职位名搜索"></input>
                                         <a class="s-btn" href="javascript:;">
                                             <i class="ico ico-search">搜索</i>
                                         </a>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="jobTabs">
                                     <a class="fs18 jobTab on" href="javascript:;" data-tab="manage">我的投递</a>
                                 </div>

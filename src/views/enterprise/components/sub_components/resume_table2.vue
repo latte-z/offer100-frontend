@@ -24,7 +24,7 @@ export default {
             name2: 'name2',
             name3: 'name3',
             name4: 'name4',
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=2&pageNumber=1&pageSize=10',
+            url: '/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=2&pageNumber=1&pageSize=10',
             data: [],
             page: {
                 current: 1,
@@ -108,7 +108,7 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=3';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=3';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已邀请');
@@ -125,12 +125,13 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = 'http://localhost:8081/resume_post_record/manageResume?id=' + id + '&state=4';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=4';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
                                     }
                                 }
                             }, '不合适')
@@ -142,7 +143,7 @@ export default {
     },
     methods: {
         buildUrl () {
-            let enterpriseId = 1;
+            let enterpriseId = localStorage.getItem('userid');
             let url = this.url + '?enterpriseId=' + enterpriseId + '&state=2';
             url += '&pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
             return url;

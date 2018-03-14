@@ -20,7 +20,7 @@ export default {
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
-            url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=1&state=4&pageNumber=1&pageSize=10',
+            url: '/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=4&pageNumber=1&pageSize=10',
             data: [],
             name1: 'name1',
             name2: 'name2',

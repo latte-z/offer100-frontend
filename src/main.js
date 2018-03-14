@@ -6,6 +6,7 @@ import store from './store';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 import axios from 'axios';
+// import util from '@/libs/util.js';
 Vue.prototype.$axios = axios;
 
 Vue.use(iView);
@@ -20,6 +21,10 @@ new Vue({
     },
     mounted () {
         this.currentPageName = this.$route.name;
+        // axios.defaults.baseURL = 'http://47.93.20.40:8081';
+        axios.defaults.baseURL = 'http://localhost:8081';
+        // axios.defaults.headers.common['Access-Token'] = localStorage.getItem('usertoken');
+        // Vue.use(axios, util.ajax);
     },
     created () {
     }
