@@ -63,7 +63,7 @@ export default {
     data () {
         return {
             pageName: 'resume',
-            enterpriseId: 1
+            enterpriseId: ''
         };
     },
     methods: {
@@ -71,6 +71,9 @@ export default {
     },
     computed: {
 
+    },
+    mounted () {
+        this.enterpriseId = localStorage.getItem('userid');
     }
 };
 </script>

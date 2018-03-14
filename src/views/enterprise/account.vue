@@ -79,7 +79,7 @@
                             </div>
                         </div>
 
-                        <main-navbar></main-navbar>
+                        <main-navbar :message="pageName"></main-navbar>
                     </div>
                 </div>
             </Row>
@@ -126,12 +126,12 @@ export default {
             }
         };
         return {
-            getCompanyUrl: 'http://47.93.20.40:8081/enterprise',      //获取企业信息的url
-            updateUrl: 'http://47.93.20.40:8081/enterprise',       //更新企业信息的url
+            updateUrl: '/enterprise',       //更新企业信息的url
             // updateUrl: '',         //维护账户安全的url
             // updateUrl: '',       //更新单位信息的url
 
-            enterpriseId: 5,
+            enterpriseId: '',
+            pageName: 'account',
             rows: {},
             form: {
                 login: '',
@@ -216,10 +216,8 @@ export default {
     },
     methods: {
         init () {
-            // this.$nextTick(function(){
-            this.getCompanyInfo();
-            // })
-
+            this.enterpriseId = localStorage.getItem('userid');
+            this.getCompanyInfo();            
         },
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
@@ -230,32 +228,23 @@ export default {
                 }
             })
         },
-        buildUrl () {
-            this.getCompanyUrl = 'http://47.93.20.40:8081/enterprise';
-            this.getCompanyUrl += '/' + this.enterpriseId;
-        },
         getCompanyInfo () {
-            // this.form = {};
-
-            this.buildUrl();
-            console.log(this.getCompanyUrl);
-            this.$axios.get(this.getCompanyUrl)
+            let getCompanyUrl = '/enterprise/' + this.enterpriseId;
+            this.$axios.get(getCompanyUrl)
                 .then(response => {
-                    console.log(response.data);
                     this.form.login = response.data.userName;
                     this.form.name = response.data.linkman;
                     this.form.mail = response.data.email;
                     this.form.phone = response.data.phone;
-                    this.form.oldPassword = response.data.userPassword;
+                    // this.form.oldPassword = response.data.userPassword;
                     this.form.companyName = response.data.name;
                     // this.form.industry = response.data.industryId;
                     this.form.companystage = response.data.stage;
                     this.form.companyAddress = response.data.address
-                    console.log(this.form);
+                    // console.log(this.form);
                 })
                 .catch(function (error) {
                     console.log(error)
-
                 })
         },
         buildAcc() {
@@ -266,7 +255,7 @@ export default {
         },
         //更新账户信息
         handleSubmitAcc () {
-            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl = '/enterprise';
             this.updateUrl += '/' + this.enterpriseId;
             this.buildAcc();
             this.$axios.put(this.updateUrl,this.rows)
@@ -281,7 +270,7 @@ export default {
         },
         //修改账户密码
         handleModify() {
-            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl = '/enterprise';
             this.updateUrl += '/' + this.enterpriseId;
 
             this.rows = {};
@@ -290,7 +279,7 @@ export default {
             this.$axios.put(this.updateUrl,this.rows)
                 .then(response => {
                     this.$Message.info('提交成功！');
-                    console.log(this.form.newPassword);
+                    // console.log(this.form.newPassword);
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -306,7 +295,7 @@ export default {
         },
         //修改企业地址信息等
         modifyCompany() {
-            this.updateUrl = 'http://47.93.20.40:8081/enterprise';
+            this.updateUrl = '/enterprise';
             this.updateUrl += '/' + this.enterpriseId;
 
             this.buildCompany();
@@ -314,7 +303,7 @@ export default {
             this.$axios.put(this.updateUrl,this.rows)
                 .then(response => {
                     this.$Message.info('提交成功！');
-                    console.log(this.rows);
+                    // console.log(this.rows);
                 })
                 .catch(function (error) {
                     console.log(error)

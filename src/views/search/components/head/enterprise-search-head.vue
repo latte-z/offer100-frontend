@@ -1,17 +1,17 @@
 <style lang="less">
 @import './search-head.less';
-@import '../../../../styles/base.less';
+// @import '../../../../styles/base.less';
 </style>
 
 <template>
     <div class="positionHead">
         <ul class="filter-wrapper">
             <div class="details" id="filterCollapse" style="opacity: 1; height: auto;">
-                <div class="has-more">
+                <!-- <div class="has-more"> -->
 
                     <!-- 处理工作地点深层选择 -->
-                    <div class="choose-detail" style="margin-bottom:20px;">
-                        <li class="position-head">
+                    <!-- <div class="choose-detail" style="margin-bottom:20px;"> -->
+                        <!-- <li class="position-head">
 
                             <div class="current-handle-position">
                                 <span class="title">工作地点：</span>
@@ -38,10 +38,10 @@
                                     </RadioGroup>
                                 </div>
                             </div>
-                        </li>
-                    </div>
-                </div>
-                <li class="multi-chosen">
+                        </li> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+                <!-- <li class="multi-chosen">
                     <span class="title">工作经验：</span>
                     <RadioGroup v-model="experience" type="button" size="small" @on-change="sendMsgToParent">
                         <Radio label="不限"></Radio>
@@ -52,17 +52,18 @@
                         <Radio label="10年以上"></Radio>
                         <Radio label="不要求"></Radio>
                     </RadioGroup>
-                </li>
+                </li> -->
 
                 <li class="multi-chosen">
-                    <span class="title">学历要求：</span>
+                    <span class="title">融资阶段：</span>
                     <RadioGroup v-model="education" type="button" size="small" @on-change="sendMsgToParent">
                         <Radio label="不限"></Radio>
-                        <Radio label="大专"></Radio>
-                        <Radio label="本科"></Radio>
-                        <Radio label="硕士"></Radio>
-                        <Radio label="博士"></Radio>
-                        <Radio label="不要求"></Radio>
+                        <Radio label="未融资"></Radio>
+                        <Radio label="A轮"></Radio>
+                        <Radio label="B轮"></Radio>
+                        <Radio label="C轮"></Radio>
+                        <Radio label="D轮"></Radio>
+                        <Radio label="D轮以上"></Radio>
                     </RadioGroup>
                 </li>
                 <div class="has-more hy-area">
@@ -70,22 +71,18 @@
                         <span class="title">行业领域：</span>
                         <RadioGroup v-model="industry" type="button" size="small" @on-change="sendMsgToParent">
                             <Radio label="不限"></Radio>
-                            <Radio label="移动互联网"></Radio>
-                            <Radio label="电子商务"></Radio>
-                            <Radio label="金融"></Radio>
-                            <Radio label="企业服务"></Radio>
-                            <Radio label="教育"></Radio>
-                            <Radio label="文化娱乐"></Radio>
-                            <Radio label="游戏"></Radio>
-                            <Radio label="O2O"></Radio>
-                            <Radio label="硬件"></Radio>
+                            <Radio label="技术"></Radio>
+                            <Radio label="产品"></Radio>
+                            <Radio label="设计"></Radio>
+                            <Radio label="运营"></Radio>
+                            <Radio label="市场与销售"></Radio>
                         </RadioGroup>
                     </li>
                 </div>
             </div>
         </ul>
         <!-- 排序方式及翻页(old) -->
-        <ul class="order">
+        <!-- <ul class="order">
             <li class="wrapper">
                 <div class="item order">
                     <span class="title">排序方式：</span>
@@ -108,7 +105,7 @@
                     </div>
                 </div>
             </li>
-        </ul>
+        </ul> -->
     </div>
 </template>
 
@@ -117,11 +114,8 @@ export default {
     name: 'search_head',
     data () {
         return {
-            city: '全国',
-            experience: '不限',
             education: '不限',
             industry: '不限',
-            sorting: '默认',
             message: []
         };
     },
@@ -132,11 +126,8 @@ export default {
     methods: {
         sendMsgToParent () {
             this.message = [
-                { key: "city", value: this.city },
-                { key: "experience", value: this.experience },
                 { key: "education", value: this.education },
-                { key: "industry", value: this.industry },
-                { key: "sorting", value: this.sorting }
+                { key: "industry", value: this.industry }
             ];
             this.$emit("listenToChildEvent", this.message);
         }

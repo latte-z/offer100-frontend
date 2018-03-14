@@ -19,6 +19,10 @@
                     <Icon type="log-in"></Icon>
                     欢迎登录
                 </p>
+                <!-- <RadioGroup v-model="logintype" type="button">
+                    <Radio label="个人"></Radio>
+                    <Radio label="企业"></Radio>
+                </RadioGroup> -->
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
@@ -40,8 +44,8 @@
                             <Button @click="registSwitch" type="success" style="margin-left:20px;">注册</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p>
-                    <p class="login-tip" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
+                    <!-- <p class="login-tip">测试：admin，enterprise，user对应三种用户；密码随意</p> -->
+                    <p class="login-tip" style="color:red" v-show="!(this.loginStatus === 0)">{{ loginMsg }}</p>
                 </div>
             </Card>
         </div>
@@ -118,9 +122,10 @@ export default {
             }
         };
         return {
-            loginUrl: 'http://localhost:8081/login/user/login',
+            loginUrl: '/login/login',
             loginMsg: '',
             loginStatus: '',
+            logintype: '个人',
             form: {
                 userName: '',
                 password: ''
@@ -138,8 +143,8 @@ export default {
             registToggle: false,
             usertype: '个人',
             hasGender: false,
-            userRegistUrl: 'http://localhost:8081/users',
-            enterpriseRegistUrl: 'http://localhost:8081/enterprise/admin/enterprise',
+            userRegistUrl: '/users',
+            enterpriseRegistUrl: '/enterprise/admin/enterprise',
             registMsg: '',
             registStatus: '',
             user: {
@@ -182,35 +187,31 @@ export default {
                 if (valid) {
                     // 0:guest 1:admin 2:enterprise 3:user
                     // axios send login post request
+                    let usertype = this.logintype === '个人' ? 'user' : 'enterprise';
                     let postData = {
-                        "type":"user",
-                        "username":this.form.userName,
-                        "password":this.form.password
+                        // "type": usertype,
+                        "username": this.form.userName,
+                        "password": this.form.password
                     }
                     this.$axios.post(this.loginUrl, postData)
                         .then(response => {
                             this.loginMsg = response.data.msg;
-                            // this.loginStatus = response.data.status;
-                            // if (this.loginStatus === 0) {
+                            if (response.data.status === '1') {
                                 // set user token
-                                // localStorage.setItem('token', response.data.msg);
-                                localStorage.setItem('username', this.form.userName);
+                                this.$store.commit('setUserToken', response.data.token);
+                                this.$store.commit('setUserName', response.data.username);
+                                this.$store.commit('setUserType', response.data.type);
+                                this.$store.commit('setUserId', response.data.id);
                                 this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                                // set user role
-                                if (response.data.type === 'admin') {
-                                    localStorage.setItem('access', 1);
-                                } else if (response.data.type === 'enterprise') {
-                                    localStorage.setItem('access', 2);
-                                } else {
-                                    localStorage.setItem('access', 3);
-                                }
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            // }
+                            } else if (response.data.status === '0') {
+                                this.$Message.error(response.data.msg)
+                            }
                         })
-                        .catch(function (error) {
-                            console.log(error);
+                        .catch(error => {
+                            this.$Message.info(error.data.msg);
                         });
                 }
             });
@@ -240,12 +241,8 @@ export default {
                     }
                     this.$axios.post(url, postData)
                         .then(response => {
-                            console.log(postData);
-                            // this.registMsg = response.data.msg;
-                            // this.registStatus = response.data.registStatus;
-                            // if (this.registStatus === 0) {
-
-                            // }
+                            this.$Message.info('注册成功');
+                            this.registSwitch();
                         });
                 }
             });

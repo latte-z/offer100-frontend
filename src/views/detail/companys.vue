@@ -21,10 +21,10 @@
                 </Row>
                 </Col>
                 <Col span="6" offset="10" class="detailheader-right">
-                <Row style="margin-top:50px;">
-                    <Button type="primary" icon="star" size="large">收藏</Button>
+                <!-- <Row style="margin-top:50px;"> -->
+                    <!-- <Button type="primary" icon="star" size="large">收藏</Button> -->
                     <!-- <Button type="primary" size="large">投个简历</Button> -->
-                </Row>
+                <!-- </Row> -->
                 </Col>
             </Row>
         </div>
@@ -82,7 +82,7 @@ export default {
     data () {
         return {
             index: 0,
-            enterpriseUrl: 'http://localhost:8081/enterprise/',
+            enterpriseUrl: '/enterprise/',
             enterprise: {
                 id: '',
                 name: '',

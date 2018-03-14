@@ -15,27 +15,27 @@
                     <a @click="goDetail" target="_blank">{{enterprise.name}}</a>
                 </p>
                 <p class="indus-stage wordcut">
-                    <span>{{enterprise.industryName}}</span>
-                    <span> {{enterprise.stage}}</span>
+                    <!-- <span>{{enterprise.industryName}}</span> -->
+                    <span>{{stage}}</span>
                 </p>
                 <p class="advantage wordcut">
                     {{enterprise.description}}
                 </p>
             </div>
-            <div class="bottom clearfix">
+            <!-- <div class="bottom clearfix"> -->
                 <!-- <a class="bottom-item bottom-1 f1" href="" target="_blank">
                     <p class="green">{{enterprise.evaluate}}</p>
                     <p class="grey">面试评价</p>
                 </a> -->
-                <a class="bottom-item bottom-2 f1" target="_blank">
+                <!-- <a class="bottom-item bottom-2 f1" target="_blank">
                     <p class="green">{{enterprise.jobCount}}</p>
                     <p class="grey">在招职位</p>
-                </a>
+                </a> -->
                 <!-- <a class="bottom-item bottom-3 f1" target="_blank">
                     <p class="green">{{enterprise.resumeHanderRate}}</p>
                     <p class="grey">简历处理率</p>
                 </a> -->
-            </div>
+            <!-- </div> -->
 
         </Card>
     </div>
@@ -62,6 +62,16 @@ export default {
         }
     },
     computed: {
+        stage: function () {
+            switch(this.enterprise.stage) {
+                case 0: return '未融资';break;
+                case 1: return 'A轮';break;
+                case 2: return 'B轮';break;
+                case 3: return 'C轮';break;
+                case 4: return 'D轮';break;
+                case 5: return 'D轮以上';break;
+            }
+        }
     },
     methods: {
         init () {
@@ -73,7 +83,7 @@ export default {
                 name: 'companys',
                 params: argu
             });
-        },
+        }
     },
     mounted () {
         this.init()

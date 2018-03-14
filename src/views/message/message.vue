@@ -1,18 +1,36 @@
 <style lang="less">
-    @import './message.less';
+@import './message.less';
 </style>
 
 <template>
     <div class="message-main-con">
         <div class="message-mainlist-con">
             <div>
-                <Button @click="setCurrentMesType('unread')" size="large" long type="text"><transition name="mes-current-type-btn"><Icon v-show="currentMessageType === 'unread'" type="checkmark"></Icon></transition><span class="mes-type-btn-text">未读消息</span><Badge class="message-count-badge-outer" class-name="message-count-badge" :count="unreadCount"></Badge></Button>
+                <Button @click="setCurrentMesType('unread')" size="large" long type="text">
+                    <transition name="mes-current-type-btn">
+                        <Icon v-show="currentMessageType === 'unread'" type="checkmark"></Icon>
+                    </transition>
+                    <span class="mes-type-btn-text">未读消息</span>
+                    <Badge class="message-count-badge-outer" class-name="message-count-badge" :count="unreadCount"></Badge>
+                </Button>
             </div>
             <div>
-                <Button @click="setCurrentMesType('hasread')" size="large" long type="text"><transition name="mes-current-type-btn"><Icon v-show="currentMessageType === 'hasread'" type="checkmark"></Icon></transition><span class="mes-type-btn-text">已读消息</span><Badge class="message-count-badge-outer" class-name="message-count-badge" :count="hasreadCount"></Badge></Button>
+                <Button @click="setCurrentMesType('hasread')" size="large" long type="text">
+                    <transition name="mes-current-type-btn">
+                        <Icon v-show="currentMessageType === 'hasread'" type="checkmark"></Icon>
+                    </transition>
+                    <span class="mes-type-btn-text">已读消息</span>
+                    <Badge class="message-count-badge-outer" class-name="message-count-badge" :count="hasreadCount"></Badge>
+                </Button>
             </div>
             <div>
-                <Button @click="setCurrentMesType('recyclebin')" size="large" long type="text"><transition name="mes-current-type-btn"><Icon v-show="currentMessageType === 'recyclebin'" type="checkmark"></Icon></transition><span class="mes-type-btn-text">回收站</span><Badge class="message-count-badge-outer" class-name="message-count-badge" :count="recyclebinCount"></Badge></Button>
+                <Button @click="setCurrentMesType('recyclebin')" size="large" long type="text">
+                    <transition name="mes-current-type-btn">
+                        <Icon v-show="currentMessageType === 'recyclebin'" type="checkmark"></Icon>
+                    </transition>
+                    <span class="mes-type-btn-text">回收站</span>
+                    <Badge class="message-count-badge-outer" class-name="message-count-badge" :count="recyclebinCount"></Badge>
+                </Button>
             </div>
         </div>
         <div class="message-content-con">
@@ -24,12 +42,16 @@
             <transition name="back-message-list">
                 <div v-if="!showMesTitleList" class="message-view-content-con">
                     <div class="message-content-top-bar">
-                        <span class="mes-back-btn-con"><Button type="text" @click="backMesTitleList"><Icon type="chevron-left"></Icon>&nbsp;&nbsp;返回</Button></span>
+                        <span class="mes-back-btn-con">
+                            <Button type="text" @click="backMesTitleList">
+                                <Icon type="chevron-left"></Icon>&nbsp;&nbsp;返回</Button>
+                        </span>
                         <h3 class="mes-title">{{ mes.title }}</h3>
                     </div>
-                    <p class="mes-time-con"><Icon type="android-time"></Icon>&nbsp;&nbsp;{{ mes.time }}</p>
+                    <p class="mes-time-con">
+                        <Icon type="android-time"></Icon>&nbsp;&nbsp;{{ mes.sendTime }}</p>
                     <div class="message-content-body">
-                        <p class="message-content">{{ mes.content }}</p>
+                        <p class="message-content">{{ mes.context }}</p>
                     </div>
                 </div>
             </transition>
@@ -50,6 +72,13 @@ export default {
                     click: () => {
                         this.hasreadMesList.unshift(this.currentMesList.splice(params.index, 1)[0]);
                         this.$store.commit('setMessageCount', this.unreadMesList.length);
+                        let putData = {
+                            "type": 1
+                        }
+                        this.$axios.put('/notification/' + params.row.id, putData)
+                            .then(response => {
+                                this.$Message.info('已读')
+                            })
                     }
                 }
             }, '标为已读');
@@ -63,6 +92,13 @@ export default {
                 on: {
                     click: () => {
                         this.recyclebinList.unshift(this.hasreadMesList.splice(params.index, 1)[0]);
+                        let putData = {
+                            "type": 3
+                        }
+                        this.$axios.put('/notification/' + params.row.id, putData)
+                            .then(response => {
+                                this.$Message.info('已删除')
+                            })
                     }
                 }
             }, '删除');
@@ -75,6 +111,13 @@ export default {
                 on: {
                     click: () => {
                         this.hasreadMesList.unshift(this.recyclebinList.splice(params.index, 1)[0]);
+                        let putData = {
+                            "type": 1
+                        }
+                        this.$axios.put('/notification/' + params.row.id, putData)
+                            .then(response => {
+                                this.$Message.info('已还原')
+                            })
                     }
                 }
             }, '还原');
@@ -92,8 +135,8 @@ export default {
             noDataText: '暂无未读消息',
             mes: {
                 title: '',
-                time: '',
-                content: ''
+                sendTime: '',
+                context: ''
             },
             mesTitleColumns: [
                 // {
@@ -112,8 +155,8 @@ export default {
                                 click: () => {
                                     this.showMesTitleList = false;
                                     this.mes.title = params.row.title;
-                                    this.mes.time = this.formatDate(params.row.time);
-                                    this.getContent(params.index);
+                                    this.mes.sendTime = this.formatDate(params.row.sendTime);
+                                    this.getContent(params.row.id);
                                 }
                             }
                         }, params.row.title);
@@ -140,7 +183,7 @@ export default {
                                     type: 'android-time',
                                     size: 12
                                 }
-                            }, this.formatDate(params.row.time))
+                            }, this.formatDate(params.row.sendTime))
                         ]);
                     }
                 },
@@ -198,46 +241,27 @@ export default {
                 this.currentMesList = this.recyclebinList;
             }
         },
-        getContent (index) {
-            // you can write ajax request here to get message content
-            let mesContent = '';
-            switch (this.currentMessageType + index) {
-                case 'unread0': mesContent = '这是您点击的《欢迎登录iView-admin后台管理系统，来了解他的用途吧》的相关内容。'; break;
-                case 'unread1': mesContent = '这是您点击的《使用iView-admin和iView-ui组件库快速搭建你的后台系统吧》的相关内容。'; break;
-                case 'unread2': mesContent = '这是您点击的《喜欢iView-admin的话，欢迎到github主页给个star吧》的相关内容。'; break;
-                case 'hasread0': mesContent = '这是您点击的《这是一条您已经读过的消息》的相关内容。'; break;
-                default: mesContent = '这是您点击的《这是一条被删除的消息》的相关内容。'; break;
-            }
-            this.mes.content = mesContent;
+        getContent (id) {
+            this.$axios.get('/notification/getNotification/' + id)
+                .then(response => {
+                    this.mes.context = response.data.context;
+                })
         }
     },
     mounted () {
-        this.currentMesList = this.unreadMesList = [
-            {
-                title: '欢迎登录iView-admin后台管理系统，来了解他的用途吧',
-                time: 1507390106000
-            },
-            {
-                title: '使用iView-admin和iView-ui组件库快速搭建你的后台系统吧',
-                time: 1507390106000
-            },
-            {
-                title: '喜欢iView-admin的话，欢迎到github主页给个star吧',
-                time: 1507390106000
-            }
-        ];
-        this.hasreadMesList = [
-            {
-                title: '这是一条您已经读过的消息',
-                time: 1507330106000
-            }
-        ];
-        this.recyclebinList = [
-            {
-                title: '这是一条被删除的消息',
-                time: 1506390106000
-            }
-        ];
+        // 1已读，2未读，回收站3
+        this.$axios.get('/notification?pageSize=10&pageNumber=1&type=2&recieverId=' + localStorage.getItem('userid'))
+            .then(response => {
+                this.currentMesList = this.unreadMesList = response.data.rows;
+            })
+        this.$axios.get('/notification?pageSize=10&pageNumber=1&type=1&recieverId=' + localStorage.getItem('userid'))
+            .then(response => {
+                this.hasreadMesList = response.data.rows;
+            })
+        this.$axios.get('/notification?pageSize=10&pageNumber=1&type=3&recieverId=' + localStorage.getItem('userid'))
+            .then(response => {
+                this.recyclebinList = response.data.rows;
+            })
         this.unreadCount = this.unreadMesList.length;
         this.hasreadCount = this.hasreadMesList.length;
         this.recyclebinCount = this.recyclebinList.length;

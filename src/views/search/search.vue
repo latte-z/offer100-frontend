@@ -91,7 +91,7 @@ export default {
         return {
             hasHistory: true,
             spinShow: false,
-            searchUrl: 'http://localhost:8081/jobSearch',
+            searchUrl: '/jobSearch',
             searchInput: '',
             params: '',
             rows: [],
@@ -151,7 +151,7 @@ export default {
             }
         },
         buildUrl () {
-            this.searchUrl = 'http://localhost:8081/jobSearch';
+            this.searchUrl = '/jobSearch';
             this.searchUrl += '?page=' + this.page.current + '&rows=' + this.page.pageSize;
             if (this.sorting != '默认')
                 this.searchUrl += '&sortKey=publishTime' + '&asc=false';

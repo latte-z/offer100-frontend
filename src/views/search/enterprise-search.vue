@@ -6,79 +6,75 @@
         <Row>
             <div class="row-wrapper" style="margin-top:30px;">
                 <Row :gutter="10" style="width:1200px;margin:0 auto;overflow:hidden;padding-bottom:100px">
-                    <div class="content-left">
-                        <search-head v-on:listenToChildEvent="getFilterInfo"></search-head>
-                        <!-- <div v-for="(row,index) in rows">
-                            <enterpriseCard :message="row"></enterpriseCard>
-                        </div> -->
-
+                    <search-head v-on:listenToChildEvent="getFilterInfo"></search-head>
+                    <Row :gutter="5">
+                        <Col :md="24" :lg="6">
                         <Row :gutter="5">
-                            <Col :md="24" :lg="6">
-                            <Row :gutter="5">
-                                <div v-for="(enterprise,index) in enterprises" v-if="index === (0 || 4 || 8)" style="padding:5px">
-                                    <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
-                                </div>
-                            </Row>
-                            </Col>
-                            <Col :md="24" :lg="6">
-                            <Row :gutter="5">
-                                <div v-for="(enterprise,index) in enterprises" v-if="index === (1 || 5 || 9)" style="padding:5px">
-                                    <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
-                                </div>
-                            </Row>
-                            </Col>
-                            <Col :md="24" :lg="6">
-                            <Row :gutter="5">
-                                <div v-for="(enterprise,index) in enterprises" v-if="index === (2 || 6 || 10)" style="padding:5px">
-                                    <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
-                                </div>
-                            </Row>
-                            </Col>
-                            <Col :md="24" :lg="6">
-                            <Row :gutter="5">
-                                <div v-for="(enterprise,index) in enterprises" v-if="index === (3 || 7 || 11)" style="padding:5px">
-                                    <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
-                                </div>
-                            </Row>
-                            </Col>
+                            <div v-for="(enterprise,index) in rows" v-if="index === 0 || index === 4" style="padding:5px">
+                                <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
+                            </div>
                         </Row>
-
-                        <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
-                        <Spin size="large" fix v-if="spinShow" style="margin-top:208px;">
-                            <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
-                            <div>加载中，请稍候</div>
-                        </Spin>
-                    </div>
+                        </Col>
+                        <Col :md="24" :lg="6">
+                        <Row :gutter="5">
+                            <div v-for="(enterprise,index) in rows" v-if="index === 1 || index === 5" style="padding:5px">
+                                <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
+                            </div>
+                        </Row>
+                        </Col>
+                        <Col :md="24" :lg="6">
+                        <Row :gutter="5">
+                            <div v-for="(enterprise,index) in rows" v-if="index === 2 || index === 6" style="padding:5px">
+                                <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
+                            </div>
+                        </Row>
+                        </Col>
+                        <Col :md="24" :lg="6">
+                        <Row :gutter="5">
+                            <div v-for="(enterprise,index) in rows" v-if="index === 3 || index === 7" style="padding:5px">
+                                <enterpriseCard :message="enterprise" style="width:100%;height:100%"></enterpriseCard>
+                            </div>
+                        </Row>
+                        </Col>
+                    </Row>
+                    <!-- show-sizer  -->
+                    <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total style="text-align:center;margin-top:50px"></Page>
+                    <Spin size="large" fix v-if="spinShow" style="margin-top:208px;">
+                        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+                        <div>加载中，请稍候</div>
+                    </Spin>
                 </Row>
             </div>
+        </Row>
+        <Row>
+            <footer-div></footer-div>
         </Row>
     </div>
 </template>
 <script>
 import searchHead from './components/head/enterprise-search-head.vue'
-import enterpriseCard from '@/views/main-components/enterprise-card/enterprise-card.vue'
+import enterpriseCard from '@/views/main-components/enterprise-card-search/enterprise-card.vue'
+import footerDiv from '@/views/main-components/footer/footer.vue'
 export default {
     name: 'enterprise_list',
     components: {
         searchHead,
-        enterpriseCard
+        enterpriseCard,
+        footerDiv
     },
     data () {
         return {
             spinShow: false,
-            searchUrl: 'http://localhost:8081/jobSearch',
-            enterprises: [],
-            city: '',
-            experience: '',
+            searchUrl: '',
+            rows: [],
             education: '',
             industry: '',
-            sorting: '',
             keys: {},
             page: {
                 current: 1,
                 total: 0,
-                pageSize: 10,
-                pageSizeOpts: [10, 20, 30],
+                pageSize: 8,
+                pageSizeOpts: [8, 16, 30],
             }
         }
     },
@@ -89,35 +85,37 @@ export default {
         init () {
             this.handleSubmit();
         },
-        buildKey () {
-            this.keys = {};
-            // 等值搜索
-            // 地区重新加入 key 内搜索
-            // if (this.city != '全国')
-            //     this.keys.zone = this.city;
-            if (this.experience != '不限')
-                this.keys.serviceYear = this.experience;
-            if (this.education != '不限')
-                this.keys.education = this.education;
-            if (this.industry != '不限')
-                this.keys.enterpriseCategory = this.industry;
-            // key 内检索
-            if (this.searchInput) {
-                if (!this.keys.key)
-                    this.keys.key = [];
-                this.keys.key.push(this.searchInput);
-            }
-            if (this.city != '全国') {
-                if (!this.keys.key)
-                    this.keys.key = [];
-                this.keys.key.push(this.city);
-            }
-        },
         buildUrl () {
-            this.searchUrl = 'http://localhost:8081/jobSearch';
-            this.searchUrl += '?page=' + this.page.current + '&rows=' + this.page.pageSize;
-            if (this.sorting != '默认')
-                this.searchUrl += '&sortKey=publishTime' + '&asc=false';
+            this.searchUrl = '/enterprise/selectEnterprise';
+            this.searchUrl += '?pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
+            switch (this.education) {
+                case '未融资':
+                    this.searchUrl += '&stage=0'; break;
+                case 'A轮':
+                    this.searchUrl += '&stage=1'; break;
+                case 'B轮':
+                    this.searchUrl += '&stage=2'; break;
+                case 'C轮':
+                    this.searchUrl += '&stage=3'; break;
+                case 'D轮':
+                    this.searchUrl += '&stage=4'; break;
+                case 'D轮以上':
+                    this.searchUrl += '&stage=5'; break;
+                default: break;
+            }
+            switch (this.industry) {
+                case '技术':
+                    this.searchUrl += '&industryId=1'; break;
+                case '产品':
+                    this.searchUrl += '&industryId=2'; break;
+                case '设计':
+                    this.searchUrl += '&industryId=3'; break;
+                case '运营':
+                    this.searchUrl += '&industryId=4'; break;
+                case '市场与销售':
+                    this.searchUrl += '&industryId=5'; break;
+                default: break;
+            }
         },
         handleSubmit () {
             // 清空rows
@@ -125,40 +123,20 @@ export default {
             // 加载进度条和loading动画
             this.$Loading.start();
             this.spinShow = true;
-            this.buildKey();
             this.buildUrl();
-            // 对body内容做判断
-            if (JSON.stringify(this.keys) != '{}') {
-                this.$axios.put(this.searchUrl, this.keys)
-                    .then(response => {
-                        this.page.total = response.data.total;
-                        this.rows = response.data.rows;
-                        // 加载进度条和loading动画
-                        this.$Loading.finish();
-                        this.spinShow = false;
-                    })
-            } else {
-                this.$axios.put(this.searchUrl)
-                    .then(response => {
-                        this.page.total = response.data.total;
-                        this.rows = response.data.rows;
-                        // 加载进度条和loading动画
-                        this.$Loading.finish();
-                        this.spinShow = false;
-                    })
-            }
+
+            this.$axios.get(this.searchUrl)
+                .then(response => {
+                    this.page.total = response.data.total;
+                    this.rows = response.data.rows;
+                    // 加载进度条和loading动画
+                    this.$Loading.finish();
+                    this.spinShow = false;
+                })
         },
         getFilterInfo (data) {
-            this.city = data[0].value;
-            // console.log(this.city);
-            this.experience = data[1].value;
-            // console.log(this.experience);
-            this.education = data[2].value;
-            // console.log(this.education);
-            this.industry = data[3].value;
-            // console.log(this.industry);
-            this.sorting = data[4].value;
-            // console.log(this.sorting);
+            this.education = data[0].value;
+            this.industry = data[1].value;
             this.handleSubmit();
         },
         pageChange (page) {

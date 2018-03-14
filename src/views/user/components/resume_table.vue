@@ -1,5 +1,5 @@
 <style lang="less">
-@import './styles/resume_table2.less';
+@import './styles/resume_table.less';
 </style>
 
 <template>
@@ -17,15 +17,15 @@
 import util from '@/libs/util.js'
 export default {
     props: ['message'],
-    name: 'enterprise_resume_resumeTable',
+    name: 'user_resume_post_table',
     data () {
         return {
-            name1: 'name1',
-            name2: 'name2',
-            name3: 'name3',
-            name4: 'name4',
-            url: '/resume_post_record/manageResume?enterpriseId=' + localStorage.getItem('userid') + '&state=2&pageNumber=1&pageSize=10',
+            userid: '',
+            state: 1,
+            url: '/resume_post_record/manageResume?userId=',
             data: [],
+            modal: false,
+            resumeObj: {},
             page: {
                 current: 1,
                 total: 0,
@@ -77,80 +77,37 @@ export default {
                     }
                 },
                 {
-                    title: '学历',
-                    key: 'education',
+                    title: '状态',
+                    key: 'state',
                     align: 'center',
                     render: (h, params) => {
+                        let state = '';
+                        switch (params.row.state) {
+                            case 1: state = '已投递'; break;
+                            case 2: state = '待沟通'; break;
+                            case 3: state = '已邀请'; break;
+                            case 4: state = '已拒绝'; break;
+                        }
                         return h('div', [
                             h('i', {
                                 style: {
                                     cursor: 'default'
                                 }
-                            }, params.row.education)
+                            }, state)
                         ]);
                     }
                 },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'success',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '15px'
-                                },
-                                on: {
-                                    click: () => {
-                                        let id = params.row.resume_post_record_id;
-                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=3';
-                                        this.$axios.put(url)
-                                            .then(response => {
-                                                this.$Message.info('已邀请');
-                                                this.data.splice(params.index, 1);
-                                            })
-                                    }
-                                }
-                            }, '发送邀请'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        let id = params.row.resume_post_record_id;
-                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=4';
-                                        this.$axios.put(url)
-                                            .then(response => {
-                                                this.$Message.info('已拒绝');
-                                                this.data.splice(params.index, 1);
-                                            })
-                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
-                                    }
-                                }
-                            }, '不合适')
-                        ]);
-                    }
-                }
-            ]
+            ],
         };
     },
     methods: {
         buildUrl () {
-            let enterpriseId = localStorage.getItem('userid');
-            let url = this.url + '?enterpriseId=' + enterpriseId + '&state=2';
-            url += '&pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize;
-            return url;
+            this.userid = localStorage.getItem('userid');
+            this.url += this.userid + '&state=' + this.state + '&pageNumber=1&pageSize=10';
+            return this.url;
         },
         init () {
-            this.buildUrl();
-            this.$axios.get(this.url)
+            this.$axios.get(this.buildUrl())
                 .then(response => {
                     this.data = response.data.rows;
                     this.page.current = response.data.pageNum;
@@ -167,11 +124,11 @@ export default {
             this.init();
         }
     },
-    computed: {
-
-    },
     mounted () {
         this.init();
+    },
+    computed: {
+
     }
 };
 </script>

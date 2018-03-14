@@ -14,17 +14,17 @@
           </div>
           <div class="nav">
             <ul>
-              <li :class="[curPage === 'home_index' ? curClass : '']">
-                <a @click="handlePush('home_index')" href="#">首页</a>
+              <li>
+                <a @click="handlePush('home_index')">首页</a>
               </li>
-              <li :class="[curPage === 'enterprise_account' ? curClass : '']">
-                <a @click="handlePush('enterprise_account')" href="#">公司</a>
+              <li>
+                <a @click="handlePush('enterprise_list')">公司</a>
               </li>
               <!-- <li :class="[curPage === 'job_index' ? curClass : '']">
                 <a @click="handlePush('job_index')" href="#">求职</a>
               </li> -->
-              <li :class="[curPage === 'information_index' ? curClass : '']">
-                <a @click="handlePush('information_index')" href="#">资讯</a>
+              <li>
+                <a @click="handlePush('information_index')">资讯</a>
               </li>
             </ul>
           </div>
@@ -42,10 +42,11 @@
                         <span class="main-user-name">{{ userName }}</span>
                       </a>
                       <DropdownMenu slot="list">
-                        <DropdownItem name="ownSpace" v-if="seen">个人中心</DropdownItem>
-                        <DropdownItem name="userResume" v-if="seen">我的简历</DropdownItem>
-                        <DropdownItem name="userFavorite" v-if="seen">收藏夹</DropdownItem>
-                        <DropdownItem name="userDelivery" v-if="seen">投递箱</DropdownItem>
+                        <DropdownItem name="ownSpace" v-if="seen === 'user'">个人中心</DropdownItem>
+                        <DropdownItem name="userResume" v-if="seen === 'user'">我的简历</DropdownItem>
+                        <DropdownItem name="userFavorite" v-if="seen === 'user'">收藏夹</DropdownItem>
+                        <DropdownItem name="userDelivery" v-if="seen === 'user'">投递箱</DropdownItem>
+                        <DropdownItem name="enterprise" v-if="seen === 'enterprise'">企业管理</DropdownItem>
                         <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
@@ -98,17 +99,27 @@ export default {
       // set curPage name
       this.curPage = this.$route.name;
       // 如果登录是用户，那么显示个人中心按钮
-      if (localStorage.getItem('access') === '3') {
-        this.seen = true;
+      if (localStorage.getItem('usertype') !== 'visitor' && localStorage.getItem('usertype') !== 'enterprise') {
+        this.seen = 'user';
+      } else if (localStorage.getItem('usertype') === 'enterprise') {
+        this.seen = 'enterprise';
+      } else {
+        this.seen = 'visitor';
       }
+
       if (localStorage.getItem('username')) {
         this.userName = localStorage.getItem('username');
         this.isLogin = true;
       }
 
-      let messageCount = 3;
-      this.messageCount = messageCount.toString();
-      this.$store.commit('setMessageCount', 3);
+      // 获取通知数目
+      let messageCount = 0;
+      this.$axios.get('/notification?pageSize=100&pageNumber=1&type=2&recieverId=' + localStorage.getItem('userid'))
+        .then(response => {
+          messageCount = response.data.total;
+          this.messageCount = messageCount.toString();
+          this.$store.commit('setMessageCount', messageCount);
+        })
     },
     handleClickUserDropdown (name) {
       if (name === 'ownSpace') {
@@ -117,6 +128,11 @@ export default {
           name: 'user_account'
         });
         // TODO
+      } else if (name === 'enterprise') {
+        util.openNewPage(this, 'enterprise_account')
+        this.$router.push({
+          name: 'enterprise_account'
+        })
       } else if (name === 'userResume') {
         util.openNewPage(this, 'user_resume')
         this.$router.push({
@@ -130,16 +146,18 @@ export default {
         })
         // TODO
       } else if (name === 'userDelivery') {
-        util.openNewPage(this, 'user_delivery')
+        util.openNewPage(this, 'user_resume_post_record')
         this.$router.push({
-          name: 'user_delivery'
+          name: 'user_resume_post_record'
         })
         // TODO 
       } else if (name === 'loginout') {
         // 退出登录
         this.$store.commit('logout', this);
+        this.isLogin = false;
+        this.$Message.info('退出登录成功');
         this.$router.push({
-          name: 'login'
+          name: 'home_index'
         });
       }
     },
