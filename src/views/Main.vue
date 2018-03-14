@@ -98,7 +98,7 @@ export default {
       // set curPage name
       this.curPage = this.$route.name;
       // 如果登录是用户，那么显示个人中心按钮
-      if (localStorage.getItem('access') === '3') {
+      if (localStorage.getItem('usertype') !== 'visitor' && localStorage.getItem('usertype') !== 'enterprise') {
         this.seen = true;
       }
       if (localStorage.getItem('username')) {
@@ -138,8 +138,10 @@ export default {
       } else if (name === 'loginout') {
         // 退出登录
         this.$store.commit('logout', this);
+        this.isLogin = false;
+        this.$Message.info('退出登录成功');
         this.$router.push({
-          name: 'login'
+          name: 'home_index'
         });
       }
     },

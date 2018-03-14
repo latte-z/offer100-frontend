@@ -104,29 +104,9 @@ export default {
         handleSubmit() {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    // 0:guest 1:admin 2:enterprise 3:user
-                    // axios send login post request
                     this.$axios.post(this.loginUrl, qs.stringify(this.form))
                         .then(response => {
-                            this.msg = response.data.msg
-                            this.status = response.data.status
-                            if (this.status === 0) {
-                                // set user token
-                                localStorage.setItem('token', response.data.msg)
-                                localStorage.setItem('username', this.form.userName)
-                                this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg')
-                                // set user role
-                                if (response.data.accsss === 'admin') {
-                                    localStorage.setItem('access', 1)
-                                } else if (response.data.accsss === 'enterprise') {
-                                    localStorage.setItem('access', 2)
-                                } else {
-                                    localStorage.setItem('access', 3)
-                                }
-                                this.$router.push({
-                                    name: 'home_index'
-                                });
-                            }
+                            
                         })
                         .catch(function (error) {
                             console.log(error)

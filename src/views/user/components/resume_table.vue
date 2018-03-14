@@ -7,7 +7,7 @@
         <Table border stripe :columns="columns" :data="data"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="10" :current="1"></Page>
+                <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px"></Page>
             </div>
         </div>
     </div>
@@ -24,6 +24,12 @@ export default {
             state: 1,
             url: 'http://localhost:8081/resume_post_record/manageResume?enterpriseId=',
             data: [],
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 10,
+                pageSizeOpts: [10, 20, 30],
+            },
             columns: [
                 {
                     title: '序号',
@@ -150,7 +156,14 @@ export default {
         remove (index) {
             this.data.splice(index, 1);
         },
-
+        pageChange (page) {
+            this.page.current = page;
+            this.init();
+        },
+        pageSizeChange (pageSize) {
+            this.page.pageSize = pageSize;
+            this.init();
+        }
     },
     mounted () {
         this.init();
