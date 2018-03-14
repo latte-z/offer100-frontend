@@ -158,8 +158,8 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        // console.log('params.index:' + params.index);
-                                        this.goNewPage(params.index);
+                                        // console.log('params.row:' + params.row.title);
+                                        this.goNewPage(params.row);
                                     }
                                 }
                             }, '查看'),
@@ -275,12 +275,11 @@ export default {
             this.page3.pageSize = pageSize;
             this.getNotOnlineJob();
         },
-        goNewPage (index) {
-            console.log('job页面jobid：' + this.jobData1[index].id);
+        goNewPage (jobInfo) {
             this.$router.push({
                 name: 'enterprise_jobadd',
                 params: {
-                    jobId: this.jobData1[index].id
+                    jobInfo: jobInfo
                 }
             })
         },

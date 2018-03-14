@@ -1,6 +1,6 @@
 <style lang="less">
-  @import '../../styles/common.less';
-  @import './styles/account.less';
+@import '../../styles/common.less';
+@import './styles/account.less';
 </style>
 
 <template>
@@ -30,10 +30,11 @@
           <div class="hadInfo">
             <span class="edit_link" @click="handlePush('user_edit')" href="#">编辑</span>
             <div class="view_avatar">
-              <img class="avatar_img" src="@/images/default_headpic.png" width="100" height="100" alt="田永涛">
+              <img class="avatar_img" :src="pic" width="100" height="100" alt="田永涛">
             </div>
             <div class="view_nickname" style="display: inline">
-              <span>{{ user.name }}</span> <span style="padding-left: 5px">{{ user.sex }}</span>
+              <span>{{ user.name }}</span>
+              <span style="padding-left: 5px">{{ user.sex }}</span>
             </div>
             <div class="view_phone">{{ user.phone }}</div>
             <div class="view_email">{{user.email}}</div>
@@ -48,57 +49,57 @@
 </template>
 
 <script>
-  export default {
-    name: 'user_account',
-    data() {
-      return {
-        getUserByIdUrl: '/users/',
-        user: {
-          name: '',
-          sex: '',
-          phone: '',
-          email: '',
-          education: '',
-          major: '软件工程'
-        }
-
-      };
-    },
-    computed: {},
-    methods: {
-      handlePush(name) {
-        this.$router.push({
-          name: name
-        })
-      },
-      init() {
-        this.get()
-      },
-      get() {
-        this.$axios.get(this.getUserByIdUrl + 1)
-          .then(response => {
-            this.user = response.data;
-            this.user.sex = (response.data.sex == '1' ? '男' : '女');
-            switch (response.data.education) {
-              case 1: this.user.education = '本科'; break;
-              case 2: this.user.education = '硕士'; break;
-              case 3: this.user.education = '博士'; break;
-              case 4: this.user.education = '高中'; break;
-              case 5: this.user.education = '初中'; break;
-              case 6: this.user.education = '大专'; break;
-            }
-            //TODO 专业
-            //this.$axios.get('' + 1)
-            this.user.major = "软件工程"
-          })
-        // this.user = this.message
+export default {
+  name: 'user_account',
+  data () {
+    return {
+      getUserByIdUrl: '/users/',
+      pic: '',
+      user: {
+        name: '',
+        sex: '',
+        phone: '',
+        email: '',
+        education: '',
+        major: '软件工程'
       }
-    },
-    mounted() {
-        this.init()
-        }
+
     };
+  },
+  computed: {},
+  methods: {
+    handlePush (name) {
+      this.$router.push({
+        name: name
+      })
+    },
+    init () {
+      this.pic = localStorage.getItem('avatorImgPath');
+      this.get()
+    },
+    get () {
+      this.$axios.get(this.getUserByIdUrl + localStorage.getItem('userid'))
+        .then(response => {
+          this.user = response.data;
+          this.user.sex = (response.data.sex === 1 ? '男' : '女');
+          switch (response.data.education) {
+            case 1: this.user.education = '本科'; break;
+            case 2: this.user.education = '硕士'; break;
+            case 3: this.user.education = '博士'; break;
+            case 4: this.user.education = '高中'; break;
+            case 5: this.user.education = '初中'; break;
+            case 6: this.user.education = '大专'; break;
+          }
+          this.user.major = "软件工程"
+        })
+    }
+  },
+  mounted () {
+    this.init()
+  }
+};
 </script>
 
 <style>
+
 </style>

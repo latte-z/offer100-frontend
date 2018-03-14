@@ -136,34 +136,34 @@
                                     <Form :class="{dn:!editProExpToggle}" ref="updateProForm" class="jobExpForm" id="addJobForm" novalidate="novalidate">
                                         <!-- 项目经历添加页面 -->
                                         <div class="mr_add_work">
-                                            <FormItem prop="resume.projectExperiences[0].projectName">
+                                            <FormItem prop="updateProForm.projectName">
                                                 <label>项目名称</label>
                                                 <div class="company">
                                                     <Input v-model="resume.projectExperiences[0].projectName" size="large" placeholder="请输入项目名称" style="width: 350px"></Input>
                                                 </div>
                                             </FormItem>
 
-                                            <FormItem prop="resume.projectExperiences[0].job">
+                                            <FormItem prop="updateProForm.job">
                                                 <label>承担的职位</label>
                                                 <div class="projectExp.job">
                                                     <Input v-model="resume.projectExperiences[0].job" size="large" placeholder="请输入所在职位" style="width: 350px"></Input>
                                                 </div>
                                             </FormItem>
-                                            <FormItem prop="resume.projectExperiences[0].startTime">
+                                            <FormItem prop="updateProForm.startTime">
                                                 <label>开始时间</label>
                                                 <div class="workTime">
                                                     <DatePicker v-model="resume.projectExperiences[0].startTime" type="date" format="yyyyMMdd" placeholder="Select date" style="width: 200px"></DatePicker>
                                                 </div>
                                             </FormItem>
 
-                                            <FormItem prop="resume.projectExperiences[0].endTime">
+                                            <FormItem prop="updateProForm.endTime">
                                                 <label>结束时间</label>
                                                 <div class="workTime">
                                                     <DatePicker v-model="resume.projectExperiences[0].endTime" type="date" format="yyyyMMdd" placeholder="Select date" style="width: 200px"></DatePicker>
                                                 </div>
                                             </FormItem>
 
-                                            <FormItem prop="resume.projectExperiences[0].projectDesc">
+                                            <FormItem prop="updateProForm.projectDesc">
                                                 <label>具体描述</label>
                                                 <Input v-model="resume.projectExperiences[0].projectDesc" type="textarea" :rows="6" placeholder="输入工作内容"></Input>
                                             </FormItem>

@@ -146,9 +146,9 @@ export default {
         })
         // TODO
       } else if (name === 'userDelivery') {
-        util.openNewPage(this, 'user_delivery')
+        util.openNewPage(this, 'user_resume_post_record')
         this.$router.push({
-          name: 'user_delivery'
+          name: 'user_resume_post_record'
         })
         // TODO 
       } else if (name === 'loginout') {

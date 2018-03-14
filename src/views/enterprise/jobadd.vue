@@ -132,10 +132,7 @@ export default {
             zoneData: [],
 
             //查询岗位详情
-            getJobUrl: '/job/',
             updateJobUrl: '/job/',
-
-            jobId: 0,   //用于存储路由传过来的参数
 
             formValidate: {
                 jobName: '',
@@ -182,40 +179,27 @@ export default {
         init () {   //默认是发布岗位
             this.getJobCategory();
             this.getJobZone();
-            if (this.$route.params.jobId !== undefined) {//修改岗位
-                console.log('发布岗位')
-                this.jobId = this.$route.params.jobId;
+            if (this.$route.params.jobInfo !== undefined) {//修改岗位
+                this.formValidate.jobName = this.$route.params.jobInfo.title;
+                this.formValidate.jobProp = this.$route.params.jobInfo.nature;
+                this.formValidate.jobCategory[0] = this.$route.params.jobInfo.industryId;
+                this.formValidate.jobZone[0] = this.$route.params.jobInfo.zoneId;
+                this.formValidate.jobAddress = this.$route.params.jobInfo.address;
+                this.formValidate.startTime = this.$route.params.jobInfo.effectiveTime;
+                this.formValidate.endTime = this.$route.params.jobInfo.expirationTime;
+                this.formValidate.jobSalary = this.$route.params.jobInfo.wage;
+                this.formValidate.employeeNum = this.$route.params.jobInfo.peopleNumber;
+                this.formValidate.education = this.$route.params.jobInfo.education;
+                this.formValidate.jobYear = this.$route.params.jobInfo.serviceYear;
+                this.formValidate.jobDesc = this.$route.params.jobInfo.description;
+                this.formValidate.welfare = this.$route.params.jobInfo.welfare;
                 this.$refs.createJob.style.display = 'none';
                 this.$refs.modifyJob.style.display = 'inline-block';
-                this.getJobInfo(this.$route.params.jobId);
-            } 
-        },
-        //更加jobId获取job信息，用于岗位修改
-        getJobInfo (jobid) {
-            this.getJobUrl = '/job/' + jobid;
-            this.$axios.get(this.getJobUrl)
-                .then(response => {
-                    // console.log('response:'+response.data.address);
-                    this.formValidate.jobName = response.data.title;
-                    this.formValidate.jobProp = response.data.nature;
-                    this.formValidate.jobCategory[0] = response.data.industryId;
-                    this.formValidate.jobZone[0] = response.data.zoneId;
-                    this.formValidate.jobAddress = response.data.address;
-                    this.formValidate.startTime = response.data.effectiveTime;
-                    this.formValidate.endTime = response.data.expirationTime;
-                    this.formValidate.jobSalary = response.data.wage;
-                    this.formValidate.employeeNum = response.data.peopleNumber;
-                    this.formValidate.education = response.data.education;
-                    this.formValidate.jobYear = response.data.serviceYear;
-                    this.formValidate.jobDesc = response.data.description;
-                    this.formValidate.welfare = response.data.welfare;
-                    console.log('jobSalary:' + this.formValidate.jobSalary);
-                })
-
+            }
         },
         //提交修改后的岗位信息
         modifySubmit () {
-            this.updateJobUrl += this.jobId;
+            this.updateJobUrl += this.$route.params.jobInfo.id;
             this.buildJob();
 
             if (JSON.stringify(this.job) != '{}') {
@@ -223,8 +207,6 @@ export default {
                     .then(response => {
                         this.$Message.info('提交成功！');
                         //清空表单
-                        // this.$refs.formValidate1.resetFields();
-                        // this.$refs.formValidate2.resetFields();
                     })
                     .catch(function (error) {
                         console.log(error)

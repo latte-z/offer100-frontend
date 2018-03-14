@@ -132,7 +132,8 @@ export default {
                 });
         },
         sendResume () {
-            this.$axios.get('/resume/getResumeList/' + localStorage.getItem('userid') + '?pageNumber=1&pageSize=10')
+            if (localStorage.getItem('userid')) {
+                this.$axios.get('/resume/getResumeList/' + localStorage.getItem('userid') + '?pageNumber=1&pageSize=10')
                 .then(response => {
                     let rows = response.data.rows;
                     let row = rows[0];
@@ -142,6 +143,9 @@ export default {
                     this.$Message.info('您没有简历信息')
                 })
             this.modal = true;
+            } else {
+                this.$Message.error('您没有登录，无法进行操作');
+            }
         },
         send () {
             this.$axios.get('/resume_post_record/' + localStorage.getItem('userid') + '/' + this.resumeid + '/' + this.job.enterpriseId)
@@ -152,7 +156,7 @@ export default {
                 })
         },
         favorite () {
-
+            
         }
     },
     mounted () {

@@ -1,6 +1,6 @@
 <style lang="less">
 @import './search-head.less';
-@import '../../../../styles/base.less';
+// @import '../../../../styles/base.less';
 </style>
 
 <template>
