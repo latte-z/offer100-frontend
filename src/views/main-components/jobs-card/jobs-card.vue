@@ -16,7 +16,7 @@
       <div class="left" style="color:#495060">
         <p>{{ job.serviceYear !== '无' ? job.serviceYear + '年经验' : '无' }}&nbsp;/&nbsp;{{ job.education }}</p>
         <p>{{ job.welfare }}</p>
-        <span class="jobcategory">{{job.industryName}}</span>
+        <!-- <span class="jobcategory">{{job.industryName}}</span> -->
       </div>
       <div class="right">
         <a @click="goDetail">查看详情</a>

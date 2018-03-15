@@ -14,17 +14,17 @@
                             <Tabs value="name1">
                                 <TabPane label="已投递" name="name1">
                                     <!-- 简历表格 -->
-                                    <resumeTable1 :message="enterpriseId"></resumeTable1>
+                                    <resumeTable1></resumeTable1>
                                 </TabPane>
                                 <TabPane label="待沟通" name="name2">
-                                    <resumeTable2 :message="enterpriseId"></resumeTable2>
+                                    <resumeTable2></resumeTable2>
                                 </TabPane>
                                 <TabPane label="已邀请" name="name3">
-                                    <resumeTable3 :message="enterpriseId"></resumeTable3>
+                                    <resumeTable3></resumeTable3>
                                 </TabPane>
                                 <TabPane label="不合适" name="name4">
                                     <!-- <resume_table4></resume_table4> -->
-                                    <resumeTable4 :message="enterpriseId"></resumeTable4>
+                                    <resumeTable4></resumeTable4>
                                 </TabPane>
                             </Tabs>
                         </div>
@@ -63,17 +63,14 @@ export default {
     data () {
         return {
             pageName: 'resume',
-            enterpriseId: ''
         };
     },
     methods: {
-
     },
     computed: {
 
     },
     mounted () {
-        this.enterpriseId = localStorage.getItem('userid');
     }
 };
 </script>

@@ -41,9 +41,9 @@
                                                 <font class="asterisk fs18">*</font> 上传证照原件照片</span>
                                         </div>
                                         <p>
-                                            <font class="reupload_tiptext">仅限最多上传5份资料，文件要求以JPEG,PNG 或JPG格式，大小限制在3M以内</font>
+                                            <font class="reupload_tiptext">文件要求以JPEG,PNG 或JPG格式，大小限制在3M以内，命名以英文命名</font>
                                         </p>
-                                        <Upload class="upload-btn" action="/picture/manageFile" :show-upload-list="false" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
+                                        <Upload class="upload-btn" action="http://47.93.20.40:8081/picture/manageFile" :show-upload-list="false" :on-success="uploadSuccess" :format="['jpg','jpeg','png']">
                                             <Button type="ghost" icon="ios-cloud-upload-outline">上传照片</Button>
                                         </Upload>
                                     </div>
@@ -123,13 +123,21 @@ export default {
     },
     methods: {
         init () {
+            this.enterpriseId = localStorage.getItem('userid');
             this.getUrl = '/enterprise';
             this.getUrl += '/' + this.enterpriseId;
-            this.enterpriseId = localStorage.getItem('userid');
+            
 
             this.$axios.get(this.getUrl)
                 .then(response => {
                     this.companyName = response.data.name;
+                    
+                    this.imageUrl = response.data.imageLicense;
+                    if(this.imageUrl !==''){
+                        this.$refs.displayPhoto.style.display = "block";
+                    }
+                    // this.$refs.displayPhoto.style.display = "block";
+                    this.peopleName = response.data.linkman;
                 })
         },
         submit () {

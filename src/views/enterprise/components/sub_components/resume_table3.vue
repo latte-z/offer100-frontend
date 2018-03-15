@@ -16,7 +16,6 @@
 <script>
 import util from '@/libs/util.js'
 export default {
-    props: ['message'],
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
@@ -102,13 +101,13 @@ export default {
                                 on: {
                                     click: () => {
                                         let id = params.row.resume_post_record_id;
-                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=0';
+                                        let url = '/resume_post_record/manageResume?id=' + id + '&state=5';
                                         this.$axios.put(url)
                                             .then(response => {
                                                 this.$Message.info('已通过');
                                                 this.data.splice(params.index, 1);
                                             })
-                                        this.$axios.get('/resume_post_record/getResumeMail/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
+                                        this.$axios.get('/resume_post_record/getPassMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '面试通过'),
@@ -126,7 +125,7 @@ export default {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
-                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
+                                        this.$axios.get('/resume_post_record/getReturnMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '不合适')

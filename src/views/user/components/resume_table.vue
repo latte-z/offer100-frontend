@@ -87,6 +87,7 @@ export default {
                             case 2: state = '待沟通'; break;
                             case 3: state = '已邀请'; break;
                             case 4: state = '已拒绝'; break;
+                            case 5: state = '已通过'; break;
                         }
                         return h('div', [
                             h('i', {
@@ -103,7 +104,7 @@ export default {
     methods: {
         buildUrl () {
             this.userid = localStorage.getItem('userid');
-            this.url += this.userid + '&state=' + this.state + '&pageNumber=1&pageSize=10';
+            this.url += this.userid + '&pageNumber=1&pageSize=10';
             return this.url;
         },
         init () {

@@ -16,7 +16,6 @@
 <script>
 import util from '@/libs/util.js'
 export default {
-    props: ['message'],
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
@@ -114,6 +113,7 @@ export default {
                                                 this.$Message.info('已邀请');
                                                 this.data.splice(params.index, 1);
                                             })
+                                        this.$axios.get('/resume_post_record/getResumeMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '发送邀请'),
@@ -131,7 +131,7 @@ export default {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
-                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
+                                        this.$axios.get('/resume_post_record/getReturnMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '不合适')

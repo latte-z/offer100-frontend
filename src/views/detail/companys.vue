@@ -29,7 +29,7 @@
             </Row>
         </div>
         <Row class="detailcontent">
-            <Col span="18" style="box-shadow: 5px 0 5px -5px rgba(100, 100, 100, 1);padding:30px;margin-left:100px;width:696px;">
+            <Col span="18" style="box-shadow: 5px 0 5px -5px rgba(100, 100, 100, 1);padding: 30px 50px 50px 100px;margin-left:100px;width:60%;min-height: 240px;">
             <p>
                 <div v-html="enterprise.description">
                 </div>

@@ -72,7 +72,6 @@
 <script>
 import util from '@/libs/util.js'
 export default {
-    props: ['message'],
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
@@ -181,11 +180,11 @@ export default {
                                         let url = '/resume_post_record/manageResume?id=' + id + '&state=2';
                                         this.$axios.put(url)
                                             .then(response => {
-                                                this.$Message.info('已通过');
+                                                this.$Message.info('筛选通过');
                                                 // splice params: index, len, result
                                                 this.data.splice(params.index, 1);
                                             })
-                                        this.$axios.get('/resume_post_record/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
+                                        this.$axios.get('/resume_post_record/getChecMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '筛选通过'),
@@ -203,7 +202,7 @@ export default {
                                                 this.$Message.info('已拒绝');
                                                 this.data.splice(params.index, 1);
                                             })
-                                        this.$axios.get('/resume_post_record/rejectMailNotify/' + params.row.resume_id + '/' + localStorage.getItem('userid'));
+                                        this.$axios.get('/resume_post_record/getReturnMail/' + params.row.resume_id + '/' + localStorage.getItem('userid') + '/' + params.row.job_id);
                                     }
                                 }
                             }, '不合适')

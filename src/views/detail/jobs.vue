@@ -29,7 +29,7 @@
             </Row>
         </div>
         <Row class="detailcontent">
-            <Col span="18" style="box-shadow: 5px 0 5px -5px rgba(100, 100, 100, 1);padding:30px;margin-left:100px;width:696px;">
+            <Col span="18" style="box-shadow: 5px 0 5px -5px rgba(100, 100, 100, 1);padding: 30px 50px 50px 100px;margin-left:100px;width:60%;">
             <p>
                 <div v-html="job.description">
                 </div>
@@ -91,6 +91,7 @@ export default {
             loading: true,
             resumeid: 0,
             job: {
+                id: '',
                 enterprise: '',
                 enterpriseId: '',
                 title: '',
@@ -134,21 +135,21 @@ export default {
         sendResume () {
             if (localStorage.getItem('userid')) {
                 this.$axios.get('/resume/getResumeList/' + localStorage.getItem('userid') + '?pageNumber=1&pageSize=10')
-                .then(response => {
-                    let rows = response.data.rows;
-                    let row = rows[0];
-                    this.resumeid = row.id;
-                })
-                .catch(error => {
-                    this.$Message.info('您没有简历信息')
-                })
-            this.modal = true;
+                    .then(response => {
+                        let rows = response.data.rows;
+                        let row = rows[0];
+                        this.resumeid = row.id;
+                    })
+                    .catch(error => {
+                        this.$Message.info('您没有简历信息')
+                    })
+                this.modal = true;
             } else {
                 this.$Message.error('您没有登录，无法进行操作');
             }
         },
         send () {
-            this.$axios.get('/resume_post_record/' + localStorage.getItem('userid') + '/' + this.resumeid + '/' + this.job.enterpriseId)
+            this.$axios.get('/resume_post_record/getSuccessMail/' + localStorage.getItem('userid') + '/' + this.resumeid + '/' + this.job.id)
                 .then(response => {
                     this.$Message.info('投递成功')
                     this.loading = false;
@@ -156,7 +157,17 @@ export default {
                 })
         },
         favorite () {
-            
+            let postData = {
+                "jobId": this.job.id,
+                "userId": localStorage.getItem('userid')
+            }
+            this.$axios.post('/Receive', postData)
+                .then(response => {
+                    if (response.data === true)
+                        this.$Message.info('收藏成功')
+                    else 
+                        this.$Message.error('请不要重复收藏')
+                })
         }
     },
     mounted () {

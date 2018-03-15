@@ -1,128 +1,98 @@
 <style lang="less">
-    @import '../../styles/common.less';
-    @import './styles/favorite.less';
+@import '../../styles/common.less';
+@import './styles/favorite.less';
 </style>
 <template>
-    <div id="container">
-        <div class="clearfix">
-            <div class="new_section">
-                <dl class="c_collections">
-                    <dt>
-                        <h1>我收藏的职位</h1>
-                    </dt>
-                        <Form id="collectionsForm">
-                            <ul class="reset my_collections">
-                                <li>
-                                    <div style="background:#eee;">
-                                        <Card :bordered="false">
-                                            <p slot="title">
-                                                <a href="#" style="color:#0d9572">
-                                                    {{ favoriteJob.enterprise }}：{{ favoriteJob.title }}
-                                                </a>
-                                            </p>
-                                            <a href="#">
-                                                <em class="jobName" style="max-width: 200px;color: #0d9572">{{ favoriteJob.title }}</em>
-                                                <span class="salary" style="color: #e6775c">({{ favoriteJob.wage }})</span>
-                                            </a>
-                                            <span class="co_time">发布时间：{{ favoriteJob.publishTime }}</span>
-                                            <div class="co_cate">{{ favoriteJob.enterprise }} / {{ favoriteJob.zone }} / {{ favoriteJob.serviceYear }} / {{ favoriteJob.education }}</div>
-                                            <span class="co_youhuo c7">{{ favoriteJob.welfare }}</span>
-                                            <Button type="success">投个简历</Button>
-                                            <Button type="error">删除本条</Button>
-                                        </Card>
-                                    </div>
-                                </li>
-
-                                <li data-id="3287644" data-company="128998">
-                                    <div style="background:#eee;">
-                                        <Card :bordered="false">
-                                            <p slot="title">
-                                                <a href="#">offer-100公司：Java工程师</a>
-                                            </p>
-                                            <a href="#">
-                                                <em class="jobName" style="max-width: 200px;color:#3baf41">Java工程师</em>
-                                                <span class="salary">（15k-30k）</span>
-                                            </a>
-                                            <span class="co_time">发布时间：2018-03-01 15:47</span>
-                                            <div class="co_cate">offer-100 / 武汉 / 无 / 本科</div>
-                                            <span class="co_youhuo c7">快速发展的业务和足够的技术挑战</span>
-                                            <Button type="success">投个简历</Button>
-                                            <Button type="error">删除本条</Button>
-                                        </Card>
-                                    </div>
-                                </li>
-                            </ul>
-                        </Form>
-                </dl>
-            </div>
-
-            <div class="content_r">
-                <div class="collections_nav_button">
-                    <div class="mr_r_nav">
-                        <ul class="clearfix">
-                            <li :class="[curPage === 'enterprise_index' ? curClass : '']">
-                                <a  @click="handlePush('投递箱')" href="#">投递箱
-                                    <i class="td"></i>
-                                </a>                          
-                            </li>                           
-                            <li :class="[curPage === 'enterprise_index' ? curClass : '']">
-                                <a @click="handlePush('user_resume')" href="#">我的简历
-                                    <i class="sc"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div style=" padding-top: 20px;margin-top: 80px;">
-                    <Card :bordered="false">
-                        <p slot="title">这是广告位</p>
-                        <p>这免费为软酷网打的广告1</p>
-                    </Card>
-                </div>
-                <div style="padding-top: 20px;margin-top: 80px;">
-                    <Card :bordered="false">
-                        <p slot="title">这是广告位</p>
-                        <p>这免费为软酷网打的广告2</p>
-                    </Card>
-                </div>
-            </div>
-
-        </div>
+    <div class="banner">
+        <Row style="width:1200px;margin:0 auto">
+            <Tabs value="hotjobs">
+                <TabPane label="收藏职位" icon="fireball" name="hotjobs">
+                    <Row :gutter="5">
+                        <Col :md="24" :lg="8">
+                        <Row :gutter="5">
+                            <div v-for="(job,index) in rows" v-if="index === 0 || index === 3 || index === 6" style="padding:5px">
+                                <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
+                            </div>
+                        </Row>
+                        </Col>
+                        <Col :md="24" :lg="8">
+                        <Row :gutter="5">
+                            <div v-for="(job,index) in rows" v-if="index === 1 || index === 4 || index === 7" style="padding:5px">
+                                <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
+                            </div>
+                        </Row>
+                        </Col>
+                        <Col :md="24" :lg="8">
+                        <Row :gutter="5">
+                            <div v-for="(job,index) in rows" v-if="index === 2 || index === 5 || index === 8" style="padding:5px">
+                                <jobsCard :message="job" style="width:100%;height:100%"></jobsCard>
+                            </div>
+                        </Row>
+                        </Col>
+                    </Row>
+                </TabPane>
+            </Tabs>
+        </Row>
+        <Page @on-change="pageChange" @on-page-size-change="pageSizeChange" placement="top" :current="page.current" :total="page.total" :page-size="page.pageSize" :page-size-opts="page.pageSizeOpts" show-total show-sizer style="text-align:center;margin-top:50px;margin-bottom:50px;"></Page>
+        <Row>
+            <footerDiv></footerDiv>
+        </Row>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'user_favorite',
-        data() {
-            return {
-                favoriteJob: {
-                    enterprise: 'offer-100',
-                    title: 'Java开发',
-                    wage: '5K-10k',
-                    publishTime: '2017-9-1',
-                    zone: '武汉',
-                    serviceYear: '不限',
-                    education: '本科以上',
-                    welfare: '五险一金'
-                }
-            };
-        },
-        computed: {
-            avatorPath() {
-
+import jobsCard from '@/views/main-components/jobs-card/jobs-card.vue';
+import footerDiv from '@/views/main-components/footer/footer.vue'
+export default {
+    name: 'user_favorite',
+    components: {
+        footerDiv,
+        jobsCard
+    },
+    data () {
+        return {
+            rows: [],
+            page: {
+                current: 1,
+                total: 0,
+                pageSize: 9,
+                pageSizeOpts: [9, 18, 27],
             }
+        };
+    },
+    computed: {
+    },
+    methods: {
+        init () {
+            this.handleSubmit();
         },
-        methods: {
-            handlePush(name) {
-                this.$router.push({
-                    name: name
+        handleSubmit () {
+            this.rows = [];
+            let getUrl = '/Receive?pageNumber=' + this.page.current + '&pageSize=' + this.page.pageSize + '&userId=';
+            this.$axios.get(getUrl + localStorage.getItem('userid'))
+                .then(response => {
+                    this.page.total = response.data.total;
+                    this.page.current = response.data.pageNum;
+                    this.page.pageSize = response.data.pageSize;
+                    this.rows = response.data.rows;
+                    console.log(this.rows)
                 })
-            }
-
+        },
+        pageChange (page) {
+            this.page.current = page;
+            this.handleSubmit();
+        },
+        pageSizeChange (pageSize) {
+            this.page.pageSize = pageSize;
+            this.handleSubmit();
         }
-    };
+    },
+    mounted () {
+        this.init();
+    }
+};
 </script>
 
 <style>
+
 </style>

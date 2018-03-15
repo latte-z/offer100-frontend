@@ -16,7 +16,6 @@
 <script>
 import util from '@/libs/util.js'
 export default {
-    props: ['message'],
     name: 'enterprise_resume_resumeTable',
     data () {
         return {
